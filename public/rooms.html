@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Explore rooms and suites at Don Steve Imperial Hotel."
+    >
+
+    <title>
+        Rooms & Suites | Don Steve Imperial Hotel
+    </title>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        :root {
+            --navy: #071521;
+            --gold: #c7a15a;
+            --cream: #f7f4ee;
+            --white: #ffffff;
+            --muted: #72777b;
+            --border: #e3ddd1;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+            background: var(--cream);
+            color: var(--navy);
+            font-family: "DM Sans", sans-serif;
+        }
+
+
+        img {
+            display: block;
+            width: 100%;
+        }
+
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .rooms-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 10;
+            padding: 25px 5%;
+            color: white;
+            border-bottom:
+                1px solid rgba(255,255,255,0.15);
+        }
+
+
+        .rooms-header-inner {
+            max-width: 1400px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .brand-name {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 31px;
+        }
+
+
+        .brand-subtitle {
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+
+        .rooms-nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+
+        .rooms-nav a {
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+
+        .rooms-nav a:hover {
+            color: var(--gold);
+        }
+
+
+        .book-button {
+            padding: 13px 22px;
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .rooms-hero {
+            min-height: 72vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            color: white;
+            overflow: hidden;
+        }
+
+
+        .rooms-hero-bg {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7,21,33,0.86),
+                    rgba(7,21,33,0.35)
+                ),
+                url("/images/elegant-interior.jpg")
+                center/cover;
+        }
+
+
+        .rooms-hero-content {
+            position: relative;
+            width: min(1300px, 90%);
+            margin: auto;
+            padding: 190px 0 85px;
+        }
+
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 4px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+
+        .rooms-hero h1 {
+            max-width: 800px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(60px, 8vw, 105px);
+            line-height: 0.9;
+            font-weight: 400;
+            margin-bottom: 25px;
+        }
+
+
+        .rooms-hero p {
+            max-width: 650px;
+            color: rgba(255,255,255,0.82);
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           INTRO
+        ===================================================== */
+
+        .rooms-intro {
+            width: min(1000px, 90%);
+            margin: 100px auto 70px;
+            text-align: center;
+        }
+
+
+        .rooms-intro h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 60px;
+            line-height: 1;
+            font-weight: 400;
+            margin-bottom: 20px;
+        }
+
+
+        .rooms-intro p {
+            max-width: 680px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 15px;
+            line-height: 1.9;
+        }
+
+
+        /* =====================================================
+           ROOM GRID
+        ===================================================== */
+
+        .rooms-container {
+            width: min(1300px, 90%);
+            margin: 0 auto 120px;
+        }
+
+
+        .rooms-grid {
+            display: grid;
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+            gap: 30px;
+        }
+
+
+        .room-card {
+            background: white;
+            overflow: hidden;
+            box-shadow:
+                0 15px 50px rgba(7,21,33,0.07);
+        }
+
+
+        .room-image {
+            height: 420px;
+            overflow: hidden;
+        }
+
+
+        .room-image img {
+            height: 100%;
+            object-fit: cover;
+            transition:
+                transform 0.8s ease;
+        }
+
+
+        .room-card:hover .room-image img {
+            transform: scale(1.05);
+        }
+
+
+        .room-content {
+            padding: 35px;
+        }
+
+
+        .room-number {
+            color: var(--gold-dark, #a47d38);
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 9px;
+        }
+
+
+        .room-content h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 39px;
+            font-weight: 500;
+            line-height: 1;
+            margin-bottom: 14px;
+        }
+
+
+        .room-content p {
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+
+        .room-features {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+            padding-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+        }
+
+
+        .room-feature {
+            color: #596168;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+        }
+
+
+        .room-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            padding-top: 22px;
+        }
+
+
+        .room-price span {
+            display: block;
+            color: var(--muted);
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+
+        .room-price strong {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
+            font-weight: 500;
+        }
+
+
+        .room-link {
+            padding: 13px 19px;
+            border: 1px solid var(--gold);
+            color: var(--navy);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+
+        .room-link:hover {
+            background: var(--gold);
+        }
+
+
+        /* =====================================================
+           CTA
+        ===================================================== */
+
+        .rooms-cta {
+            width: min(1300px, 90%);
+            margin: 0 auto 110px;
+            padding: 80px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7,21,33,0.94),
+                    rgba(7,21,33,0.72)
+                ),
+                url("/images/pool-leisure.jpg")
+                center/cover;
+        }
+
+
+        .rooms-cta-content {
+            position: relative;
+            max-width: 650px;
+        }
+
+
+        .rooms-cta h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 60px;
+            font-weight: 400;
+            line-height: 1;
+            margin-bottom: 18px;
+        }
+
+
+        .rooms-cta p {
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 30px;
+            line-height: 1.8;
+        }
+
+
+        .rooms-cta-button {
+            display: inline-block;
+            padding: 15px 25px;
+            background: var(--gold);
+            color: var(--navy);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .rooms-footer {
+            background: var(--navy);
+            color: white;
+            padding: 65px 5% 30px;
+        }
+
+
+        .rooms-footer-inner {
+            max-width: 1300px;
+            margin: auto;
+        }
+
+
+        .rooms-footer-grid {
+            display: grid;
+            grid-template-columns:
+                1.5fr 1fr 1fr 1fr;
+            gap: 50px;
+            padding-bottom: 50px;
+        }
+
+
+        .rooms-footer h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 38px;
+            font-weight: 500;
+        }
+
+
+        .rooms-footer .gold-text {
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 3px;
+        }
+
+
+        .rooms-footer p {
+            max-width: 320px;
+            margin-top: 18px;
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+
+        .rooms-footer h3 {
+            color: var(--gold);
+            font-size: 10px;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+        }
+
+
+        .rooms-footer a {
+            display: block;
+            margin-bottom: 9px;
+            color: rgba(255,255,255,0.68);
+            font-size: 13px;
+        }
+
+
+        .rooms-footer a:hover {
+            color: var(--gold);
+        }
+
+
+        .rooms-footer-bottom {
+            border-top:
+                1px solid rgba(255,255,255,0.12);
+            padding-top: 25px;
+            color: rgba(255,255,255,0.4);
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ===================================================== */
+
+        @media (max-width: 850px) {
+
+            .rooms-nav {
+                display: none;
+            }
+
+
+            .rooms-grid {
+                grid-template-columns: 1fr;
+            }
+
+
+            .rooms-footer-grid {
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+
+            .rooms-cta {
+                padding: 55px 35px;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .rooms-hero-content {
+                padding-top: 160px;
+            }
+
+
+            .rooms-hero h1 {
+                font-size: 58px;
+            }
+
+
+            .rooms-intro h2 {
+                font-size: 45px;
+            }
+
+
+            .room-image {
+                height: 300px;
+            }
+
+
+            .room-content {
+                padding: 25px;
+            }
+
+
+            .room-content h3 {
+                font-size: 34px;
+            }
+
+
+            .room-bottom {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+
+            .room-link {
+                width: 100%;
+                text-align: center;
+            }
+
+
+            .rooms-cta {
+                width: 94%;
+                padding: 45px 25px;
+            }
+
+
+            .rooms-cta h2 {
+                font-size: 45px;
+            }
+
+
+            .rooms-footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header class="rooms-header">
+
+        <div class="rooms-header-inner">
+
+            <a href="/">
+
+                <div class="brand-name">
+                    Don Steve
+                </div>
+
+                <div class="brand-subtitle">
+                    IMPERIAL HOTEL
+                </div>
+
+            </a>
+
+
+            <nav class="rooms-nav">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/rooms.html">
+                    Rooms
+                </a>
+
+                <a href="/booking.html">
+                    Reservations
+                </a>
+
+                <a href="/#dining">
+                    Dining
+                </a>
+
+                <a
+                    href="/booking.html"
+                    class="book-button"
+                >
+                    Book Now
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ====================================================== -->
+
+    <section class="rooms-hero">
+
+        <div class="rooms-hero-bg"></div>
+
+
+        <div class="rooms-hero-content">
+
+            <div class="eyebrow">
+                Accommodation
+            </div>
+
+            <h1>
+                Rooms made
+                for lingering.
+            </h1>
+
+            <p>
+                Discover a collection of refined rooms and
+                suites where contemporary comfort meets
+                timeless hospitality.
+            </p>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         INTRO
+    ====================================================== -->
+
+    <section class="rooms-intro">
+
+        <div class="eyebrow">
+            The Collection
+        </div>
+
+        <h2>
+            Your private retreat.
+        </h2>
+
+        <p>
+            Each accommodation at Don Steve Imperial Hotel
+            has been designed as a quiet sanctuary, with
+            generous spaces, sophisticated interiors and
+            everything needed for an exceptional stay.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         ROOMS
+    ====================================================== -->
+
+    <main class="rooms-container">
+
+        <div class="rooms-grid">
+
+
+            <!-- DELUXE -->
+
+            <article class="room-card">
+
+                <div class="room-image">
+
+                    <img
+                        src="/images/deluxe-king-room.jpg"
+                        alt="Deluxe King Room"
+                    >
+
+                </div>
+
+
+                <div class="room-content">
+
+                    <div class="room-number">
+                        01 — DELUXE COLLECTION
+                    </div>
+
+                    <h3>
+                        Deluxe King Room
+                    </h3>
+
+                    <p>
+                        An elegant private retreat with a
+                        generous king bed, refined interiors
+                        and a calm atmosphere designed for
+                        restful stays.
+                    </p>
+
+
+                    <div class="room-features">
+
+                        <span class="room-feature">
+                            King Bed
+                        </span>
+
+                        <span class="room-feature">
+                            City View
+                        </span>
+
+                        <span class="room-feature">
+                            Wi-Fi
+                        </span>
+
+                        <span class="room-feature">
+                            2 Guests
+                        </span>
+
+                    </div>
+
+
+                    <div class="room-bottom">
+
+                        <div class="room-price">
+
+                            <span>
+                                From
+                            </span>
+
+                            <strong>
+                                ₦250,000
+                            </strong>
+
+                        </div>
+
+
+                        <a
+                            href="/booking.html?room=Deluxe%20King%20Room"
+                            class="room-link"
+                        >
+                            Reserve Room
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- EXECUTIVE -->
+
+            <article class="room-card">
+
+                <div class="room-image">
+
+                    <img
+                        src="/images/executive-suite.jpg"
+                        alt="Executive Suite"
+                    >
+
+                </div>
+
+
+                <div class="room-content">
+
+                    <div class="room-number">
+                        02 — EXECUTIVE COLLECTION
+                    </div>
+
+                    <h3>
+                        Executive Suite
+                    </h3>
+
+                    <p>
+                        A spacious suite created for longer
+                        stays, business travel and guests who
+                        appreciate additional living space.
+                    </p>
+
+
+                    <div class="room-features">
+
+                        <span class="room-feature">
+                            King Bed
+                        </span>
+
+                        <span class="room-feature">
+                            Living Area
+                        </span>
+
+                        <span class="room-feature">
+                            Wi-Fi
+                        </span>
+
+                        <span class="room-feature">
+                            3 Guests
+                        </span>
+
+                    </div>
+
+
+                    <div class="room-bottom">
+
+                        <div class="room-price">
+
+                            <span>
+                                From
+                            </span>
+
+                            <strong>
+                                ₦450,000
+                            </strong>
+
+                        </div>
+
+
+                        <a
+                            href="/booking.html?room=Executive%20Suite"
+                            class="room-link"
+                        >
+                            Reserve Suite
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- PRESIDENTIAL -->
+
+            <article class="room-card">
+
+                <div class="room-image">
+
+                    <img
+                        src="/images/presidential-suite.jpg"
+                        alt="Presidential Suite"
+                    >
+
+                </div>
+
+
+                <div class="room-content">
+
+                    <div class="room-number">
+                        03 — IMPERIAL COLLECTION
+                    </div>
+
+                    <h3>
+                        Presidential Suite
+                    </h3>
+
+                    <p>
+                        Our signature accommodation, combining
+                        expansive living spaces, sophisticated
+                        design and a private atmosphere for
+                        extraordinary stays.
+                    </p>
+
+
+                    <div class="room-features">
+
+                        <span class="room-feature">
+                            King Bed
+                        </span>
+
+                        <span class="room-feature">
+                            Private Lounge
+                        </span>
+
+                        <span class="room-feature">
+                            Premium Wi-Fi
+                        </span>
+
+                        <span class="room-feature">
+                            4 Guests
+                        </span>
+
+                    </div>
+
+
+                    <div class="room-bottom">
+
+                        <div class="room-price">
+
+                            <span>
+                                From
+                            </span>
+
+                            <strong>
+                                ₦850,000
+                            </strong>
+
+                        </div>
+
+
+                        <a
+                            href="/booking.html?room=Presidential%20Suite"
+                            class="room-link"
+                        >
+                            Reserve Suite
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+
+            <!-- HOTEL INTERIOR -->
+
+            <article class="room-card">
+
+                <div class="room-image">
+
+                    <img
+                        src="/images/elegant-interior.jpg"
+                        alt="Don Steve Imperial Hotel interior"
+                    >
+
+                </div>
+
+
+                <div class="room-content">
+
+                    <div class="room-number">
+                        04 — IMPERIAL EXPERIENCE
+                    </div>
+
+                    <h3>
+                        The Imperial Experience
+                    </h3>
+
+                    <p>
+                        Beyond your accommodation, discover
+                        elegant shared spaces, attentive
+                        hospitality, dining and leisure
+                        experiences throughout the hotel.
+                    </p>
+
+
+                    <div class="room-features">
+
+                        <span class="room-feature">
+                            Fine Dining
+                        </span>
+
+                        <span class="room-feature">
+                            Pool
+                        </span>
+
+                        <span class="room-feature">
+                            Wellness
+                        </span>
+
+                        <span class="room-feature">
+                            Events
+                        </span>
+
+                    </div>
+
+
+                    <div class="room-bottom">
+
+                        <div class="room-price">
+
+                            <span>
+                                Experience
+                            </span>
+
+                            <strong>
+                                5 Star
+                            </strong>
+
+                        </div>
+
+
+                        <a
+                            href="/booking.html"
+                            class="room-link"
+                        >
+                            Plan Your Stay
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         CTA
+    ====================================================== -->
+
+    <section class="rooms-cta">
+
+        <div class="rooms-cta-content">
+
+            <div class="eyebrow">
+                Your Stay Awaits
+            </div>
+
+            <h2>
+                Make your next
+                stay memorable.
+            </h2>
+
+            <p>
+                Choose your preferred accommodation and
+                submit a reservation request with our
+                reservations team.
+            </p>
+
+            <a
+                href="/booking.html"
+                class="rooms-cta-button"
+            >
+                Begin Your Reservation
+            </a>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="rooms-footer">
+
+        <div class="rooms-footer-inner">
+
+            <div class="rooms-footer-grid">
+
+
+                <div>
+
+                    <h2>
+                        Don Steve
+                    </h2>
+
+                    <span class="gold-text">
+                        IMPERIAL HOTEL
+                    </span>
+
+                    <p>
+                        Refined hospitality, elegant spaces
+                        and memorable stays in Nigeria.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        HOTEL
+                    </h3>
+
+                    <a href="/">
+                        Home
+                    </a>
+
+                    <a href="/rooms.html">
+                        Rooms
+                    </a>
+
+                    <a href="/booking.html">
+                        Reservations
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        EXPERIENCE
+                    </h3>
+
+                    <a href="/#dining">
+                        Dining
+                    </a>
+
+                    <a href="/#wellness">
+                        Wellness
+                    </a>
+
+                    <a href="/#events">
+                        Events
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        CONTACT
+                    </h3>
+
+                    <a href="mailto:reservations@donstevehotel.com">
+                        Reservations
+                    </a>
+
+                    <a href="tel:+2340000000000">
+                        +234 000 000 0000
+                    </a>
+
+                    <a href="/">
+                        Lagos, Nigeria
+                    </a>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="rooms-footer-bottom">
+
+                © 2026 Don Steve Imperial Hotel.
+                All rights reserved.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

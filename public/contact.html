@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Contact Don Steve Imperial Hotel for reservations, concierge services, events, dining and luxury hotel enquiries."
+    >
+
+    <title>
+        Contact Us | Don Steve Imperial Hotel
+    </title>
+
+
+    <!-- GOOGLE FONTS -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- MAIN CSS -->
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+
+    <!-- CONTACT PAGE CSS -->
+
+    <style>
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .contact-page {
+            background: #ffffff;
+            color: #071521;
+        }
+
+
+        /* =====================================================
+           HEADER
+        ===================================================== */
+
+        .contact-page .luxury-header {
+            background: #071521 !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .contact-page .luxury-header .luxury-logo {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .contact-page .luxury-header .logo-name {
+            color: #ffffff !important;
+        }
+
+        .contact-page .luxury-header .logo-sub {
+            color: #c7a15a !important;
+        }
+
+        .contact-page .luxury-header .logo-line {
+            background: #c7a15a !important;
+        }
+
+        .contact-page .luxury-header .luxury-navigation a {
+            color: #ffffff !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+        .contact-page .luxury-header .luxury-navigation a:hover,
+        .contact-page .luxury-header .luxury-navigation a.active {
+            color: #c7a15a !important;
+        }
+
+
+        /* =====================================================
+           HERO
+        ===================================================== */
+
+        .contact-hero {
+            position: relative;
+            min-height: 620px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    rgba(7, 21, 33, 0.60),
+                    rgba(7, 21, 33, 0.78)
+                ),
+                url("/images/elegant-interior.jpg")
+                center center / cover no-repeat;
+        }
+
+        .contact-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7, 21, 33, 0.82),
+                    rgba(7, 21, 33, 0.28),
+                    rgba(7, 21, 33, 0.70)
+                );
+
+            pointer-events: none;
+        }
+
+        .contact-hero-content {
+            position: relative;
+            z-index: 2;
+
+            width: min(900px, 90%);
+            margin: 0 auto;
+
+            padding: 120px 0 100px;
+
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .contact-eyebrow {
+            display: inline-block;
+
+            margin-bottom: 22px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .contact-hero-content h1 {
+            margin: 0;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(58px, 8vw, 105px);
+            font-weight: 500;
+
+            line-height: 0.92;
+        }
+
+        .contact-hero-content p {
+            max-width: 680px;
+
+            margin: 30px auto 0;
+
+            color: rgba(255, 255, 255, 0.84);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+
+        /* =====================================================
+           INTRO
+        ===================================================== */
+
+        .contact-intro {
+            padding: 110px 7%;
+            background: #ffffff;
+        }
+
+        .contact-intro-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+
+            gap: 80px;
+        }
+
+        .contact-intro-label {
+            margin-bottom: 18px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.20em;
+            text-transform: uppercase;
+        }
+
+        .contact-intro h2 {
+            margin: 0;
+
+            color: #071521;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(42px, 5vw, 66px);
+            font-weight: 500;
+
+            line-height: 1.02;
+        }
+
+        .contact-intro-copy p {
+            margin: 0 0 22px;
+
+            color: #555b60;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 15px;
+
+            line-height: 1.9;
+        }
+
+
+        /* =====================================================
+           MAIN CONTACT SECTION
+        ===================================================== */
+
+        .contact-main {
+            padding: 100px 7% 120px;
+            background: #f7f5f0;
+        }
+
+        .contact-main-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 0.75fr 1.25fr;
+
+            gap: 70px;
+            align-items: start;
+        }
+
+
+        /* =====================================================
+           CONTACT DETAILS
+        ===================================================== */
+
+        .contact-details {
+            padding: 55px 45px;
+
+            background: #071521;
+            color: #ffffff;
+        }
+
+        .contact-details-label {
+            margin-bottom: 18px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .contact-details h2 {
+            margin: 0 0 42px;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 43px;
+            font-weight: 500;
+
+            line-height: 1;
+        }
+
+        .contact-detail-item {
+            padding-bottom: 28px;
+            margin-bottom: 28px;
+
+            border-bottom:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+        }
+
+        .contact-detail-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .contact-detail-title {
+            margin-bottom: 9px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .contact-detail-item p {
+            margin: 0;
+
+            color: rgba(255, 255, 255, 0.82);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+        .contact-detail-item a {
+            color: rgba(255, 255, 255, 0.88);
+            text-decoration: none;
+
+            transition: color 0.25s ease;
+        }
+
+        .contact-detail-item a:hover {
+            color: #c7a15a;
+        }
+
+
+        /* =====================================================
+           FORM WRAPPER
+        ===================================================== */
+
+        .contact-form-wrapper {
+            padding: 55px;
+
+            background: #ffffff;
+
+            box-shadow:
+                0 20px 60px
+                rgba(7, 21, 33, 0.07);
+        }
+
+        .contact-form-heading {
+            margin-bottom: 35px;
+        }
+
+        .contact-form-heading span {
+            display: block;
+
+            margin-bottom: 12px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .contact-form-heading h2 {
+            margin: 0;
+
+            color: #071521;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 48px;
+            font-weight: 500;
+
+            line-height: 1;
+        }
+
+        .contact-form-heading p {
+            margin: 17px 0 0;
+
+            color: #666;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           FORM
+        ===================================================== */
+
+        .contact-form {
+            width: 100%;
+        }
+
+        .contact-form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 22px;
+        }
+
+        .contact-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .contact-form-group label {
+            margin-bottom: 9px;
+
+            color: #071521;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.10em;
+            text-transform: uppercase;
+        }
+
+        .contact-form-group input,
+        .contact-form-group textarea {
+            width: 100%;
+            box-sizing: border-box;
+
+            border: 1px solid #dedbd3;
+            border-radius: 0;
+
+            outline: none;
+
+            background: #ffffff;
+            color: #071521;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            padding: 15px 16px;
+
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+        }
+
+        .contact-form-group input {
+            min-height: 52px;
+        }
+
+        .contact-form-group textarea {
+            min-height: 170px;
+            resize: vertical;
+
+            line-height: 1.7;
+        }
+
+        .contact-form-group input:focus,
+        .contact-form-group textarea:focus {
+            border-color: #c7a15a;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(199, 161, 90, 0.10);
+        }
+
+
+        /* =====================================================
+           BUTTON
+        ===================================================== */
+
+        .contact-submit-area {
+            margin-top: 28px;
+        }
+
+        .contact-form button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            gap: 18px;
+
+            min-width: 190px;
+
+            border: 1px solid #c7a15a;
+
+            background: #c7a15a;
+            color: #071521;
+
+            padding: 16px 25px;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.13em;
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            transition:
+                background 0.25s ease,
+                color 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+        .contact-form button:hover {
+            background: #071521;
+            border-color: #071521;
+            color: #ffffff;
+        }
+
+        .contact-form button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .contact-form-note {
+            margin-top: 16px;
+
+            color: #777;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =====================================================
+           FORM MESSAGES
+        ===================================================== */
+
+        .contact-form-message {
+            width: 100%;
+            box-sizing: border-box;
+
+            margin: 20px 0;
+
+            padding: 18px 20px;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            line-height: 1.6;
+        }
+
+        .contact-form-message.error {
+            background: #fff3f1;
+
+            border:
+                1px solid
+                #d9a29a;
+
+            color: #8a3025;
+        }
+
+        .contact-form-message.success {
+            display: flex;
+            align-items: flex-start;
+
+            gap: 18px;
+
+            background: #f8f5ed;
+
+            border:
+                1px solid
+                #c7a15a;
+
+            color: #071521;
+
+            padding: 24px;
+        }
+
+        .success-icon {
+            width: 42px;
+            height: 42px;
+
+            flex-shrink: 0;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border:
+                1px solid
+                #c7a15a;
+
+            border-radius: 50%;
+
+            color: #c7a15a;
+
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .success-content strong {
+            display: block;
+
+            margin-bottom: 6px;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .success-content p {
+            margin: 0 0 16px;
+
+            color: #4b4b4b;
+
+            line-height: 1.7;
+        }
+
+        .send-another-button {
+            border:
+                1px solid
+                #c7a15a;
+
+            background: transparent;
+
+            padding: 10px 18px;
+
+            color: #071521;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+
+            cursor: pointer;
+        }
+
+        .send-another-button:hover {
+            background: #071521;
+            color: #ffffff;
+        }
+
+
+        /* =====================================================
+           SERVICES
+        ===================================================== */
+
+        .contact-services {
+            padding: 115px 7%;
+            background: #ffffff;
+        }
+
+        .contact-services-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .services-heading {
+            max-width: 700px;
+            margin-bottom: 60px;
+        }
+
+        .services-heading span {
+            display: block;
+
+            margin-bottom: 15px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .services-heading h2 {
+            margin: 0;
+
+            color: #071521;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(43px, 5vw, 64px);
+            font-weight: 500;
+
+            line-height: 1;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 24px;
+        }
+
+        .service-card {
+            min-height: 250px;
+
+            padding: 38px 32px;
+
+            background: #f7f5f0;
+
+            border:
+                1px solid
+                #ebe7de;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+
+            box-shadow:
+                0 18px 40px
+                rgba(7, 21, 33, 0.08);
+        }
+
+        .service-number {
+            margin-bottom: 25px;
+
+            color: #c7a15a;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+        }
+
+        .service-card h3 {
+            margin: 0 0 15px;
+
+            color: #071521;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 31px;
+            font-weight: 500;
+        }
+
+        .service-card p {
+            margin: 0;
+
+            color: #666;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =====================================================
+           LOCATION
+        ===================================================== */
+
+        .contact-location {
+            padding: 0 7% 120px;
+            background: #ffffff;
+        }
+
+        .contact-location-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            min-height: 390px;
+        }
+
+        .location-image {
+            background:
+                linear-gradient(
+                    rgba(7, 21, 33, 0.18),
+                    rgba(7, 21, 33, 0.45)
+                ),
+                url("/images/elegant-interior.jpg")
+                center center / cover no-repeat;
+        }
+
+        .location-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            padding: 55px;
+
+            background: #071521;
+            color: #ffffff;
+        }
+
+        .location-content span {
+            margin-bottom: 15px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .location-content h2 {
+            margin: 0 0 20px;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 48px;
+            font-weight: 500;
+
+            line-height: 1;
+        }
+
+        .location-content p {
+            max-width: 450px;
+
+            margin: 0;
+
+            color: rgba(255, 255, 255, 0.76);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+
+            line-height: 1.9;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ===================================================== */
+
+        .contact-footer {
+            padding: 70px 7% 35px;
+
+            background: #071521;
+            color: #ffffff;
+        }
+
+        .contact-footer-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+
+            gap: 60px;
+
+            padding-bottom: 55px;
+
+            border-bottom:
+                1px solid
+                rgba(255, 255, 255, 0.12);
+        }
+
+        .footer-brand h2 {
+            margin: 0;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 36px;
+            font-weight: 500;
+        }
+
+        .footer-brand span {
+            display: block;
+
+            margin-top: 5px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 600;
+
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+        }
+
+        .footer-brand p {
+            max-width: 370px;
+
+            margin: 20px 0 0;
+
+            color: rgba(255, 255, 255, 0.65);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 13px;
+
+            line-height: 1.8;
+        }
+
+        .footer-column h3 {
+            margin: 0 0 20px;
+
+            color: #c7a15a;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+        }
+
+        .footer-column a {
+            display: block;
+
+            width: fit-content;
+
+            margin-bottom: 11px;
+
+            color: rgba(255, 255, 255, 0.70);
+
+            text-decoration: none;
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 13px;
+        }
+
+        .footer-column a:hover {
+            color: #c7a15a;
+        }
+
+        .footer-bottom {
+            padding-top: 28px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+
+            color: rgba(255, 255, 255, 0.45);
+
+            font-family: "DM Sans", sans-serif;
+            font-size: 11px;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ===================================================== */
+
+        @media (max-width: 1000px) {
+
+            .contact-intro-inner {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .contact-main-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .footer-brand {
+                grid-column: 1 / -1;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .contact-hero {
+                min-height: 530px;
+            }
+
+            .contact-hero-content {
+                padding: 100px 0 80px;
+            }
+
+            .contact-hero-content h1 {
+                font-size: 60px;
+            }
+
+            .contact-intro,
+            .contact-main,
+            .contact-services {
+                padding-left: 6%;
+                padding-right: 6%;
+            }
+
+            .contact-intro {
+                padding-top: 75px;
+                padding-bottom: 75px;
+            }
+
+            .contact-main {
+                padding-top: 70px;
+                padding-bottom: 80px;
+            }
+
+            .contact-details {
+                padding: 35px 28px;
+            }
+
+            .contact-form-wrapper {
+                padding: 30px 22px;
+            }
+
+            .contact-form-heading h2 {
+                font-size: 40px;
+            }
+
+            .contact-form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form-group.full-width {
+                grid-column: auto;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-location {
+                padding-left: 6%;
+                padding-right: 6%;
+                padding-bottom: 80px;
+            }
+
+            .contact-location-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .location-image {
+                min-height: 280px;
+            }
+
+            .location-content {
+                padding: 40px 28px;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .footer-brand {
+                grid-column: auto;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .contact-form-message.success {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .success-content strong {
+                font-size: 24px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body class="contact-page">
+
+
+    <!-- =====================================================
+         HEADER
+    ===================================================== -->
+
+    <header class="luxury-header">
+
+        <div class="luxury-header-inner">
+
+
+            <a
+                href="/"
+                class="luxury-logo"
+            >
+
+                <span class="logo-name">
+                    Don Steve
+                </span>
+
+                <span class="logo-line"></span>
+
+                <span class="logo-sub">
+                    Imperial Hotel
+                </span>
+
+            </a>
+
+
+            <nav class="luxury-navigation">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/rooms.html">
+                    Rooms & Suites
+                </a>
+
+                <a href="/about.html">
+                    About
+                </a>
+
+                <a
+                    href="/contact.html"
+                    class="active"
+                >
+                    Contact
+                </a>
+
+                <a href="/booking.html">
+                    Reserve
+                </a>
+
+            </nav>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+    ===================================================== -->
+
+    <main>
+
+        <section class="contact-hero">
+
+            <div class="contact-hero-content">
+
+                <span class="contact-eyebrow">
+                    Don Steve Imperial Hotel
+                </span>
+
+                <h1>
+                    Contact Us
+                </h1>
+
+                <p>
+                    Whether you are planning an unforgettable stay,
+                    arranging an event, or simply wish to speak with
+                    our team, we are here to assist with every detail.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             INTRO
+        ================================================== -->
+
+        <section class="contact-intro">
+
+            <div class="contact-intro-inner">
+
+                <div>
+
+                    <div class="contact-intro-label">
+                        Your Invitation
+                    </div>
+
+                    <h2>
+                        Let us make
+                        your stay
+                        exceptional.
+                    </h2>
+
+                </div>
+
+
+                <div class="contact-intro-copy">
+
+                    <p>
+                        At Don Steve Imperial Hotel, every interaction
+                        is an opportunity to deliver thoughtful,
+                        discreet and highly personalised hospitality.
+                    </p>
+
+                    <p>
+                        Our reservations and guest services team is
+                        available to assist with accommodation,
+                        dining, celebrations, meetings and special
+                        requests.
+                    </p>
+
+                    <p>
+                        Send us a message using the form below and a
+                        member of our team will review your enquiry
+                        and respond as soon as possible.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             CONTACT
+        ================================================== -->
+
+        <section class="contact-main">
+
+            <div class="contact-main-inner">
+
+
+                <!-- DETAILS -->
+
+                <aside class="contact-details">
+
+                    <div class="contact-details-label">
+                        Speak With Us
+                    </div>
+
+                    <h2>
+                        We are
+                        here for you.
+                    </h2>
+
+
+                    <div class="contact-detail-item">
+
+                        <div class="contact-detail-title">
+                            Reservations
+                        </div>
+
+                        <p>
+                            <a href="tel:+2340000000000">
+                                +234 000 000 0000
+                            </a>
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-detail-item">
+
+                        <div class="contact-detail-title">
+                            Email
+                        </div>
+
+                        <p>
+                            <a href="mailto:reservations@donsteveimperialhotel.com">
+                                reservations@donsteveimperialhotel.com
+                            </a>
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-detail-item">
+
+                        <div class="contact-detail-title">
+                            General Enquiries
+                        </div>
+
+                        <p>
+                            <a href="mailto:info@donsteveimperialhotel.com">
+                                info@donsteveimperialhotel.com
+                            </a>
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-detail-item">
+
+                        <div class="contact-detail-title">
+                            Guest Services
+                        </div>
+
+                        <p>
+                            Our guest services team is available
+                            to assist with hotel information,
+                            dining, transportation and special
+                            arrangements.
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-detail-item">
+
+                        <div class="contact-detail-title">
+                            Location
+                        </div>
+
+                        <p>
+                            Nigeria
+                        </p>
+
+                    </div>
+
+                </aside>
+
+
+
+                <!-- FORM -->
+
+                <div class="contact-form-wrapper">
+
+                    <div class="contact-form-heading">
+
+                        <span>
+                            Send An Enquiry
+                        </span>
+
+                        <h2>
+                            How may we assist you?
+                        </h2>
+
+                        <p>
+                            Complete the form below and our team
+                            will be in touch with you.
+                        </p>
+
+                    </div>
+
+
+                    <form
+                        id="contactForm"
+                        class="contact-form"
+                    >
+
+                        <div class="contact-form-grid">
+
+
+                            <div class="contact-form-group">
+
+                                <label for="name">
+                                    Full Name *
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="Your full name"
+                                    autocomplete="name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="contact-form-group">
+
+                                <label for="email">
+                                    Email Address *
+                                </label>
+
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="you@example.com"
+                                    autocomplete="email"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="contact-form-group">
+
+                                <label for="phone">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="+234..."
+                                    autocomplete="tel"
+                                >
+
+                            </div>
+
+
+                            <div class="contact-form-group">
+
+                                <label for="subject">
+                                    Subject
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="subject"
+                                    name="subject"
+                                    placeholder="How can we help?"
+                                >
+
+                            </div>
+
+
+                            <div class="contact-form-group full-width">
+
+                                <label for="message">
+                                    Message *
+                                </label>
+
+                                <textarea
+                                    id="message"
+                                    name="message"
+                                    rows="7"
+                                    placeholder="Tell us how we can assist you..."
+                                    required
+                                ></textarea>
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            id="contactMessage"
+                            class="contact-form-message"
+                            style="display: none;"
+                        ></div>
+
+
+                        <div class="contact-submit-area">
+
+                            <button type="submit">
+
+                                Send Message
+
+                                <span>
+                                    →
+                                </span>
+
+                            </button>
+
+                            <p class="contact-form-note">
+                                Your enquiry will be handled by
+                                our hotel guest services team.
+                            </p>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             SERVICES
+        ================================================== -->
+
+        <section class="contact-services">
+
+            <div class="contact-services-inner">
+
+                <div class="services-heading">
+
+                    <span>
+                        Guest Services
+                    </span>
+
+                    <h2>
+                        More than a hotel.
+                        A complete experience.
+                    </h2>
+
+                </div>
+
+
+                <div class="services-grid">
+
+
+                    <article class="service-card">
+
+                        <div class="service-number">
+                            01
+                        </div>
+
+                        <h3>
+                            Reservations
+                        </h3>
+
+                        <p>
+                            From selecting the ideal room or suite
+                            to arranging your arrival, our reservations
+                            team can assist with every stage of your stay.
+                        </p>
+
+                    </article>
+
+
+                    <article class="service-card">
+
+                        <div class="service-number">
+                            02
+                        </div>
+
+                        <h3>
+                            Concierge
+                        </h3>
+
+                        <p>
+                            Allow our guest services team to assist
+                            with dining, transportation, celebrations,
+                            local experiences and special arrangements.
+                        </p>
+
+                    </article>
+
+
+                    <article class="service-card">
+
+                        <div class="service-number">
+                            03
+                        </div>
+
+                        <h3>
+                            Events & Meetings
+                        </h3>
+
+                        <p>
+                            Contact us about private celebrations,
+                            corporate meetings, conferences and
+                            bespoke events hosted at the hotel.
+                        </p>
+
+                    </article>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             LOCATION
+        ================================================== -->
+
+        <section class="contact-location">
+
+            <div class="contact-location-inner">
+
+                <div
+                    class="location-image"
+                    aria-label="Luxury hotel interior"
+                ></div>
+
+
+                <div class="location-content">
+
+                    <span>
+                        Visit Don Steve
+                    </span>
+
+                    <h2>
+                        Your journey
+                        begins here.
+                    </h2>
+
+                    <p>
+                        Discover refined accommodation, thoughtful
+                        service, elegant dining and memorable
+                        experiences at Don Steve Imperial Hotel.
+                        Contact our team before your arrival and
+                        let us help create a stay designed around you.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+
+    <footer class="contact-footer">
+
+        <div class="contact-footer-inner">
+
+            <div class="footer-top">
+
+
+                <div class="footer-brand">
+
+                    <h2>
+                        Don Steve
+                    </h2>
+
+                    <span>
+                        Imperial Hotel
+                    </span>
+
+                    <p>
+                        A refined destination for exceptional
+                        stays, memorable dining, elegant events
+                        and personalised hospitality.
+                    </p>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h3>
+                        Explore
+                    </h3>
+
+                    <a href="/">
+                        Home
+                    </a>
+
+                    <a href="/rooms.html">
+                        Rooms & Suites
+                    </a>
+
+                    <a href="/about.html">
+                        About
+                    </a>
+
+                    <a href="/contact.html">
+                        Contact
+                    </a>
+
+                    <a href="/booking.html">
+                        Reserve
+                    </a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h3>
+                        Contact
+                    </h3>
+
+                    <a href="mailto:reservations@donsteveimperialhotel.com">
+                        Reservations
+                    </a>
+
+                    <a href="mailto:info@donsteveimperialhotel.com">
+                        General Enquiries
+                    </a>
+
+                    <a href="tel:+2340000000000">
+                        +234 000 000 0000
+                    </a>
+
+                    <a href="/booking.html">
+                        Make a Reservation
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <p>
+                    © 2026 Don Steve Imperial Hotel.
+                    All rights reserved.
+                </p>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+
+    <!-- CONTACT JAVASCRIPT -->
+
+    <script src="/js/contact.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Don Steve Imperial Hotel administrator login."
+    >
+
+    <title>
+        Administrator Login | Don Steve Imperial Hotel
+    </title>
+
+
+    <!--
+    |--------------------------------------------------------------------------
+    | GOOGLE FONTS
+    |--------------------------------------------------------------------------
+    -->
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <style>
+
+        /*
+        |--------------------------------------------------------------------------
+        | ROOT
+        |--------------------------------------------------------------------------
+        */
+
+        :root {
+
+            --navy:
+                #071521;
+
+            --navy-light:
+                #102532;
+
+            --navy-soft:
+                #162f3e;
+
+            --gold:
+                #c7a15a;
+
+            --gold-light:
+                #d8bb7d;
+
+            --gold-dark:
+                #a9823e;
+
+            --cream:
+                #f8f4ec;
+
+            --ivory:
+                #fffdf8;
+
+            --white:
+                #ffffff;
+
+            --text:
+                #17232b;
+
+            --muted:
+                #66727a;
+
+            --border:
+                #ddd7cb;
+
+            --danger:
+                #a33d3d;
+
+            --danger-bg:
+                #fceaea;
+
+            --success:
+                #287052;
+
+            --success-bg:
+                #eaf6ef;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESET
+        |--------------------------------------------------------------------------
+        */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            min-height: 100%;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                "DM Sans",
+                Arial,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #071521 0%,
+                    #102532 48%,
+                    #071521 100%
+                );
+
+            color:
+                var(--text);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            padding:
+                40px 20px;
+
+            position:
+                relative;
+
+            overflow-x:
+                hidden;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | BACKGROUND DECORATION
+        |--------------------------------------------------------------------------
+        */
+
+        body::before {
+
+            content:
+                "";
+
+            position:
+                fixed;
+
+            width:
+                520px;
+
+            height:
+                520px;
+
+            border:
+                1px solid
+                rgba(
+                    199,
+                    161,
+                    90,
+                    0.16
+                );
+
+            border-radius:
+                50%;
+
+            top:
+                -260px;
+
+            right:
+                -180px;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        body::after {
+
+            content:
+                "";
+
+            position:
+                fixed;
+
+            width:
+                420px;
+
+            height:
+                420px;
+
+            border:
+                1px solid
+                rgba(
+                    199,
+                    161,
+                    90,
+                    0.10
+                );
+
+            border-radius:
+                50%;
+
+            bottom:
+                -220px;
+
+            left:
+                -170px;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN WRAPPER
+        |--------------------------------------------------------------------------
+        */
+
+        .login-wrapper {
+
+            width:
+                100%;
+
+            max-width:
+                460px;
+
+            position:
+                relative;
+
+            z-index:
+                2;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | BRAND
+        |--------------------------------------------------------------------------
+        */
+
+        .brand {
+
+            text-align:
+                center;
+
+            margin-bottom:
+                26px;
+
+            color:
+                var(--white);
+
+        }
+
+
+        .brand-name {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            font-size:
+                clamp(
+                    38px,
+                    6vw,
+                    50px
+                );
+
+            line-height:
+                0.95;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                -0.5px;
+
+        }
+
+
+        .brand-subtitle {
+
+            margin-top:
+                10px;
+
+            font-size:
+                10px;
+
+            font-weight:
+                600;
+
+            letter-spacing:
+                4px;
+
+            text-transform:
+                uppercase;
+
+            color:
+                var(--gold-light);
+
+        }
+
+
+        .brand-line {
+
+            width:
+                52px;
+
+            height:
+                1px;
+
+            background:
+                var(--gold);
+
+            margin:
+                15px auto 0;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN CARD
+        |--------------------------------------------------------------------------
+        */
+
+        .login-card {
+
+            background:
+                var(--ivory);
+
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.7
+                );
+
+            padding:
+                42px;
+
+            box-shadow:
+                0 30px 80px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.28
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | CARD HEADER
+        |--------------------------------------------------------------------------
+        */
+
+        .card-header {
+
+            margin-bottom:
+                30px;
+
+        }
+
+
+        .eyebrow {
+
+            display:
+                block;
+
+            color:
+                var(--gold-dark);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                2.5px;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                9px;
+
+        }
+
+
+        .card-header h1 {
+
+            font-family:
+                "Cormorant Garamond",
+                Georgia,
+                serif;
+
+            color:
+                var(--navy);
+
+            font-size:
+                40px;
+
+            line-height:
+                1;
+
+            font-weight:
+                500;
+
+            margin-bottom:
+                10px;
+
+        }
+
+
+        .card-header p {
+
+            color:
+                var(--muted);
+
+            font-size:
+                13px;
+
+            line-height:
+                1.7;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | GOLD DIVIDER
+        |--------------------------------------------------------------------------
+        */
+
+        .gold-divider {
+
+            width:
+                48px;
+
+            height:
+                2px;
+
+            background:
+                var(--gold);
+
+            margin:
+                18px 0 0;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FORM
+        |--------------------------------------------------------------------------
+        */
+
+        .login-form {
+
+            margin-top:
+                28px;
+
+        }
+
+
+        .form-group {
+
+            margin-bottom:
+                21px;
+
+        }
+
+
+        .form-group label {
+
+            display:
+                block;
+
+            margin-bottom:
+                8px;
+
+            color:
+                var(--navy);
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                2px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .input-wrapper {
+
+            position:
+                relative;
+
+        }
+
+
+        .form-input {
+
+            width:
+                100%;
+
+            height:
+                56px;
+
+            border:
+                1px solid
+                var(--border);
+
+            background:
+                #f8f9fa;
+
+            padding:
+                0 16px;
+
+            color:
+                var(--navy);
+
+            font-family:
+                "DM Sans",
+                Arial,
+                sans-serif;
+
+            font-size:
+                14px;
+
+            outline:
+                none;
+
+            transition:
+                border-color
+                0.25s ease,
+                box-shadow
+                0.25s ease,
+                background
+                0.25s ease;
+
+        }
+
+
+        .form-input::placeholder {
+
+            color:
+                #9aa1a5;
+
+        }
+
+
+        .form-input:focus {
+
+            border-color:
+                var(--gold);
+
+            background:
+                var(--white);
+
+            box-shadow:
+                0 0 0 3px
+                rgba(
+                    199,
+                    161,
+                    90,
+                    0.12
+                );
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PASSWORD TOGGLE
+        |--------------------------------------------------------------------------
+        */
+
+        .password-input {
+
+            padding-right:
+                62px;
+
+        }
+
+
+        .password-toggle {
+
+            position:
+                absolute;
+
+            top:
+                50%;
+
+            right:
+                0;
+
+            transform:
+                translateY(-50%);
+
+            height:
+                100%;
+
+            width:
+                56px;
+
+            border:
+                0;
+
+            background:
+                transparent;
+
+            color:
+                var(--muted);
+
+            cursor:
+                pointer;
+
+            font-family:
+                "DM Sans",
+                Arial,
+                sans-serif;
+
+            font-size:
+                10px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                1px;
+
+            text-transform:
+                uppercase;
+
+        }
+
+
+        .password-toggle:hover {
+
+            color:
+                var(--gold-dark);
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN MESSAGE
+        |--------------------------------------------------------------------------
+        */
+
+        .login-message {
+
+            display:
+                none;
+
+            margin-bottom:
+                20px;
+
+            padding:
+                13px 15px;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.5;
+
+            border:
+                1px solid
+                transparent;
+
+        }
+
+
+        .login-message.error {
+
+            display:
+                block;
+
+            color:
+                var(--danger);
+
+            background:
+                var(--danger-bg);
+
+            border-color:
+                #f2caca;
+
+        }
+
+
+        .login-message.success {
+
+            display:
+                block;
+
+            color:
+                var(--success);
+
+            background:
+                var(--success-bg);
+
+            border-color:
+                #cce8d9;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SIGN IN BUTTON
+        |--------------------------------------------------------------------------
+        */
+
+        .login-button {
+
+            width:
+                100%;
+
+            height:
+                56px;
+
+            border:
+                0;
+
+            background:
+                var(--gold);
+
+            color:
+                #151515;
+
+            font-family:
+                "DM Sans",
+                Arial,
+                sans-serif;
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                2px;
+
+            text-transform:
+                uppercase;
+
+            cursor:
+                pointer;
+
+            transition:
+                background
+                0.25s ease,
+                transform
+                0.25s ease,
+                box-shadow
+                0.25s ease;
+
+        }
+
+
+        .login-button:hover {
+
+            background:
+                var(--gold-light);
+
+            transform:
+                translateY(-1px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(
+                    199,
+                    161,
+                    90,
+                    0.2
+                );
+
+        }
+
+
+        .login-button:active {
+
+            transform:
+                translateY(0);
+
+        }
+
+
+        .login-button:disabled {
+
+            opacity:
+                0.65;
+
+            cursor:
+                wait;
+
+            transform:
+                none;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SECURITY NOTE
+        |--------------------------------------------------------------------------
+        */
+
+        .security-note {
+
+            display:
+                flex;
+
+            gap:
+                10px;
+
+            align-items:
+                flex-start;
+
+            margin-top:
+                22px;
+
+            padding-top:
+                20px;
+
+            border-top:
+                1px solid
+                #e8e3d9;
+
+            color:
+                #7b8388;
+
+            font-size:
+                11px;
+
+            line-height:
+                1.6;
+
+        }
+
+
+        .security-icon {
+
+            flex:
+                0 0 auto;
+
+            width:
+                20px;
+
+            height:
+                20px;
+
+            border:
+                1px solid
+                var(--gold);
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            color:
+                var(--gold-dark);
+
+            font-size:
+                10px;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN LINK
+        |--------------------------------------------------------------------------
+        */
+
+        .return-link {
+
+            display:
+                block;
+
+            text-align:
+                center;
+
+            margin-top:
+                24px;
+
+            color:
+                var(--gold-light);
+
+            text-decoration:
+                none;
+
+            font-size:
+                12px;
+
+            transition:
+                color
+                0.2s ease;
+
+        }
+
+
+        .return-link:hover {
+
+            color:
+                var(--white);
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FOOTER
+        |--------------------------------------------------------------------------
+        */
+
+        .login-footer {
+
+            text-align:
+                center;
+
+            margin-top:
+                26px;
+
+            color:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.55
+                );
+
+            font-size:
+                10px;
+
+            letter-spacing:
+                1px;
+
+        }
+
+
+        .login-footer span {
+
+            color:
+                var(--gold);
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RESPONSIVE
+        |--------------------------------------------------------------------------
+        */
+
+        @media (
+            max-width: 600px
+        ) {
+
+            body {
+
+                padding:
+                    25px 15px;
+
+                align-items:
+                    flex-start;
+
+            }
+
+
+            .login-wrapper {
+
+                margin-top:
+                    20px;
+
+            }
+
+
+            .login-card {
+
+                padding:
+                    30px 23px;
+
+            }
+
+
+            .card-header h1 {
+
+                font-size:
+                    35px;
+
+            }
+
+
+            .brand-name {
+
+                font-size:
+                    42px;
+
+            }
+
+        }
+
+
+        @media (
+            max-width: 380px
+        ) {
+
+            .login-card {
+
+                padding:
+                    26px 18px;
+
+            }
+
+
+            .card-header h1 {
+
+                font-size:
+                    32px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <main class="login-wrapper">
+
+
+        <!--
+        |--------------------------------------------------------------------------
+        | HOTEL BRAND
+        |--------------------------------------------------------------------------
+        -->
+
+        <header class="brand">
+
+            <div class="brand-name">
+                Don Steve
+            </div>
+
+            <div class="brand-subtitle">
+                Imperial Hotel · Administration
+            </div>
+
+            <div class="brand-line"></div>
+
+        </header>
+
+
+        <!--
+        |--------------------------------------------------------------------------
+        | LOGIN CARD
+        |--------------------------------------------------------------------------
+        -->
+
+        <section class="login-card">
+
+
+            <div class="card-header">
+
+                <span class="eyebrow">
+                    Private Administration
+                </span>
+
+                <h1>
+                    Administrator Login
+                </h1>
+
+                <p>
+                    Sign in securely to manage
+                    hotel reservations, guests,
+                    rooms and hotel operations.
+                </p>
+
+                <div class="gold-divider"></div>
+
+            </div>
+
+
+            <!--
+            |--------------------------------------------------------------------------
+            | LOGIN FORM
+            |--------------------------------------------------------------------------
+            -->
+
+            <form
+                id="adminLoginForm"
+                class="login-form"
+                autocomplete="on"
+            >
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group">
+
+                    <label
+                        for="username"
+                    >
+                        Username
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            class="form-input"
+                            placeholder="Enter administrator username"
+                            autocomplete="username"
+                            spellcheck="false"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="form-group">
+
+                    <label
+                        for="password"
+                    >
+                        Password
+                    </label>
+
+                    <div class="input-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-input password-input"
+                            placeholder="Enter administrator password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="passwordToggle"
+                            class="password-toggle"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!--
+                |--------------------------------------------------------------------------
+                | LOGIN MESSAGE
+                |--------------------------------------------------------------------------
+                -->
+
+                <div
+                    id="loginMessage"
+                    class="login-message"
+                    role="alert"
+                    aria-live="polite"
+                ></div>
+
+
+                <!--
+                |--------------------------------------------------------------------------
+                | LOGIN BUTTON
+                |--------------------------------------------------------------------------
+                -->
+
+                <button
+                    type="submit"
+                    id="loginButton"
+                    class="login-button"
+                >
+                    Sign In
+                </button>
+
+
+                <!--
+                |--------------------------------------------------------------------------
+                | SECURITY MESSAGE
+                |--------------------------------------------------------------------------
+                -->
+
+                <div class="security-note">
+
+                    <div class="security-icon">
+                        ✓
+                    </div>
+
+                    <p>
+                        This is a private hotel
+                        administration area.
+                        Unauthorized access is
+                        prohibited and administrator
+                        sessions are protected.
+                    </p>
+
+                </div>
+
+            </form>
+
+
+            <!--
+            |--------------------------------------------------------------------------
+            | RETURN TO HOTEL
+            |--------------------------------------------------------------------------
+            -->
+
+            <a
+                href="/"
+                class="return-link"
+            >
+                ← Return to hotel website
+            </a>
+
+
+        </section>
+
+
+        <!--
+        |--------------------------------------------------------------------------
+        | FOOTER
+        |--------------------------------------------------------------------------
+        -->
+
+        <footer class="login-footer">
+
+            ©
+            <span id="currentYear"></span>
+            Don Steve Imperial Hotel
+
+        </footer>
+
+
+    </main>
+
+
+    <!--
+    |--------------------------------------------------------------------------
+    | ADMIN LOGIN JAVASCRIPT
+    |--------------------------------------------------------------------------
+    -->
+
+    <script src="/js/admin-login.js"></script>
+
+
+    <script>
+
+        /*
+        |--------------------------------------------------------------------------
+        | CURRENT YEAR
+        |--------------------------------------------------------------------------
+        */
+
+        const yearElement =
+            document.getElementById(
+                "currentYear"
+            );
+
+        if (yearElement) {
+
+            yearElement.textContent =
+                new Date().getFullYear();
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PASSWORD VISIBILITY
+        |--------------------------------------------------------------------------
+        */
+
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+        const passwordToggle =
+            document.getElementById(
+                "passwordToggle"
+            );
+
+
+        if (
+            passwordInput &&
+            passwordToggle
+        ) {
+
+            passwordToggle.addEventListener(
+                "click",
+                () => {
+
+                    const isPassword =
+                        passwordInput.type ===
+                        "password";
+
+
+                    passwordInput.type =
+                        isPassword
+                            ? "text"
+                            : "password";
+
+
+                    passwordToggle.textContent =
+                        isPassword
+                            ? "Hide"
+                            : "Show";
+
+                }
+            );
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

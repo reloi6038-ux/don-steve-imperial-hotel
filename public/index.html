@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Don Steve Imperial Hotel — refined luxury, exceptional hospitality, elegant rooms, fine dining, wellness and unforgettable experiences."
+    >
+
+    <title>
+        Don Steve Imperial Hotel | Luxury Redefined
+    </title>
+
+
+    <!-- =====================================================
+         FONTS
+    ====================================================== -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+
+    <!-- =====================================================
+         MAIN CSS
+    ====================================================== -->
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+
+    <!-- =====================================================
+         HEADER / VISIBILITY FIX
+    ====================================================== -->
+
+    <style>
+
+        /*
+        =====================================================
+        HEADER
+        =====================================================
+        */
+
+        .luxury-header {
+            position: relative !important;
+            z-index: 1000 !important;
+
+            /*
+            Dark navy background keeps the hotel logo
+            and navigation clearly visible.
+            */
+            background: #071521 !important;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+
+        .header-inner {
+            position: relative;
+            z-index: 1001;
+        }
+
+
+        /*
+        =====================================================
+        HOTEL LOGO
+        =====================================================
+        */
+
+        .luxury-header .luxury-logo {
+            position: relative;
+            z-index: 1002;
+
+            color: #ffffff !important;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+
+        .luxury-header .logo-name {
+            color: #ffffff !important;
+        }
+
+
+        .luxury-header .logo-sub {
+            color: #c7a15a !important;
+        }
+
+
+        .luxury-header .logo-line {
+            background: #c7a15a !important;
+        }
+
+
+        /*
+        =====================================================
+        NAVIGATION
+        =====================================================
+        */
+
+        .luxury-header .luxury-navigation {
+            position: relative;
+            z-index: 1002;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+
+        .luxury-header .luxury-navigation a {
+            color: #ffffff !important;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+
+        .luxury-header .luxury-navigation a:hover {
+            color: #c7a15a !important;
+        }
+
+
+        .luxury-header .luxury-navigation a.active {
+            color: #c7a15a !important;
+        }
+
+
+        /*
+        =====================================================
+        MOBILE MENU BUTTON
+        =====================================================
+        */
+
+        .luxury-header .mobile-menu-button {
+            position: relative;
+            z-index: 1003;
+        }
+
+
+        .luxury-header .mobile-menu-button span {
+            background: #ffffff !important;
+        }
+
+
+        /*
+        =====================================================
+        RESERVE BUTTON
+        =====================================================
+        */
+
+        .luxury-header .header-button {
+            position: relative;
+            z-index: 1002;
+
+            opacity: 1 !important;
+            visibility: visible !important;
+        }
+
+
+        /*
+        =====================================================
+        HERO
+        =====================================================
+        */
+
+        .luxury-hero {
+            position: relative;
+            z-index: 1;
+        }
+
+
+        /*
+        Keep hero bottom content visible.
+        */
+
+        .hero-bottom {
+            position: relative;
+            z-index: 20;
+        }
+
+
+        .hero-location {
+            position: relative;
+            z-index: 21;
+        }
+
+
+        .hero-social {
+            position: relative;
+            z-index: 21;
+        }
+
+
+        /*
+        =====================================================
+        BOOKING BAR
+        =====================================================
+        */
+
+        .luxury-booking {
+            position: relative;
+            z-index: 50;
+
+            /*
+            Creates enough separation so the booking
+            bar does not cover the hero content.
+            */
+            margin-top: 50px !important;
+        }
+
+
+        /*
+        =====================================================
+        MOBILE
+        =====================================================
+        */
+
+        @media (max-width: 768px) {
+
+            .luxury-booking {
+                margin-top: 30px !important;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header
+    class="luxury-header"
+    id="siteHeader"
+>
+
+    <div class="header-inner">
+
+
+        <!-- HOTEL LOGO -->
+
+        <a
+            href="/"
+            class="luxury-logo"
+        >
+
+            <span class="logo-name">
+                Don Steve
+            </span>
+
+            <span class="logo-line"></span>
+
+            <span class="logo-sub">
+                IMPERIAL HOTEL
+            </span>
+
+        </a>
+
+
+        <!-- MOBILE MENU -->
+
+        <button
+            class="mobile-menu-button"
+            id="mobileMenuButton"
+            aria-label="Open menu"
+        >
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+
+        <!-- NAVIGATION -->
+
+        <nav
+            class="luxury-navigation"
+            id="navigation"
+        >
+
+            <a
+                href="/"
+                class="active"
+            >
+                Home
+            </a>
+
+
+            <a href="/rooms.html">
+                Rooms & Suites
+            </a>
+
+
+            <a href="#experience">
+                Experience
+            </a>
+
+
+            <a href="#dining">
+                Dining
+            </a>
+
+
+            <a href="#wellness">
+                Wellness
+            </a>
+
+
+            <a href="#events">
+                Events
+            </a>
+
+        </nav>
+
+
+        <!-- RESERVE BUTTON -->
+
+        <a
+            href="/booking.html"
+            class="gold-button header-button"
+        >
+            <span>
+                Reserve
+            </span>
+        </a>
+
+
+    </div>
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="luxury-hero">
+
+
+    <!-- HERO IMAGE -->
+
+    <div
+        class="hero-background"
+        style="background-image:url('/images/elegant-interior.jpg');"
+    ></div>
+
+
+    <!-- DARK OVERLAY -->
+
+    <div class="hero-dark-overlay"></div>
+
+
+    <!-- GLOW -->
+
+    <div class="hero-glow"></div>
+
+
+    <!-- HERO CONTENT -->
+
+    <div class="hero-content">
+
+
+        <div class="hero-label">
+
+            <span></span>
+
+            FIVE-STAR HOSPITALITY
+
+            <span></span>
+
+        </div>
+
+
+        <h1>
+
+            Luxury
+
+            <em>
+                Beyond Expectations
+            </em>
+
+        </h1>
+
+
+        <p>
+
+            Discover a refined world of exceptional
+            rooms, extraordinary dining and
+            genuinely personal hospitality.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+
+            <a
+                href="/booking.html"
+                class="gold-button large-button"
+            >
+                Reserve Your Stay
+            </a>
+
+
+            <a
+                href="/rooms.html"
+                class="outline-button"
+            >
+                Explore Rooms
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         HERO BOTTOM
+    ================================================== -->
+
+    <div class="hero-bottom">
+
+
+        <!-- HOTEL NAME -->
+
+        <div class="hero-location">
+
+            <span class="location-icon">
+                ✦
+            </span>
+
+            <span>
+                DON STEVE IMPERIAL HOTEL
+            </span>
+
+        </div>
+
+
+
+        <!-- SCROLL -->
+
+        <div class="hero-scroll">
+
+            <span>
+                SCROLL TO DISCOVER
+            </span>
+
+            <div class="scroll-arrow">
+                ↓
+            </div>
+
+        </div>
+
+
+
+        <!-- SOCIAL LINKS -->
+
+        <div class="hero-social">
+
+            <!-- FOLLOW OUR JOURNEY REMOVED -->
+
+            <a href="#">
+                IG
+            </a>
+
+            <a href="#">
+                FB
+            </a>
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     BOOKING SEARCH
+===================================================== -->
+
+<section class="luxury-booking">
+
+
+    <!-- BOOKING INTRO -->
+
+    <div class="booking-intro">
+
+        <span>
+            YOUR STAY
+        </span>
+
+        <strong>
+            Find your room
+        </strong>
+
+    </div>
+
+
+
+    <!-- CHECK IN -->
+
+    <div class="booking-field">
+
+        <label>
+            CHECK IN
+        </label>
+
+        <input
+            type="date"
+            id="homeCheckIn"
+        >
+
+    </div>
+
+
+
+    <!-- CHECK OUT -->
+
+    <div class="booking-field">
+
+        <label>
+            CHECK OUT
+        </label>
+
+        <input
+            type="date"
+            id="homeCheckOut"
+        >
+
+    </div>
+
+
+
+    <!-- GUESTS -->
+
+    <div class="booking-field">
+
+        <label>
+            GUESTS
+        </label>
+
+
+        <select id="homeGuests">
+
+
+            <option value="1">
+                1 Guest
+            </option>
+
+
+            <option
+                value="2"
+                selected
+            >
+                2 Guests
+            </option>
+
+
+            <option value="3">
+                3 Guests
+            </option>
+
+
+            <option value="4">
+                4 Guests
+            </option>
+
+
+        </select>
+
+    </div>
+
+
+
+    <!-- CHECK AVAILABILITY -->
+
+    <a
+        href="/booking.html"
+        class="booking-button"
+    >
+
+        Check Availability
+
+        <span>
+            →
+        </span>
+
+    </a>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     INTRODUCTION
+===================================================== -->
+
+<section class="luxury-intro section">
+
+
+    <div class="intro-number">
+        01
+    </div>
+
+
+
+    <div class="intro-image-wrap">
+
+        <div class="gold-frame"></div>
+
+
+        <img
+            src="/images/elegant-interior.jpg"
+            alt="Elegant interior at Don Steve Imperial Hotel"
+        >
+
+
+    </div>
+
+
+
+    <div class="intro-copy">
+
+
+        <span class="luxury-eyebrow">
+            THE IMPERIAL STANDARD
+        </span>
+
+
+        <h2>
+
+            An extraordinary
+
+            <em>
+                stay,
+            </em>
+
+            thoughtfully imagined.
+
+        </h2>
+
+
+        <div class="gold-rule"></div>
+
+
+        <p>
+
+            At Don Steve Imperial Hotel, every detail
+            has been created to make your stay feel
+            effortless, elegant and distinctly personal.
+
+        </p>
+
+
+        <p>
+
+            From beautifully appointed rooms to
+            exceptional dining and moments of quiet
+            indulgence, experience hospitality designed
+            around you.
+
+        </p>
+
+
+        <a
+            href="/about.html"
+            class="luxury-link"
+        >
+
+            Discover Our Story
+
+            <span>
+                →
+            </span>
+
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     ROOMS
+===================================================== -->
+
+<section class="luxury-rooms section">
+
+
+    <div class="section-header-luxury">
+
+
+        <div>
+
+            <span class="luxury-eyebrow">
+                ACCOMMODATION
+            </span>
+
+
+            <h2>
+                Stay in <em>comfort.</em>
+            </h2>
+
+
+        </div>
+
+
+
+        <a
+            href="/rooms.html"
+            class="luxury-link"
+        >
+            View All Rooms →
+        </a>
+
+
+    </div>
+
+
+
+    <div
+        class="luxury-room-grid"
+        id="roomGrid"
+    >
+
+        <div class="room-loading">
+            Preparing your rooms...
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     SIGNATURE EXPERIENCE
+===================================================== -->
+
+<section
+    class="signature-experience"
+    id="experience"
+>
+
+
+    <div
+        class="signature-image"
+        style="background-image:url('/images/pool-leisure.jpg');"
+    ></div>
+
+
+    <div class="signature-overlay"></div>
+
+
+    <div class="signature-content">
+
+
+        <span class="luxury-eyebrow light">
+            THE IMPERIAL EXPERIENCE
+        </span>
+
+
+        <h2>
+
+            Moments made
+
+            <em>
+                unforgettable.
+            </em>
+
+        </h2>
+
+
+        <p>
+
+            Whether you are escaping for the weekend,
+            travelling for business or celebrating
+            life's most important moments, discover
+            a hotel experience created to linger
+            in your memory.
+
+        </p>
+
+
+        <a
+            href="#wellness"
+            class="outline-button"
+        >
+            Discover The Experience
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     AMENITIES
+===================================================== -->
+
+<section
+    class="luxury-amenities section"
+    id="wellness"
+>
+
+
+    <div class="section-header-centered">
+
+
+        <span class="luxury-eyebrow">
+            SIGNATURE EXPERIENCES
+        </span>
+
+
+        <h2>
+
+            More than a hotel.
+
+            <em>
+                A destination.
+            </em>
+
+        </h2>
+
+
+        <p>
+
+            Exceptional spaces, thoughtful service
+            and experiences designed around your stay.
+
+        </p>
+
+
+    </div>
+
+
+
+    <div class="experience-grid">
+
+
+        <!-- FINE DINING -->
+
+        <article class="experience-card large-card">
+
+
+            <div class="experience-card-image">
+
+                <img
+                    src="/images/fine-dining.jpg"
+                    alt="Fine dining"
+                    loading="lazy"
+                >
+
+            </div>
+
+
+            <div class="experience-card-content">
+
+                <span>
+                    01
+                </span>
+
+
+                <h3>
+                    Fine Dining
+                </h3>
+
+
+                <p>
+                    Elegant surroundings and memorable
+                    culinary experiences.
+                </p>
+
+
+                <a href="#dining">
+                    Discover →
+                </a>
+
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- WELLNESS -->
+
+        <article class="experience-card">
+
+
+            <div class="experience-card-image">
+
+                <img
+                    src="/images/wellness.jpg"
+                    alt="Wellness and spa"
+                    loading="lazy"
+                >
+
+            </div>
+
+
+            <div class="experience-card-content">
+
+                <span>
+                    02
+                </span>
+
+
+                <h3>
+                    Wellness
+                </h3>
+
+
+                <p>
+                    Space to slow down, restore and reconnect.
+                </p>
+
+
+                <a href="#wellness">
+                    Discover →
+                </a>
+
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- EVENTS -->
+
+        <article class="experience-card">
+
+
+            <div class="experience-card-image">
+
+                <img
+                    src="/images/events-meetings.jpg"
+                    alt="Events and meetings"
+                    loading="lazy"
+                >
+
+            </div>
+
+
+            <div class="experience-card-content">
+
+                <span>
+                    03
+                </span>
+
+
+                <h3>
+                    Events & Meetings
+                </h3>
+
+
+                <p>
+                    Sophisticated spaces for important occasions.
+                </p>
+
+
+                <a href="#events">
+                    Discover →
+                </a>
+
+
+            </div>
+
+
+        </article>
+
+
+
+        <!-- RESTAURANT -->
+
+        <article class="experience-card large-card">
+
+
+            <div class="experience-card-image">
+
+                <img
+                    src="/images/luxury-restaurant.jpg"
+                    alt="Luxury restaurant"
+                    loading="lazy"
+                >
+
+            </div>
+
+
+            <div class="experience-card-content">
+
+                <span>
+                    04
+                </span>
+
+
+                <h3>
+                    The Restaurant
+                </h3>
+
+
+                <p>
+                    Beautiful spaces, refined flavours
+                    and gracious service.
+                </p>
+
+
+                <a href="#dining">
+                    Explore Dining →
+                </a>
+
+
+            </div>
+
+
+        </article>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     DINING
+===================================================== -->
+
+<section
+    class="luxury-dining"
+    id="dining"
+>
+
+
+    <div class="dining-image">
+
+
+        <img
+            src="/images/luxury-restaurant.jpg"
+            alt="Luxury restaurant"
+            loading="lazy"
+        >
+
+
+    </div>
+
+
+
+    <div class="dining-copy">
+
+
+        <span class="luxury-eyebrow">
+            CULINARY EXCELLENCE
+        </span>
+
+
+        <h2>
+
+            Where every meal
+            becomes a
+
+            <em>
+                memory.
+            </em>
+
+        </h2>
+
+
+        <div class="gold-rule"></div>
+
+
+        <p>
+
+            Discover an elegant dining environment
+            where beautiful surroundings meet
+            exceptional hospitality.
+
+        </p>
+
+
+        <a
+            href="#dining"
+            class="luxury-link"
+        >
+            Discover Dining →
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     WELLNESS / EVENTS
+===================================================== -->
+
+<section class="split-luxury-section">
+
+
+    <!-- WELLNESS -->
+
+    <div class="split-panel">
+
+
+        <img
+            src="/images/wellness.jpg"
+            alt="Wellness"
+            loading="lazy"
+        >
+
+
+        <div class="split-panel-overlay"></div>
+
+
+        <div class="split-panel-content">
+
+
+            <span>
+                WELLNESS
+            </span>
+
+
+            <h2>
+
+                Find your
+
+                <em>
+                    balance.
+                </em>
+
+            </h2>
+
+
+            <a href="#wellness">
+                Explore Wellness →
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- EVENTS -->
+
+    <div
+        class="split-panel"
+        id="events"
+    >
+
+
+        <img
+            src="/images/events-meetings.jpg"
+            alt="Events and meetings"
+            loading="lazy"
+        >
+
+
+        <div class="split-panel-overlay"></div>
+
+
+        <div class="split-panel-content">
+
+
+            <span>
+                EVENTS & MEETINGS
+            </span>
+
+
+            <h2>
+
+                Make it
+
+                <em>
+                    remarkable.
+                </em>
+
+            </h2>
+
+
+            <a href="#events">
+                Explore Events →
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     QUOTE
+===================================================== -->
+
+<section class="luxury-quote">
+
+
+    <div class="quote-symbol">
+        “
+    </div>
+
+
+    <blockquote>
+
+        Luxury is not about what you have.
+        It is about how every moment makes you feel.
+
+    </blockquote>
+
+
+    <span>
+        DON STEVE IMPERIAL HOTEL
+    </span>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     FINAL CTA
+===================================================== -->
+
+<section class="luxury-cta">
+
+
+    <div
+        class="cta-background"
+        style="background-image:url('/images/presidential-suite.jpg');"
+    ></div>
+
+
+    <div class="cta-overlay"></div>
+
+
+    <div class="cta-content">
+
+
+        <span class="luxury-eyebrow light">
+            YOUR IMPERIAL ESCAPE
+        </span>
+
+
+        <h2>
+            Your stay begins here.
+        </h2>
+
+
+        <p>
+            Experience refined hospitality at Don Steve Imperial Hotel.
+        </p>
+
+
+        <a
+            href="/booking.html"
+            class="gold-button large-button"
+        >
+            Reserve Your Stay
+        </a>
+
+
+    </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer class="luxury-footer">
+
+
+    <div class="footer-top">
+
+
+        <!-- FOOTER BRAND -->
+
+        <div class="footer-brand">
+
+
+            <a
+                href="/"
+                class="luxury-logo"
+            >
+
+
+                <span class="logo-name">
+                    Don Steve
+                </span>
+
+
+                <span class="logo-line"></span>
+
+
+                <span class="logo-sub">
+                    IMPERIAL HOTEL
+                </span>
+
+
+            </a>
+
+
+            <p>
+
+                Refined hospitality.
+                Exceptional experiences.
+
+            </p>
+
+
+        </div>
+
+
+
+        <!-- EXPLORE -->
+
+        <div class="footer-column">
+
+
+            <h4>
+                Explore
+            </h4>
+
+
+            <a href="/">
+                Home
+            </a>
+
+
+            <a href="/rooms.html">
+                Rooms & Suites
+            </a>
+
+
+            <a href="/about.html">
+                About
+            </a>
+
+
+            <a href="/contact.html">
+                Contact
+            </a>
+
+
+        </div>
+
+
+
+        <!-- EXPERIENCES -->
+
+        <div class="footer-column">
+
+
+            <h4>
+                Experiences
+            </h4>
+
+
+            <a href="#dining">
+                Dining
+            </a>
+
+
+            <a href="#wellness">
+                Wellness
+            </a>
+
+
+            <a href="#experience">
+                Pool & Leisure
+            </a>
+
+
+            <a href="#events">
+                Events
+            </a>
+
+
+        </div>
+
+
+
+        <!-- RESERVATIONS -->
+
+        <div class="footer-column">
+
+
+            <h4>
+                Reservations
+            </h4>
+
+
+            <a href="/booking.html">
+                Book Your Stay
+            </a>
+
+
+            <a href="/rooms.html">
+                View Rooms
+            </a>
+
+
+            <p>
+                info@donsteveimperial.com
+            </p>
+
+
+            <p>
+                +234 703 822 8289
+            </p>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- FOOTER BOTTOM -->
+
+    <div class="footer-bottom">
+
+
+        <span>
+
+            © 2026 Don Steve Imperial Hotel.
+            Website designed by Kelvin Ikpeni AKA Don Steve.
+            Contact: 07038228289
+
+        </span>
+
+
+        <span>
+            All Rights Reserved
+        </span>
+
+
+    </div>
+
+
+</footer>
+
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+
+</html>

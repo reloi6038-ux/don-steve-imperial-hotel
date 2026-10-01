@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Discover the story, philosophy and hospitality of Don Steve Imperial Hotel."
+    >
+
+    <title>About Us | Don Steve Imperial Hotel</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+
+        :root {
+            --navy: #071521;
+            --navy-soft: #0d2230;
+            --gold: #c7a15a;
+            --gold-light: #e4c98c;
+            --cream: #f7f3eb;
+            --white: #ffffff;
+            --text: #17232c;
+            --muted: #6f777c;
+            --line: rgba(7, 21, 33, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.7;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
+        /* =========================================
+           HEADER
+        ========================================= */
+
+        .site-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .header-inner {
+            width: min(1240px, calc(100% - 48px));
+            min-height: 92px;
+            margin: auto;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 35px;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .logo-main {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-top: 6px;
+        }
+
+        .navigation {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .navigation a {
+            position: relative;
+            color: rgba(255,255,255,0.9);
+            font-size: 13px;
+        }
+
+        .navigation a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -9px;
+            width: 0;
+            height: 1px;
+            background: var(--gold-light);
+            transition: width 0.3s ease;
+        }
+
+        .navigation a:hover::after,
+        .navigation a.active::after {
+            width: 100%;
+        }
+
+        .reserve-button {
+            padding: 13px 21px;
+            border: 1px solid var(--gold);
+            color: white;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .reserve-button:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+
+        /* =========================================
+           HERO
+        ========================================= */
+
+        .about-hero {
+            min-height: 650px;
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            color: white;
+            overflow: hidden;
+        }
+
+        .about-hero-background {
+            position: absolute;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7,21,33,0.94),
+                    rgba(7,21,33,0.62),
+                    rgba(7,21,33,0.30)
+                ),
+                url("/images/elegant-interior.jpg")
+                center/cover no-repeat;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+
+            width: min(1200px, calc(100% - 40px));
+            margin: 100px auto 0;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            color: var(--gold-light);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+
+            margin-bottom: 22px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 42px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .hero-content h1 {
+            max-width: 900px;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(65px, 9vw, 115px);
+            line-height: 0.84;
+            font-weight: 500;
+            letter-spacing: -3px;
+        }
+
+        .hero-content p {
+            max-width: 600px;
+            margin-top: 30px;
+
+            color: rgba(255,255,255,0.76);
+            font-size: 16px;
+        }
+
+
+        /* =========================================
+           INTRO
+        ========================================= */
+
+        .intro-section {
+            padding: 120px 0;
+        }
+
+        .container {
+            width: min(1180px, calc(100% - 40px));
+            margin: auto;
+        }
+
+        .intro-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 90px;
+            align-items: center;
+        }
+
+        .section-label {
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            margin-bottom: 17px;
+        }
+
+        .intro-title {
+            font-family: "Cormorant Garamond", serif;
+            color: var(--navy);
+            font-size: 65px;
+            line-height: 0.9;
+            font-weight: 500;
+        }
+
+        .intro-copy {
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .intro-copy p + p {
+            margin-top: 20px;
+        }
+
+
+        /* =========================================
+           IMAGE STORY
+        ========================================= */
+
+        .story-section {
+            padding: 0 0 120px;
+        }
+
+        .story-grid {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 25px;
+            align-items: stretch;
+        }
+
+        .story-large {
+            min-height: 650px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .story-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .story-small-column {
+            display: grid;
+            grid-template-rows: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .story-small {
+            position: relative;
+            min-height: 310px;
+            overflow: hidden;
+        }
+
+        .story-small img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .story-overlay {
+            position: absolute;
+            left: 25px;
+            right: 25px;
+            bottom: 25px;
+
+            padding: 20px;
+
+            color: white;
+            background: rgba(7,21,33,0.78);
+            backdrop-filter: blur(8px);
+
+            border-left: 2px solid var(--gold);
+        }
+
+        .story-overlay small {
+            display: block;
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .story-overlay h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 29px;
+            font-weight: 500;
+        }
+
+
+        /* =========================================
+           PHILOSOPHY
+        ========================================= */
+
+        .philosophy-section {
+            background: var(--navy);
+            color: white;
+            padding: 120px 0;
+        }
+
+        .philosophy-heading {
+            max-width: 760px;
+            margin-bottom: 70px;
+        }
+
+        .philosophy-heading .section-label {
+            color: var(--gold-light);
+        }
+
+        .philosophy-heading h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 65px;
+            line-height: 0.9;
+            font-weight: 500;
+        }
+
+        .philosophy-heading p {
+            color: rgba(255,255,255,0.58);
+            margin-top: 25px;
+            max-width: 600px;
+        }
+
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: rgba(255,255,255,0.12);
+        }
+
+        .philosophy-card {
+            background: var(--navy);
+            min-height: 290px;
+            padding: 42px 32px;
+        }
+
+        .philosophy-number {
+            color: var(--gold);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 34px;
+        }
+
+        .philosophy-card h3 {
+            margin: 18px 0 12px;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: 33px;
+            font-weight: 500;
+        }
+
+        .philosophy-card p {
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+        }
+
+
+        /* =========================================
+           EXPERIENCE
+        ========================================= */
+
+        .experience-section {
+            padding: 120px 0;
+        }
+
+        .experience-header {
+            max-width: 700px;
+            margin-bottom: 65px;
+        }
+
+        .experience-header h2 {
+            font-family: "Cormorant Garamond", serif;
+            color: var(--navy);
+            font-size: 64px;
+            line-height: 0.9;
+            font-weight: 500;
+        }
+
+        .experience-header p {
+            margin-top: 20px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .experience-card {
+            position: relative;
+            min-height: 420px;
+            overflow: hidden;
+        }
+
+        .experience-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s ease;
+        }
+
+        .experience-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .experience-content {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            padding: 35px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    transparent,
+                    rgba(7,21,33,0.93)
+                );
+        }
+
+        .experience-content small {
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .experience-content h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 37px;
+            font-weight: 500;
+            margin-top: 7px;
+        }
+
+        .experience-content p {
+            max-width: 500px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+
+        /* =========================================
+           QUOTE
+        ========================================= */
+
+        .quote-section {
+            background: #eee8dc;
+            padding: 110px 20px;
+            text-align: center;
+        }
+
+        .quote-mark {
+            color: var(--gold);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 80px;
+            line-height: 0.5;
+        }
+
+        .quote-section blockquote {
+            max-width: 850px;
+            margin: 30px auto 0;
+
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(38px, 5vw, 65px);
+            line-height: 0.95;
+            font-weight: 500;
+            color: var(--navy);
+        }
+
+        .quote-section cite {
+            display: block;
+            margin-top: 30px;
+
+            font-style: normal;
+            color: var(--muted);
+
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+
+        /* =========================================
+           CTA
+        ========================================= */
+
+        .cta-section {
+            padding: 110px 0;
+            background: white;
+        }
+
+        .cta-box {
+            position: relative;
+            overflow: hidden;
+
+            min-height: 420px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 70px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7,21,33,0.95),
+                    rgba(7,21,33,0.65)
+                ),
+                url("/images/pool-leisure.jpg")
+                center/cover no-repeat;
+        }
+
+        .cta-content {
+            max-width: 650px;
+        }
+
+        .cta-content .section-label {
+            color: var(--gold-light);
+        }
+
+        .cta-content h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 65px;
+            line-height: 0.9;
+            font-weight: 500;
+        }
+
+        .cta-content p {
+            margin-top: 20px;
+            color: rgba(255,255,255,0.68);
+            max-width: 550px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 30px;
+
+            padding: 15px 24px;
+
+            background: var(--gold);
+            color: var(--navy);
+
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .cta-button:hover {
+            background: white;
+        }
+
+
+        /* =========================================
+           FOOTER
+        ========================================= */
+
+        .footer {
+            background: #04101a;
+            color: white;
+            padding: 70px 0 25px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            gap: 50px;
+
+            padding-bottom: 45px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 39px;
+            font-weight: 500;
+        }
+
+        .footer h4 {
+            color: var(--gold-light);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .footer p,
+        .footer a {
+            display: block;
+            color: rgba(255,255,255,0.55);
+            font-size: 13px;
+            margin-top: 9px;
+        }
+
+        .footer a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            padding-top: 23px;
+            color: rgba(255,255,255,0.34);
+            font-size: 11px;
+        }
+
+
+        /* =========================================
+           RESPONSIVE
+        ========================================= */
+
+        @media (max-width: 900px) {
+
+            .navigation {
+                display: none;
+            }
+
+            .reserve-button {
+                display: none;
+            }
+
+            .intro-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .story-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .story-large {
+                min-height: 500px;
+            }
+
+            .story-small-column {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 350px;
+            }
+
+            .philosophy-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 650px) {
+
+            .header-inner {
+                width: calc(100% - 30px);
+            }
+
+            .about-hero {
+                min-height: 550px;
+            }
+
+            .hero-content {
+                width: calc(100% - 30px);
+            }
+
+            .hero-content h1 {
+                font-size: 67px;
+            }
+
+            .container {
+                width: calc(100% - 28px);
+            }
+
+            .intro-section,
+            .experience-section,
+            .philosophy-section {
+                padding: 75px 0;
+            }
+
+            .intro-title,
+            .philosophy-heading h2,
+            .experience-header h2,
+            .cta-content h2 {
+                font-size: 48px;
+            }
+
+            .story-small-column {
+                grid-template-columns: 1fr;
+                grid-template-rows: 300px 300px;
+            }
+
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .experience-card {
+                min-height: 360px;
+            }
+
+            .cta-box {
+                padding: 35px 25px;
+                min-height: 430px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         HEADER
+    ========================================= -->
+
+    <header class="site-header">
+
+        <div class="header-inner">
+
+            <a href="/" class="logo">
+
+                <span class="logo-main">
+                    Don Steve
+                </span>
+
+                <span class="logo-sub">
+                    Imperial Hotel
+                </span>
+
+            </a>
+
+
+            <nav class="navigation">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/rooms.html">
+                    Rooms & Suites
+                </a>
+
+                <a href="/booking.html">
+                    Reservations
+                </a>
+
+                <a
+                    href="/about.html"
+                    class="active"
+                >
+                    About
+                </a>
+
+                <a href="/contact.html">
+                    Contact
+                </a>
+
+            </nav>
+
+
+            <a
+                href="/booking.html"
+                class="reserve-button"
+            >
+                Reserve Your Stay
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================================
+         HERO
+    ========================================= -->
+
+    <section class="about-hero">
+
+        <div class="about-hero-background"></div>
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                The Don Steve Story
+            </div>
+
+            <h1>
+                Hospitality<br>
+                with purpose.
+            </h1>
+
+            <p>
+                Don Steve Imperial Hotel is envisioned as a destination
+                where refined surroundings, thoughtful service and
+                genuine hospitality come together.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         INTRO
+    ========================================= -->
+
+    <section class="intro-section">
+
+        <div class="container">
+
+            <div class="intro-grid">
+
+
+                <div>
+
+                    <div class="section-label">
+                        Our Philosophy
+                    </div>
+
+                    <h2 class="intro-title">
+                        Luxury is
+                        how you
+                        feel.
+                    </h2>
+
+                </div>
+
+
+                <div class="intro-copy">
+
+                    <p>
+                        At Don Steve Imperial Hotel, we believe that
+                        exceptional hospitality is about more than
+                        beautiful surroundings. It is about creating
+                        an atmosphere in which every guest feels
+                        welcomed, valued and completely at ease.
+                    </p>
+
+                    <p>
+                        From the elegance of our accommodation to
+                        the details of our guest service, every
+                        element of the experience is designed with
+                        comfort and distinction in mind.
+                    </p>
+
+                    <p>
+                        Whether visiting for business, leisure,
+                        celebration or simply a moment of escape,
+                        our goal is to make your stay memorable
+                        for all the right reasons.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         STORY IMAGES
+    ========================================= -->
+
+    <section class="story-section">
+
+        <div class="container">
+
+            <div class="story-grid">
+
+
+                <div class="story-large">
+
+                    <img
+                        src="/images/luxury-restaurant.jpg"
+                        alt="Luxury restaurant at Don Steve Imperial Hotel"
+                    >
+
+                    <div class="story-overlay">
+
+                        <small>
+                            Dining
+                        </small>
+
+                        <h3>
+                            Moments worth gathering around.
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="story-small-column">
+
+
+                    <div class="story-small">
+
+                        <img
+                            src="/images/pool-leisure.jpg"
+                            alt="Hotel pool and leisure area"
+                        >
+
+                        <div class="story-overlay">
+
+                            <small>
+                                Leisure
+                            </small>
+
+                            <h3>
+                                Time to unwind.
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="story-small">
+
+                        <img
+                            src="/images/wellness.jpg"
+                            alt="Hotel wellness experience"
+                        >
+
+                        <div class="story-overlay">
+
+                            <small>
+                                Wellness
+                            </small>
+
+                            <h3>
+                                Space to restore.
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         PHILOSOPHY
+    ========================================= -->
+
+    <section class="philosophy-section">
+
+        <div class="container">
+
+            <div class="philosophy-heading">
+
+                <div class="section-label">
+                    What guides us
+                </div>
+
+                <h2>
+                    Three principles
+                    behind the experience.
+                </h2>
+
+                <p>
+                    Every aspect of the hotel experience is shaped
+                    around a simple idea: thoughtful hospitality
+                    should feel effortless.
+                </p>
+
+            </div>
+
+
+            <div class="philosophy-grid">
+
+
+                <article class="philosophy-card">
+
+                    <div class="philosophy-number">
+                        01
+                    </div>
+
+                    <h3>
+                        Thoughtful Service
+                    </h3>
+
+                    <p>
+                        We believe great service begins with paying
+                        attention. Our approach focuses on anticipating
+                        needs and treating every guest with genuine
+                        care and respect.
+                    </p>
+
+                </article>
+
+
+                <article class="philosophy-card">
+
+                    <div class="philosophy-number">
+                        02
+                    </div>
+
+                    <h3>
+                        Refined Comfort
+                    </h3>
+
+                    <p>
+                        From restful accommodation to inviting social
+                        spaces, our environment is designed to balance
+                        elegance with the comfort of feeling at home.
+                    </p>
+
+                </article>
+
+
+                <article class="philosophy-card">
+
+                    <div class="philosophy-number">
+                        03
+                    </div>
+
+                    <h3>
+                        Lasting Memories
+                    </h3>
+
+                    <p>
+                        A memorable hotel stay is built from moments.
+                        We aim to create experiences that guests will
+                        remember long after they leave.
+                    </p>
+
+                </article>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         EXPERIENCES
+    ========================================= -->
+
+    <section class="experience-section">
+
+        <div class="container">
+
+            <div class="experience-header">
+
+                <div class="section-label">
+                    Discover Don Steve
+                </div>
+
+                <h2>
+                    More than a room.
+                    An experience.
+                </h2>
+
+                <p>
+                    Explore the spaces and experiences that make
+                    Don Steve Imperial Hotel a destination in its own right.
+                </p>
+
+            </div>
+
+
+            <div class="experience-grid">
+
+
+                <article class="experience-card">
+
+                    <img
+                        src="/images/fine-dining.jpg"
+                        alt="Fine dining experience"
+                    >
+
+                    <div class="experience-content">
+
+                        <small>
+                            Culinary
+                        </small>
+
+                        <h3>
+                            Fine Dining
+                        </h3>
+
+                        <p>
+                            Elegant surroundings and carefully
+                            considered dining experiences.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="experience-card">
+
+                    <img
+                        src="/images/events-meetings.jpg"
+                        alt="Hotel meetings and events"
+                    >
+
+                    <div class="experience-content">
+
+                        <small>
+                            Events
+                        </small>
+
+                        <h3>
+                            Meetings & Celebrations
+                        </h3>
+
+                        <p>
+                            Sophisticated spaces for gatherings,
+                            business occasions and celebrations.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="experience-card">
+
+                    <img
+                        src="/images/pool-leisure.jpg"
+                        alt="Luxury pool leisure"
+                    >
+
+                    <div class="experience-content">
+
+                        <small>
+                            Leisure
+                        </small>
+
+                        <h3>
+                            Pool & Leisure
+                        </h3>
+
+                        <p>
+                            A tranquil environment designed
+                            for slowing down and enjoying the moment.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+                <article class="experience-card">
+
+                    <img
+                        src="/images/wellness.jpg"
+                        alt="Hotel wellness facilities"
+                    >
+
+                    <div class="experience-content">
+
+                        <small>
+                            Wellbeing
+                        </small>
+
+                        <h3>
+                            Wellness
+                        </h3>
+
+                        <p>
+                            Dedicated spaces for relaxation,
+                            restoration and personal wellbeing.
+                        </p>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         QUOTE
+    ========================================= -->
+
+    <section class="quote-section">
+
+        <div class="quote-mark">
+            “
+        </div>
+
+        <blockquote>
+            The finest hospitality is not simply
+            seen in the surroundings. It is felt
+            in every thoughtful detail.
+        </blockquote>
+
+        <cite>
+            Don Steve Imperial Hotel
+        </cite>
+
+    </section>
+
+
+    <!-- =========================================
+         CTA
+    ========================================= -->
+
+    <section class="cta-section">
+
+        <div class="container">
+
+            <div class="cta-box">
+
+                <div class="cta-content">
+
+                    <div class="section-label">
+                        Your next stay
+                    </div>
+
+                    <h2>
+                        Come experience
+                        the difference.
+                    </h2>
+
+                    <p>
+                        Discover elegant accommodation,
+                        considered service and a stay created
+                        around the way you want to travel.
+                    </p>
+
+                    <a
+                        href="/booking.html"
+                        class="cta-button"
+                    >
+                        Reserve Your Stay
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         FOOTER
+    ========================================= -->
+
+    <footer class="footer">
+
+        <div class="container">
+
+            <div class="footer-grid">
+
+
+                <div>
+
+                    <h2>
+                        Don Steve
+                    </h2>
+
+                    <p>
+                        Imperial Hotel — refined hospitality,
+                        elegant accommodation and memorable
+                        experiences.
+                    </p>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Explore
+                    </h4>
+
+                    <a href="/">
+                        Home
+                    </a>
+
+                    <a href="/rooms.html">
+                        Rooms & Suites
+                    </a>
+
+                    <a href="/booking.html">
+                        Reservations
+                    </a>
+
+                    <a href="/contact.html">
+                        Contact
+                    </a>
+
+                </div>
+
+
+                <div>
+
+                    <h4>
+                        Contact
+                    </h4>
+
+                    <p>
+                        +234 000 000 0000
+                    </p>
+
+                    <p>
+                        reservations@donsteveimperialhotel.com
+                    </p>
+
+                    <p>
+                        Nigeria
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                © 2026 Don Steve Imperial Hotel.
+                All rights reserved.
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Reserve your stay at Don Steve Imperial Hotel. Experience refined luxury, exceptional service and elegant accommodation."
+    >
+
+    <title>Reserve Your Stay | Don Steve Imperial Hotel</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <style>
+        :root {
+            --navy: #071521;
+            --navy-soft: #0d2230;
+            --gold: #c7a15a;
+            --gold-light: #e4c98c;
+            --cream: #f7f3eb;
+            --white: #ffffff;
+            --text: #17232c;
+            --muted: #6f777c;
+            --border: rgba(7, 21, 33, 0.12);
+            --shadow: 0 25px 70px rgba(7, 21, 33, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+            background: var(--cream);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        /* HEADER */
+
+        .luxury-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            color: var(--white);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .header-inner {
+            width: min(1240px, calc(100% - 48px));
+            margin: auto;
+            min-height: 92px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hotel-logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1;
+        }
+
+        .hotel-logo-main {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 30px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        .hotel-logo-sub {
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 3px;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        .luxury-navigation {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .luxury-navigation a {
+            position: relative;
+            font-size: 13px;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .luxury-navigation a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: -9px;
+            width: 0;
+            height: 1px;
+            background: var(--gold-light);
+            transition: width 0.3s ease;
+        }
+
+        .luxury-navigation a:hover::after,
+        .luxury-navigation a.active::after {
+            width: 100%;
+        }
+
+        .header-reserve {
+            border: 1px solid var(--gold);
+            color: var(--white);
+            padding: 13px 21px;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .header-reserve:hover {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .mobile-menu-button {
+            display: none;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: transparent;
+            color: white;
+            width: 44px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        /* HERO */
+
+        .booking-hero {
+            min-height: 570px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            color: white;
+        }
+
+        .booking-hero-background {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(7, 21, 33, 0.92),
+                    rgba(7, 21, 33, 0.55),
+                    rgba(7, 21, 33, 0.35)
+                ),
+                url("/images/elegant-interior.jpg")
+                center/cover no-repeat;
+            transform: scale(1.02);
+        }
+
+        .booking-hero-content {
+            position: relative;
+            z-index: 2;
+            width: min(1240px, calc(100% - 48px));
+            margin: 110px auto 0;
+        }
+
+        .eyebrow {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--gold-light);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 22px;
+        }
+
+        .eyebrow::before {
+            content: "";
+            width: 42px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .booking-hero h1 {
+            max-width: 760px;
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(58px, 8vw, 105px);
+            line-height: 0.86;
+            font-weight: 500;
+            letter-spacing: -2px;
+        }
+
+        .booking-hero p {
+            max-width: 620px;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 16px;
+        }
+
+        /* MAIN */
+
+        .booking-section {
+            padding: 100px 0 120px;
+        }
+
+        .booking-container {
+            width: min(1180px, calc(100% - 40px));
+            margin: auto;
+            display: grid;
+            grid-template-columns: 0.85fr 1.15fr;
+            gap: 70px;
+            align-items: start;
+        }
+
+        /* LEFT */
+
+        .booking-image-panel {
+            position: sticky;
+            top: 30px;
+        }
+
+        .booking-image-wrap {
+            position: relative;
+            height: 720px;
+            overflow: hidden;
+            background: var(--navy);
+        }
+
+        .booking-image-wrap img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+        }
+
+        .image-caption {
+            position: absolute;
+            left: 28px;
+            right: 28px;
+            bottom: 28px;
+            padding: 25px;
+            background: rgba(7, 21, 33, 0.82);
+            backdrop-filter: blur(10px);
+            color: white;
+            border-left: 2px solid var(--gold);
+        }
+
+        .image-caption small {
+            display: block;
+            color: var(--gold-light);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .image-caption strong {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 28px;
+            font-weight: 500;
+        }
+
+        .booking-side-text {
+            margin-top: 28px;
+        }
+
+        .booking-side-text h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 34px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .booking-side-text p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* FORM */
+
+        .booking-form-panel {
+            background: white;
+            padding: 50px;
+            box-shadow: var(--shadow);
+        }
+
+        .form-intro {
+            margin-bottom: 35px;
+        }
+
+        .form-intro .eyebrow {
+            color: var(--gold);
+            margin-bottom: 12px;
+        }
+
+        .form-intro h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 52px;
+            line-height: 0.95;
+            font-weight: 500;
+            color: var(--navy);
+        }
+
+        .form-intro p {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .form-section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 34px 0 20px;
+            color: var(--navy);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 25px;
+        }
+
+        .form-section-title span {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: var(--gold-light);
+            display: grid;
+            place-items: center;
+            font-family: "DM Sans", sans-serif;
+            font-size: 12px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--navy);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .required {
+            color: #b35a4a;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            border: 1px solid #dfe2e3;
+            background: #fbfaf7;
+            color: var(--text);
+            padding: 15px 16px;
+            outline: none;
+            transition:
+                border-color 0.25s ease,
+                box-shadow 0.25s ease,
+                background 0.25s ease;
+        }
+
+        .form-group textarea {
+            min-height: 125px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(199, 161, 90, 0.08);
+        }
+
+        /* SUMMARY */
+
+        .reservation-summary {
+            margin: 30px 0;
+            padding: 25px;
+            background: var(--navy);
+            color: white;
+            border-top: 2px solid var(--gold);
+        }
+
+        .reservation-summary-heading {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 27px;
+            color: var(--gold-light);
+            margin-bottom: 17px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 13px;
+        }
+
+        .summary-row span {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .summary-row strong {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding-top: 22px;
+            margin-top: 8px;
+        }
+
+        .summary-total span {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-total strong {
+            color: var(--gold-light);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 31px;
+            font-weight: 600;
+        }
+
+        /* NOTE */
+
+        .booking-note {
+            display: flex;
+            gap: 13px;
+            align-items: flex-start;
+            padding: 18px;
+            background: #f5f0e7;
+            margin-top: 25px;
+            color: #68645e;
+            font-size: 12px;
+        }
+
+        .booking-note-icon {
+            color: var(--gold);
+            font-size: 18px;
+            line-height: 1;
+        }
+
+        /* MESSAGE */
+
+        .booking-form-message {
+            display: none;
+            margin: 20px 0;
+            padding: 15px 17px;
+            font-size: 13px;
+            border-left: 3px solid var(--gold);
+        }
+
+        .message-error {
+            display: block;
+            background: #fff0ee;
+            color: #8b3d32;
+            border-color: #b85b4c;
+        }
+
+        .message-loading {
+            display: block;
+            background: #f2f3f3;
+            color: #495258;
+        }
+
+        .message-success {
+            display: block;
+            background: #eef7f0;
+            color: #28633a;
+            border-color: #4e9561;
+        }
+
+        /* SUBMIT */
+
+        .submit-button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 18px 25px;
+            border: 1px solid var(--gold);
+            background: var(--gold);
+            color: var(--navy);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--navy);
+            color: white;
+            border-color: var(--navy);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* SUCCESS */
+
+        .booking-success-panel {
+            margin-top: 30px;
+            padding: 35px;
+            background: var(--navy);
+            color: white;
+            border-top: 3px solid var(--gold);
+        }
+
+        .success-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            border-radius: 50%;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+
+        .booking-success-panel h3 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 40px;
+            font-weight: 500;
+        }
+
+        .booking-success-panel p {
+            color: rgba(255,255,255,0.7);
+            margin: 10px 0 22px;
+            font-size: 14px;
+        }
+
+        .booking-confirmation-details {
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding: 18px 0;
+        }
+
+        .confirmation-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 8px 0;
+            font-size: 13px;
+        }
+
+        .confirmation-row span {
+            color: rgba(255,255,255,0.55);
+        }
+
+        .confirmation-row strong {
+            text-align: right;
+        }
+
+        .success-home-link {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 13px 20px;
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* FOOTER */
+
+        .luxury-footer {
+            background: var(--navy);
+            color: white;
+            padding: 75px 0 30px;
+        }
+
+        .footer-inner {
+            width: min(1180px, calc(100% - 40px));
+            margin: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+            gap: 45px;
+            padding-bottom: 55px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-brand h2 {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 37px;
+            font-weight: 500;
+        }
+
+        .footer-brand p {
+            max-width: 310px;
+            color: rgba(255,255,255,0.58);
+            font-size: 13px;
+            margin-top: 15px;
+        }
+
+        .footer-column h4 {
+            color: var(--gold-light);
+            font-size: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .footer-column a,
+        .footer-column p {
+            display: block;
+            color: rgba(255,255,255,0.6);
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .footer-column a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding-top: 25px;
+            color: rgba(255,255,255,0.38);
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 950px) {
+            .luxury-navigation {
+                display: none;
+            }
+
+            .mobile-menu-button {
+                display: block;
+            }
+
+            .header-inner {
+                min-height: 78px;
+            }
+
+            .booking-container {
+                grid-template-columns: 1fr;
+                gap: 50px;
+            }
+
+            .booking-image-panel {
+                position: static;
+            }
+
+            .booking-image-wrap {
+                height: 500px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .header-inner,
+            .booking-hero-content {
+                width: min(100% - 30px, 1240px);
+            }
+
+            .hotel-logo-main {
+                font-size: 25px;
+            }
+
+            .header-reserve {
+                display: none;
+            }
+
+            .booking-hero {
+                min-height: 520px;
+            }
+
+            .booking-hero h1 {
+                font-size: 64px;
+            }
+
+            .booking-section {
+                padding: 60px 0 75px;
+            }
+
+            .booking-container {
+                width: calc(100% - 28px);
+            }
+
+            .booking-form-panel {
+                padding: 28px 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+
+            .form-intro h2 {
+                font-size: 42px;
+            }
+
+            .booking-image-wrap {
+                height: 420px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+
+    <header class="luxury-header">
+
+        <div class="header-inner">
+
+            <a href="/" class="hotel-logo">
+                <span class="hotel-logo-main">
+                    Don Steve
+                </span>
+
+                <span class="hotel-logo-sub">
+                    Imperial Hotel
+                </span>
+            </a>
+
+            <nav class="luxury-navigation" id="navigation">
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/rooms.html">
+                    Rooms & Suites
+                </a>
+
+                <a href="/booking.html" class="active">
+                    Reservations
+                </a>
+
+                <a href="/about.html">
+                    About
+                </a>
+
+                <a href="/contact.html">
+                    Contact
+                </a>
+
+            </nav>
+
+            <a
+                href="/booking.html"
+                class="header-reserve"
+            >
+                Reserve
+            </a>
+
+            <button
+                class="mobile-menu-button"
+                id="mobileMenuButton"
+                type="button"
+                aria-label="Open menu"
+            >
+                ☰
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- HERO -->
+
+    <section class="booking-hero">
+
+        <div class="booking-hero-background"></div>
+
+        <div class="booking-hero-content">
+
+            <div class="eyebrow">
+                Your stay begins here
+            </div>
+
+            <h1>
+                Reserve<br>
+                Your Stay
+            </h1>
+
+            <p>
+                Discover refined accommodation, thoughtful hospitality
+                and an elevated hotel experience at Don Steve Imperial Hotel.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- BOOKING -->
+
+    <main class="booking-section">
+
+        <div class="booking-container">
+
+
+            <!-- LEFT -->
+
+            <aside class="booking-image-panel">
+
+                <div class="booking-image-wrap">
+
+                    <img
+                        id="bookingSlideshow"
+                        data-booking-slideshow
+                        src="/images/deluxe-king-room.jpg"
+                        alt="Luxury hotel accommodation"
+                    >
+
+                    <div class="image-caption">
+
+                        <small>
+                            Don Steve Imperial
+                        </small>
+
+                        <strong>
+                            A stay crafted around you.
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="booking-side-text">
+
+                    <h3>
+                        A private world of comfort.
+                    </h3>
+
+                    <p>
+                        From elegant rooms to spacious suites,
+                        every detail is designed to create a
+                        calm, memorable and distinguished stay.
+                    </p>
+
+                </div>
+
+            </aside>
+
+
+            <!-- FORM -->
+
+            <section class="booking-form-panel">
+
+                <div class="form-intro">
+
+                    <div class="eyebrow">
+                        Reservations
+                    </div>
+
+                    <h2>
+                        Plan your stay
+                    </h2>
+
+                    <p>
+                        Complete the details below and our reservations
+                        team will receive your request.
+                    </p>
+
+                </div>
+
+
+                <form id="bookingForm" novalidate>
+
+
+                    <!-- GUEST -->
+
+                    <h3 class="form-section-title">
+                        <span>01</span>
+                        Guest information
+                    </h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+
+                            <label for="guestName">
+                                Full name
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="guestName"
+                                name="guestName"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="email">
+                                Email address
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="phone">
+                                Phone number
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                placeholder="+234..."
+                                autocomplete="tel"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="country">
+                                Country
+                            </label>
+
+                            <input
+                                type="text"
+                                id="country"
+                                name="country"
+                                placeholder="Nigeria"
+                                autocomplete="country-name"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- STAY -->
+
+                    <h3 class="form-section-title">
+                        <span>02</span>
+                        Your stay
+                    </h3>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+
+                            <label for="checkIn">
+                                Check-in
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="checkIn"
+                                name="checkIn"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="checkOut">
+                                Check-out
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                id="checkOut"
+                                name="checkOut"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="room">
+                                Room or suite
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                id="room"
+                                name="room"
+                                required
+                            >
+
+                                <option value="">
+                                    Select accommodation
+                                </option>
+
+                                <option value="Deluxe King Room">
+                                    Deluxe King Room
+                                </option>
+
+                                <option value="Executive Suite">
+                                    Executive Suite
+                                </option>
+
+                                <option value="Presidential Suite">
+                                    Presidential Suite
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="guests">
+                                Guests
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                id="guests"
+                                name="guests"
+                                required
+                            >
+
+                                <option value="1">
+                                    1 Guest
+                                </option>
+
+                                <option value="2">
+                                    2 Guests
+                                </option>
+
+                                <option value="3">
+                                    3 Guests
+                                </option>
+
+                                <option value="4">
+                                    4 Guests
+                                </option>
+
+                                <option value="5">
+                                    5 Guests
+                                </option>
+
+                                <option value="6">
+                                    6 Guests
+                                </option>
+
+                                <option value="7">
+                                    7 Guests
+                                </option>
+
+                                <option value="8">
+                                    8 Guests
+                                </option>
+
+                                <option value="9">
+                                    9 Guests
+                                </option>
+
+                                <option value="10">
+                                    10 Guests
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUMMARY -->
+
+                    <div
+                        class="reservation-summary"
+                        id="reservationSummary"
+                    >
+
+                        <div class="reservation-summary-heading">
+                            Stay Summary
+                        </div>
+
+                        <div class="summary-row">
+
+                            <span>
+                                Room
+                            </span>
+
+                            <strong id="summaryRoom">
+                                Select a room
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Nights
+                            </span>
+
+                            <strong id="summaryNights">
+                                0 nights
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-row">
+
+                            <span>
+                                Rate
+                            </span>
+
+                            <strong id="summaryRate">
+                                ₦0 / night
+                            </strong>
+
+                        </div>
+
+
+                        <div class="summary-total">
+
+                            <span>
+                                Estimated Total
+                            </span>
+
+                            <strong id="summaryTotal">
+                                ₦0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REQUESTS -->
+
+                    <h3 class="form-section-title">
+                        <span>03</span>
+                        Special requests
+                    </h3>
+
+                    <div class="form-group">
+
+                        <label for="specialRequests">
+                            Additional requests
+                        </label>
+
+                        <textarea
+                            id="specialRequests"
+                            name="specialRequests"
+                            placeholder="Tell us about any preferences or special arrangements..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- MESSAGE -->
+
+                    <div
+                        id="bookingFormMessage"
+                        class="booking-form-message"
+                        role="alert"
+                    ></div>
+
+
+                    <!-- NOTE -->
+
+                    <div class="booking-note">
+
+                        <div class="booking-note-icon">
+                            ✦
+                        </div>
+
+                        <div>
+                            Your reservation request will initially be
+                            recorded as <strong>pending</strong>.
+                            Our reservations team can review and confirm
+                            your stay afterward.
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUBMIT -->
+
+                    <button
+                        type="submit"
+                        class="submit-button"
+                        id="bookingSubmitButton"
+                    >
+                        Request Reservation
+                    </button>
+
+                </form>
+
+
+                <!-- SUCCESS -->
+
+                <div
+                    id="bookingSuccessPanel"
+                    class="booking-success-panel"
+                    style="display:none;"
+                ></div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="luxury-footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-grid">
+
+
+                <div class="footer-brand">
+
+                    <h2>
+                        Don Steve
+                    </h2>
+
+                    <p>
+                        Imperial Hotel — refined hospitality,
+                        elegant accommodation and unforgettable
+                        moments.
+                    </p>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>
+                        Explore
+                    </h4>
+
+                    <a href="/">
+                        Home
+                    </a>
+
+                    <a href="/rooms.html">
+                        Rooms & Suites
+                    </a>
+
+                    <a href="/about.html">
+                        About Us
+                    </a>
+
+                    <a href="/contact.html">
+                        Contact
+                    </a>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>
+                        Reservations
+                    </h4>
+
+                    <a href="/booking.html">
+                        Make a Reservation
+                    </a>
+
+                    <a href="/rooms.html">
+                        Accommodation
+                    </a>
+
+                    <p>
+                        24/7 Reservations
+                    </p>
+
+                </div>
+
+
+                <div class="footer-column">
+
+                    <h4>
+                        Contact
+                    </h4>
+
+                    <p>
+                        Nigeria
+                    </p>
+
+                    <p>
+                        +234 000 000 0000
+                    </p>
+
+                    <p>
+                        reservations@donsteveimperialhotel.com
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="footer-bottom">
+
+                <span>
+                    © 2026 Don Steve Imperial Hotel.
+                    All rights reserved.
+                </span>
+
+                <span>
+                    Luxury hospitality, thoughtfully delivered.
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
+
+    <script src="/js/booking.js"></script>
+
+</body>
+</html>
