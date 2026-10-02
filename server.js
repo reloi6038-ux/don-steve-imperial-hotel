@@ -1,308 +1,99 @@
+"use strict";
+
+/*
+|--------------------------------------------------------------------------
+| DON STEVE IMPERIAL HOTEL
+| MAIN SERVER
+|--------------------------------------------------------------------------
+| JWT authentication
+| Express sessions completely removed
+|--------------------------------------------------------------------------
+*/
+
 require("dotenv").config();
 
 const express = require("express");
 const path = require("path");
-const session = require("express-session");
 
+const connectDB = require("./config/database");
 
-// =====================================================
-// DATABASE
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| ROUTES
+|--------------------------------------------------------------------------
+*/
 
-const connectDB =
-    require("./config/database");
+const roomsRoutes = require("./routes/rooms");
 
+const imageRoutes = require("./routes/images");
 
-// =====================================================
-// ROUTES
-// =====================================================
+const {
+    router: adminRoutes
+} = require("./routes/admin");
 
-const roomRoutes =
-    require("./routes/rooms");
+const bookingRoutes = require("./routes/bookings");
 
-const imageRoutes =
-    require("./routes/images");
+const contactRoutes = require("./routes/contact");
 
-const bookingRoutes =
-    require("./routes/bookings");
+/*
+|--------------------------------------------------------------------------
+| ENVIRONMENT CHECK
+|--------------------------------------------------------------------------
+*/
 
-const contactRoutes =
-    require("./routes/contact");
+if (!process.env.JWT_SECRET) {
+    console.error(
+        "ERROR: JWT_SECRET is missing from the environment."
+    );
 
-const adminRoutes =
-    require("./routes/admin");
+    process.exit(1);
+}
 
-
-// =====================================================
-// EXPRESS APP
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| EXPRESS APPLICATION
+|--------------------------------------------------------------------------
+*/
 
 const app = express();
 
+/*
+|--------------------------------------------------------------------------
+| PORT
+|--------------------------------------------------------------------------
+|
+| Render provides process.env.PORT automatically.
+| Locally, the application falls back to port 3000.
+|
+|--------------------------------------------------------------------------
+*/
 
-// =====================================================
-// BASIC APP SETTINGS
-// =====================================================
+const PORT = process.env.PORT || 3000;
 
-app.disable(
-    "x-powered-by"
-);
-
-
-// =====================================================
-// BODY PARSING
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| BODY PARSING
+|--------------------------------------------------------------------------
+*/
 
 app.use(
-    express.json()
+    express.json({
+        limit: "2mb"
+    })
 );
 
 app.use(
     express.urlencoded({
-        extended: true
+        extended: true,
+        limit: "2mb"
     })
 );
 
-
-// =====================================================
-// ADMIN SESSION
-// =====================================================
-
-app.use(
-    session({
-        name: "hotel.sid",
-
-        secret:
-            process.env.SESSION_SECRET ||
-            "don-steve-imperial-hotel-development-secret",
-
-        resave: false,
-
-        saveUninitialized: false,
-
-        cookie: {
-
-            httpOnly: true,
-
-            secure:
-                process.env.NODE_ENV ===
-                "production",
-
-            sameSite: "lax",
-
-            maxAge:
-                1000 *
-                60 *
-                60 *
-                8
-
-        }
-
-    })
-);
-
-
-// =====================================================
-// API ROUTES
-// =====================================================
-
-
-// -----------------------------------------------------
-// ROOM API
-// -----------------------------------------------------
-
-app.use(
-    "/api/rooms",
-    roomRoutes
-);
-
-
-// -----------------------------------------------------
-// AI IMAGE API
-// -----------------------------------------------------
-
-app.use(
-    "/api/images",
-    imageRoutes
-);
-
-
-// -----------------------------------------------------
-// ADMIN API
-// -----------------------------------------------------
-
-app.use(
-    "/api/admin",
-    adminRoutes.router
-);
-
-
-// -----------------------------------------------------
-// BOOKING API
-// -----------------------------------------------------
-
-app.use(
-    "/api/bookings",
-    bookingRoutes
-);
-
-
-// -----------------------------------------------------
-// CONTACT API
-// -----------------------------------------------------
-// This was the missing route.
-//
-// Contact form:
-// POST /api/contact
-//
-// Admin messages:
-// GET    /api/contact/admin
-// PATCH  /api/contact/admin/:id
-// DELETE /api/contact/admin/:id
-// -----------------------------------------------------
-
-app.use(
-    "/api/contact",
-    contactRoutes
-);
-
-
-// =====================================================
-// ADMIN PAGE AUTHENTICATION
-// =====================================================
-
-function requireAdminPage(
-    req,
-    res,
-    next
-) {
-
-    if (
-        req.session &&
-        req.session.admin
-    ) {
-
-        return next();
-
-    }
-
-
-    return res.redirect(
-        "/admin/login.html"
-    );
-
-}
-
-
-// =====================================================
-// PUBLIC ADMIN LOGIN PAGE
-// =====================================================
-//
-// This must come BEFORE protected admin pages.
-// =====================================================
-
-app.get(
-    "/admin/login.html",
-    (req, res) => {
-
-        // -------------------------------------------------
-        // Already logged in?
-        // -------------------------------------------------
-
-        if (
-            req.session &&
-            req.session.admin
-        ) {
-
-            return res.redirect(
-                "/admin"
-            );
-
-        }
-
-
-        return res.sendFile(
-            path.join(
-                __dirname,
-                "public",
-                "admin",
-                "login.html"
-            )
-        );
-
-    }
-);
-
-
-// =====================================================
-// PROTECTED ADMIN DASHBOARD
-// =====================================================
-
-app.get(
-    "/admin",
-    requireAdminPage,
-    (req, res) => {
-
-        res.sendFile(
-            path.join(
-                __dirname,
-                "public",
-                "admin",
-                "index.html"
-            )
-        );
-
-    }
-);
-
-
-// =====================================================
-// PROTECTED ADMIN DASHBOARD WITH SLASH
-// =====================================================
-
-app.get(
-    "/admin/",
-    requireAdminPage,
-    (req, res) => {
-
-        res.sendFile(
-            path.join(
-                __dirname,
-                "public",
-                "admin",
-                "index.html"
-            )
-        );
-
-    }
-);
-
-
-// =====================================================
-// PROTECTED ADMIN DASHBOARD FILE
-// =====================================================
-
-app.get(
-    "/admin/index.html",
-    requireAdminPage,
-    (req, res) => {
-
-        res.sendFile(
-            path.join(
-                __dirname,
-                "public",
-                "admin",
-                "index.html"
-            )
-        );
-
-    }
-);
-
-
-// =====================================================
-// PUBLIC WEBSITE FILES
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| STATIC PUBLIC FILES
+|--------------------------------------------------------------------------
+*/
 
 app.use(
     express.static(
@@ -313,10 +104,42 @@ app.use(
     )
 );
 
+/*
+|--------------------------------------------------------------------------
+| API ROUTES
+|--------------------------------------------------------------------------
+*/
 
-// =====================================================
-// HOMEPAGE
-// =====================================================
+app.use(
+    "/api/rooms",
+    roomsRoutes
+);
+
+app.use(
+    "/api/images",
+    imageRoutes
+);
+
+app.use(
+    "/api/admin",
+    adminRoutes
+);
+
+app.use(
+    "/api/bookings",
+    bookingRoutes
+);
+
+app.use(
+    "/api/contact",
+    contactRoutes
+);
+
+/*
+|--------------------------------------------------------------------------
+| MAIN WEBSITE
+|--------------------------------------------------------------------------
+*/
 
 app.get(
     "/",
@@ -333,10 +156,26 @@ app.get(
     }
 );
 
+/*
+|--------------------------------------------------------------------------
+| WEBSITE PAGES
+|--------------------------------------------------------------------------
+*/
 
-// =====================================================
-// BOOKING PAGE
-// =====================================================
+app.get(
+    "/booking",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "booking.html"
+            )
+        );
+
+    }
+);
 
 app.get(
     "/booking.html",
@@ -353,21 +192,207 @@ app.get(
     }
 );
 
+app.get(
+    "/rooms",
+    (req, res) => {
 
-// =====================================================
-// HEALTH CHECK
-// =====================================================
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "rooms.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/rooms.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "rooms.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/contact",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "contact.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/contact.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "contact.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/about",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "about.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/about.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "about.html"
+            )
+        );
+
+    }
+);
+
+/*
+|--------------------------------------------------------------------------
+| ADMIN PAGES
+|--------------------------------------------------------------------------
+|
+| The HTML pages themselves are public.
+|
+| The private dashboard data is protected by JWT middleware
+| inside the API routes.
+|
+| admin.js checks /api/admin/me before loading private data.
+|
+|--------------------------------------------------------------------------
+*/
+
+app.get(
+    "/admin",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin",
+                "index.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/admin/",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin",
+                "index.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/admin/index.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin",
+                "index.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/admin/login",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin",
+                "login.html"
+            )
+        );
+
+    }
+);
+
+app.get(
+    "/admin/login.html",
+    (req, res) => {
+
+        res.sendFile(
+            path.join(
+                __dirname,
+                "public",
+                "admin",
+                "login.html"
+            )
+        );
+
+    }
+);
+
+/*
+|--------------------------------------------------------------------------
+| HEALTH CHECK
+|--------------------------------------------------------------------------
+*/
 
 app.get(
     "/api/health",
     (req, res) => {
 
-        res.json({
+        res.status(200).json({
 
             success: true,
 
             message:
-                "Don Steve Imperial Hotel server is running.",
+                "Don Steve Imperial Hotel API is running.",
 
             timestamp:
                 new Date().toISOString()
@@ -377,22 +402,17 @@ app.get(
     }
 );
 
-
-// =====================================================
-// 404 HANDLER
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| 404 HANDLER
+|--------------------------------------------------------------------------
+*/
 
 app.use(
     (req, res) => {
 
-        // -------------------------------------------------
-        // API 404
-        // -------------------------------------------------
-
         if (
-            req.path.startsWith(
-                "/api/"
-            )
+            req.originalUrl.startsWith("/api/")
         ) {
 
             return res.status(404).json({
@@ -400,128 +420,46 @@ app.use(
                 success: false,
 
                 message:
-                    "API route not found."
+                    "API endpoint not found."
 
             });
 
         }
 
-
-        // -------------------------------------------------
-        // WEBSITE 404
-        // -------------------------------------------------
-
-        return res.status(404).send(
-            `
-            <!DOCTYPE html>
-
-            <html>
-
-            <head>
-
-                <title>
-                    Page Not Found
-                </title>
-
-                <meta
-                    name="viewport"
-                    content="width=device-width, initial-scale=1"
-                >
-
-                <style>
-
-                    body {
-                        margin: 0;
-                        min-height: 100vh;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: #071521;
-                        color: white;
-                        font-family: Arial, sans-serif;
-                        text-align: center;
-                    }
-
-                    h1 {
-                        font-size: 60px;
-                        margin-bottom: 10px;
-                    }
-
-                    a {
-                        color: #c7a15a;
-                        text-decoration: none;
-                    }
-
-                </style>
-
-            </head>
-
-            <body>
-
-                <div>
-
-                    <h1>
-                        404
-                    </h1>
-
-                    <p>
-                        The page you requested
-                        could not be found.
-                    </p>
-
-                    <a href="/">
-                        Return to Don Steve Imperial Hotel
-                    </a>
-
-                </div>
-
-            </body>
-
-            </html>
-            `
+        res.status(404).send(
+            "Page not found."
         );
 
     }
 );
 
-
-// =====================================================
-// GLOBAL ERROR HANDLER
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| ERROR HANDLER
+|--------------------------------------------------------------------------
+*/
 
 app.use(
-    (
-        error,
-        req,
-        res,
-        next
-    ) => {
+    (error, req, res, next) => {
 
         console.error(
             "Server error:",
             error
         );
 
+        if (res.headersSent) {
 
-        if (
-            res.headersSent
-        ) {
-
-            return next(
-                error
-            );
+            return next(error);
 
         }
 
-
-        return res.status(
+        res.status(
             error.status || 500
         ).json({
 
             success: false,
 
             message:
-                error.message ||
                 "An unexpected server error occurred."
 
         });
@@ -529,104 +467,100 @@ app.use(
     }
 );
 
-
-// =====================================================
-// SERVER PORT
-// =====================================================
-
-const PORT =
-    process.env.PORT || 3000;
-
-
-// =====================================================
-// START SERVER
-// =====================================================
+/*
+|--------------------------------------------------------------------------
+| START SERVER
+|--------------------------------------------------------------------------
+*/
 
 async function startServer() {
 
     try {
 
+        console.log("");
         console.log(
             "Connecting to MongoDB..."
         );
 
-
         await connectDB();
-
 
         console.log(
             "MongoDB connected successfully."
         );
 
+        /*
+        |--------------------------------------------------------------------------
+        | IMPORTANT FOR RENDER
+        |--------------------------------------------------------------------------
+        |
+        | Bind to 0.0.0.0 so Render can reach the application.
+        |
+        |--------------------------------------------------------------------------
+        */
 
         app.listen(
             PORT,
             "0.0.0.0",
             () => {
 
+                console.log("");
                 console.log(
-                    "----------------------------------------"
+                    "=========================================="
                 );
 
                 console.log(
-                    "DON STEVE IMPERIAL HOTEL"
+                    " DON STEVE IMPERIAL HOTEL"
                 );
 
                 console.log(
-                    `Server running on port ${PORT}`
+                    "=========================================="
                 );
 
                 console.log(
-                    `Website: http://localhost:${PORT}`
+                    ` Server running on port ${PORT}`
                 );
 
                 console.log(
-                    `Admin Login: http://localhost:${PORT}/admin/login.html`
+                    ` http://localhost:${PORT}`
                 );
 
                 console.log(
-                    `Admin Dashboard: http://localhost:${PORT}/admin`
+                    ` Admin: http://localhost:${PORT}/admin/login.html`
                 );
 
                 console.log(
-                    `Booking: http://localhost:${PORT}/booking.html`
+                    " JWT authentication: ENABLED"
                 );
 
                 console.log(
-                    `Contact API: http://localhost:${PORT}/api/contact`
+                    " Express sessions: DISABLED"
                 );
 
                 console.log(
-                    "----------------------------------------"
+                    "=========================================="
                 );
+
+                console.log("");
 
             }
         );
 
     } catch (error) {
 
+        console.error("");
         console.error(
-            "----------------------------------------"
+            "FAILED TO START SERVER"
         );
+        console.error("");
 
-        console.error(
-            "Unable to start the server."
-        );
+        console.error(error);
 
-        console.error(
-            error.message
-        );
-
-        console.error(
-            "----------------------------------------"
-        );
-
+        console.error("");
 
         process.exit(1);
 
     }
 
 }
-
 
 startServer();

@@ -1,8 +1,173 @@
+"use strict";
+
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const Admin = require("../models/Admin");
 
 const router = express.Router();
+
+const JWT_EXPIRES_IN =
+    process.env.JWT_EXPIRES_IN || "8h";
+
+
+/*
+|--------------------------------------------------------------------------
+| JWT SECRET
+|--------------------------------------------------------------------------
+*/
+
+function getJwtSecret() {
+
+    if (!process.env.JWT_SECRET) {
+
+        throw new Error(
+            "JWT_SECRET is not configured in the .env file."
+        );
+
+    }
+
+    return process.env.JWT_SECRET;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GET BEARER TOKEN
+|--------------------------------------------------------------------------
+*/
+
+function getTokenFromRequest(req) {
+
+    const authorization =
+        req.headers.authorization;
+
+    if (
+        !authorization ||
+        typeof authorization !== "string"
+    ) {
+        return null;
+    }
+
+    if (
+        !authorization
+            .toLowerCase()
+            .startsWith("bearer ")
+    ) {
+        return null;
+    }
+
+    const token =
+        authorization
+            .slice(7)
+            .trim();
+
+    return token || null;
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REQUIRE ADMIN
+|--------------------------------------------------------------------------
+*/
+
+function requireAdmin(req, res, next) {
+
+    const token =
+        getTokenFromRequest(req);
+
+    if (!token) {
+
+        return res.status(401).json({
+
+            success: false,
+
+            message:
+                "Administrator authentication is required."
+
+        });
+
+    }
+
+    try {
+
+        const decoded =
+            jwt.verify(
+                token,
+                getJwtSecret()
+            );
+
+        if (
+            !decoded ||
+            decoded.type !== "admin" ||
+            !decoded.sub
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Invalid administrator token."
+
+            });
+
+        }
+
+        req.admin = {
+
+            id:
+                decoded.sub,
+
+            username:
+                decoded.username,
+
+            name:
+                decoded.name,
+
+            role:
+                decoded.role
+
+        };
+
+        next();
+
+    } catch (error) {
+
+        console.error(
+            "JWT verification error:",
+            error.message
+        );
+
+        if (
+            error.name ===
+            "TokenExpiredError"
+        ) {
+
+            return res.status(401).json({
+
+                success: false,
+
+                message:
+                    "Administrator token has expired."
+
+            });
+
+        }
+
+        return res.status(401).json({
+
+            success: false,
+
+            message:
+                "Invalid administrator token."
+
+        });
+
+    }
+}
 
 
 /*
@@ -17,90 +182,74 @@ router.post(
 
         try {
 
-            const {
-                username,
-                password
-            } = req.body;
-
-
-            const cleanUsername =
+            const username =
                 String(
-                    username || ""
+                    req.body.username || ""
                 )
                     .trim()
                     .toLowerCase();
 
-
-            const cleanPassword =
+            const password =
                 String(
-                    password || ""
+                    req.body.password || ""
                 );
 
-
             if (
-                !cleanUsername ||
-                !cleanPassword
+                !username ||
+                !password
             ) {
 
                 return res.status(400).json({
+
                     success: false,
+
                     message:
                         "Username and password are required."
+
                 });
 
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | FIND ADMIN
-            |--------------------------------------------------------------------------
-            */
-
             const admin =
                 await Admin.findOne({
-                    username:
-                        cleanUsername
+                    username
                 });
 
 
             if (!admin) {
 
                 return res.status(401).json({
+
                     success: false,
+
                     message:
-                        "Invalid username or password."
+                        "Invalid administrator username or password."
+
                 });
 
             }
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | CHECK ACTIVE STATUS
-            |--------------------------------------------------------------------------
-            */
-
-            if (!admin.active) {
+            if (
+                admin.active === false
+            ) {
 
                 return res.status(403).json({
+
                     success: false,
+
                     message:
                         "This administrator account is inactive."
+
                 });
 
             }
 
-
-            /*
-            |--------------------------------------------------------------------------
-            | CHECK PASSWORD
-            |--------------------------------------------------------------------------
-            */
 
             const passwordMatches =
                 await bcrypt.compare(
-                    cleanPassword,
+                    password,
                     admin.password
                 );
 
@@ -108,9 +257,12 @@ router.post(
             if (!passwordMatches) {
 
                 return res.status(401).json({
+
                     success: false,
+
                     message:
-                        "Invalid username or password."
+                        "Invalid administrator username or password."
+
                 });
 
             }
@@ -118,84 +270,84 @@ router.post(
 
             /*
             |--------------------------------------------------------------------------
-            | CREATE ADMIN SESSION
+            | CREATE JWT
             |--------------------------------------------------------------------------
             */
 
-            req.session.admin = {
-                id:
-                    admin._id.toString(),
+            const token =
+                jwt.sign(
 
-                username:
-                    admin.username,
+                    {
+                        sub:
+                            admin._id.toString(),
 
-                name:
-                    admin.name,
+                        username:
+                            admin.username,
 
-                role:
-                    admin.role
-            };
+                        name:
+                            admin.name,
 
+                        role:
+                            admin.role,
 
-            /*
-            |--------------------------------------------------------------------------
-            | SAVE SESSION
-            |--------------------------------------------------------------------------
-            */
+                        type:
+                            "admin"
+                    },
 
-            req.session.save(
-                error => {
+                    getJwtSecret(),
 
-                    if (error) {
-
-                        console.error(
-                            "Session save error:",
-                            error
-                        );
-
-                        return res.status(500).json({
-                            success: false,
-                            message:
-                                "Unable to create administrator session."
-                        });
-
+                    {
+                        expiresIn:
+                            JWT_EXPIRES_IN
                     }
 
+                );
 
-                    return res.json({
-                        success: true,
-                        message:
-                            "Administrator login successful.",
 
-                        admin: {
-                            id:
-                                admin._id,
+            return res.status(200).json({
 
-                            username:
-                                admin.username,
+                success: true,
 
-                            name:
-                                admin.name,
+                message:
+                    "Administrator login successful.",
 
-                            role:
-                                admin.role
-                        }
-                    });
+                token,
+
+                expiresIn:
+                    JWT_EXPIRES_IN,
+
+                admin: {
+
+                    id:
+                        admin._id,
+
+                    username:
+                        admin.username,
+
+                    name:
+                        admin.name,
+
+                    role:
+                        admin.role
 
                 }
-            );
+
+            });
 
         } catch (error) {
 
             console.error(
-                "Admin login error:",
+                "Administrator login error:",
                 error
             );
 
             return res.status(500).json({
+
                 success: false,
+
                 message:
                     "Unable to process administrator login."
+
             });
 
         }
@@ -206,34 +358,120 @@ router.post(
 
 /*
 |--------------------------------------------------------------------------
-| CHECK CURRENT ADMIN SESSION
+| CURRENT ADMINISTRATOR
 |--------------------------------------------------------------------------
 */
 
 router.get(
     "/me",
-    (req, res) => {
+    requireAdmin,
+    async (req, res) => {
 
-        if (
-            !req.session ||
-            !req.session.admin
-        ) {
+        try {
 
-            return res.status(401).json({
+            const admin =
+                await Admin.findById(
+                    req.admin.id
+                ).select(
+                    "-password"
+                );
+
+
+            if (!admin) {
+
+                return res.status(401).json({
+
+                    success: false,
+
+                    message:
+                        "Administrator account no longer exists."
+
+                });
+
+            }
+
+
+            if (
+                admin.active === false
+            ) {
+
+                return res.status(403).json({
+
+                    success: false,
+
+                    message:
+                        "Administrator account is inactive."
+
+                });
+
+            }
+
+
+            return res.status(200).json({
+
+                success: true,
+
+                admin: {
+
+                    id:
+                        admin._id,
+
+                    username:
+                        admin.username,
+
+                    name:
+                        admin.name,
+
+                    role:
+                        admin.role,
+
+                    active:
+                        admin.active
+
+                }
+
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Admin verification error:",
+                error
+            );
+
+            return res.status(500).json({
+
                 success: false,
-                authenticated: false,
+
                 message:
-                    "Administrator is not logged in."
+                    "Unable to verify administrator."
+
             });
 
         }
 
+    }
+);
 
-        return res.json({
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
+router.post(
+    "/logout",
+    requireAdmin,
+    (req, res) => {
+
+        return res.status(200).json({
+
             success: true,
-            authenticated: true,
-            admin:
-                req.session.admin
+
+            message:
+                "Administrator logout acknowledged."
+
         });
 
     }
@@ -242,98 +480,22 @@ router.get(
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN LOGOUT
-|--------------------------------------------------------------------------
-*/
-
-router.post(
-    "/logout",
-    (req, res) => {
-
-        if (!req.session) {
-
-            return res.json({
-                success: true,
-                message:
-                    "Administrator logged out."
-            });
-
-        }
-
-
-        req.session.destroy(
-            error => {
-
-                if (error) {
-
-                    console.error(
-                        "Admin logout error:",
-                        error
-                    );
-
-                    return res.status(500).json({
-                        success: false,
-                        message:
-                            "Unable to log out."
-                    });
-
-                }
-
-
-                res.clearCookie(
-                    "hotel.sid"
-                );
-
-
-                return res.json({
-                    success: true,
-                    message:
-                        "Administrator logged out successfully."
-                });
-
-            }
-        );
-
-    }
-);
-
-
-/*
-|--------------------------------------------------------------------------
-| ADMIN AUTHENTICATION MIDDLEWARE
+| EXPORTS
 |--------------------------------------------------------------------------
 |
-| Other protected admin routes can use this function.
+| IMPORTANT:
+| We export BOTH the router and requireAdmin.
+| server.js will use:
+|
+| const { router: adminRoutes } = require("./routes/admin");
 |
 |--------------------------------------------------------------------------
 */
-
-function requireAdmin(
-    req,
-    res,
-    next
-) {
-
-    if (
-        req.session &&
-        req.session.admin
-    ) {
-
-        return next();
-
-    }
-
-
-    return res.status(401).json({
-        success: false,
-        message:
-            "Administrator authentication required."
-    });
-
-}
-
 
 module.exports = {
+
     router,
+
     requireAdmin
+
 };

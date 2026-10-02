@@ -1,271 +1,562 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    const loginForm =
-        document.getElementById("adminLoginForm");
-
-    const usernameInput =
-        document.getElementById("username");
-
-    const passwordInput =
-        document.getElementById("password");
-
-    const loginButton =
-        document.getElementById("loginButton");
-
-    const loginMessage =
-        document.getElementById("loginMessage");
+"use strict";
 
 
-    if (!loginForm) {
-        console.error(
-            "Admin login form was not found."
-        );
+/*
+|--------------------------------------------------------------------------
+| DON STEVE IMPERIAL HOTEL
+| ADMINISTRATOR LOGIN
+|--------------------------------------------------------------------------
+| JWT authentication
+|--------------------------------------------------------------------------
+*/
 
+
+const ADMIN_TOKEN_KEY =
+    "donSteveAdminToken";
+
+
+/*
+|--------------------------------------------------------------------------
+| ELEMENTS
+|--------------------------------------------------------------------------
+*/
+
+const loginForm =
+    document.getElementById(
+        "adminLoginForm"
+    );
+
+const usernameInput =
+    document.getElementById(
+        "username"
+    );
+
+const passwordInput =
+    document.getElementById(
+        "password"
+    );
+
+const loginButton =
+    document.getElementById(
+        "loginButton"
+    );
+
+const loginMessage =
+    document.getElementById(
+        "loginMessage"
+    );
+
+
+/*
+|--------------------------------------------------------------------------
+| MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+function showMessage(
+    message,
+    type = "error"
+) {
+
+    if (!loginMessage) {
         return;
     }
 
 
-    function showMessage(
-        message,
-        type
+    loginMessage.textContent =
+        message;
+
+
+    loginMessage.className =
+        "login-message " +
+        type;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CLEAR MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+function clearMessage() {
+
+    if (!loginMessage) {
+        return;
+    }
+
+
+    loginMessage.textContent =
+        "";
+
+    loginMessage.className =
+        "login-message";
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| BUTTON STATE
+|--------------------------------------------------------------------------
+*/
+
+function setLoading(
+    loading
+) {
+
+    if (!loginButton) {
+        return;
+    }
+
+
+    loginButton.disabled =
+        loading;
+
+
+    loginButton.textContent =
+        loading
+            ? "Signing In..."
+            : "Sign In";
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| GET STORED TOKEN
+|--------------------------------------------------------------------------
+*/
+
+function getStoredToken() {
+
+    return localStorage.getItem(
+        ADMIN_TOKEN_KEY
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| STORE TOKEN
+|--------------------------------------------------------------------------
+*/
+
+function storeToken(
+    token
+) {
+
+    if (!token) {
+        return;
+    }
+
+
+    localStorage.setItem(
+        ADMIN_TOKEN_KEY,
+        token
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REMOVE TOKEN
+|--------------------------------------------------------------------------
+*/
+
+function removeToken() {
+
+    localStorage.removeItem(
+        ADMIN_TOKEN_KEY
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| VERIFY EXISTING TOKEN
+|--------------------------------------------------------------------------
+|
+| If the administrator is already logged in, don't show the login
+| form again. Verify the existing JWT with the server.
+|--------------------------------------------------------------------------
+*/
+
+async function checkExistingLogin() {
+
+    const token =
+        getStoredToken();
+
+
+    if (!token) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/admin/me",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`,
+
+                        "Accept":
+                            "application/json"
+                    },
+
+                    cache:
+                        "no-store"
+                }
+            );
+
+
+        if (
+            response.ok
+        ) {
+
+            window.location.replace(
+                "/admin/index.html"
+            );
+
+            return;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | INVALID / EXPIRED TOKEN
+        |--------------------------------------------------------------------------
+        */
+
+        removeToken();
+
+    } catch (error) {
+
+        console.error(
+            "Existing administrator login check failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+
+async function handleLogin(
+    event
+) {
+
+    event.preventDefault();
+
+
+    clearMessage();
+
+
+    const username =
+        usernameInput
+            ? usernameInput.value.trim()
+            : "";
+
+
+    const password =
+        passwordInput
+            ? passwordInput.value
+            : "";
+
+
+    if (
+        !username ||
+        !password
     ) {
 
-        if (!loginMessage) {
-            return;
-        }
+        showMessage(
+            "Please enter your username and password."
+        );
 
-        loginMessage.textContent =
-            message;
-
-        loginMessage.className =
-            "login-message";
-
-        if (type) {
-            loginMessage.classList.add(
-                type
-            );
-        }
+        return;
 
     }
 
 
-    loginForm.addEventListener(
-        "submit",
-        async function (event) {
-
-            event.preventDefault();
+    setLoading(true);
 
 
-            const username =
-                usernameInput
-                    ? usernameInput.value
-                        .trim()
-                        .toLowerCase()
-                    : "";
+    try {
 
+        const response =
+            await fetch(
+                "/api/admin/login",
+                {
 
-            const password =
-                passwordInput
-                    ? passwordInput.value
-                    : "";
+                    method: "POST",
 
+                    headers: {
 
-            if (
-                !username ||
-                !password
-            ) {
+                        "Content-Type":
+                            "application/json",
 
-                showMessage(
-                    "Please enter your username and password.",
-                    "error"
-                );
+                        "Accept":
+                            "application/json"
 
-                return;
-            }
+                    },
 
+                    body:
+                        JSON.stringify({
 
-            const originalButtonText =
-                loginButton
-                    ? loginButton.textContent
-                    : "Sign In";
+                            username,
 
+                            password
 
-            if (loginButton) {
+                        }),
 
-                loginButton.disabled =
-                    true;
+                    cache:
+                        "no-store"
 
-                loginButton.textContent =
-                    "Signing In...";
-
-            }
-
-
-            showMessage(
-                "",
-                ""
+                }
             );
 
 
-            try {
+        /*
+        |--------------------------------------------------------------------------
+        | READ RESPONSE
+        |--------------------------------------------------------------------------
+        */
 
-                const response =
-                    await fetch(
-                        "/api/admin/login",
-                        {
-                            method: "POST",
-
-                            credentials:
-                                "same-origin",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                "Accept":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    username:
-                                        username,
-
-                                    password:
-                                        password
-                                }),
-
-                            cache:
-                                "no-store"
-                        }
-                    );
+        let data = null;
 
 
-                const result =
-                    await response.json()
-                        .catch(
-                            () => null
-                        );
+        try {
+
+            data =
+                await response.json();
+
+        } catch (jsonError) {
+
+            console.error(
+                "Login response was not valid JSON:",
+                jsonError
+            );
+
+        }
 
 
-                console.log(
-                    "Admin login response:",
-                    result
-                );
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN FAILED
+        |--------------------------------------------------------------------------
+        */
+
+        if (
+            !response.ok ||
+            !data ||
+            !data.success
+        ) {
+
+            showMessage(
+
+                data &&
+                data.message
+
+                    ? data.message
+
+                    : "Unable to sign in. Please check your credentials."
+
+            );
+
+            setLoading(false);
+
+            return;
+
+        }
 
 
-                if (
-                    !response.ok ||
-                    !result ||
-                    !result.success
-                ) {
+        /*
+        |--------------------------------------------------------------------------
+        | JWT REQUIRED
+        |--------------------------------------------------------------------------
+        */
 
-                    throw new Error(
-                        result?.message ||
-                        "Invalid administrator credentials."
-                    );
+        if (
+            !data.token
+        ) {
+
+            console.error(
+                "Login succeeded but no JWT was returned."
+            );
+
+
+            showMessage(
+                "Login succeeded, but the authentication token was not received."
+            );
+
+
+            setLoading(false);
+
+            return;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SAVE JWT
+        |--------------------------------------------------------------------------
+        */
+
+        storeToken(
+            data.token
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | SUCCESS MESSAGE
+        |--------------------------------------------------------------------------
+        */
+
+        showMessage(
+            "Login successful. Opening administrator dashboard...",
+            "success"
+        );
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | VERIFY JWT BEFORE REDIRECT
+        |--------------------------------------------------------------------------
+        |
+        | This makes sure the token we just stored actually works.
+        |--------------------------------------------------------------------------
+        */
+
+        const verifyResponse =
+            await fetch(
+                "/api/admin/me",
+                {
+
+                    method: "GET",
+
+                    headers: {
+
+                        "Authorization":
+                            `Bearer ${data.token}`,
+
+                        "Accept":
+                            "application/json"
+
+                    },
+
+                    cache:
+                        "no-store"
 
                 }
+            );
 
 
-                /*
-                |--------------------------------------------------------------------------
-                | LOGIN SUCCESSFUL
-                |--------------------------------------------------------------------------
-                */
+        if (
+            !verifyResponse.ok
+        ) {
 
-                showMessage(
-                    "Login successful. Opening administrator dashboard...",
-                    "success"
-                );
+            removeToken();
 
 
-                /*
-                |--------------------------------------------------------------------------
-                | VERIFY THE SESSION BEFORE REDIRECTING
-                |--------------------------------------------------------------------------
-                */
-
-                const sessionResponse =
-                    await fetch(
-                        "/api/admin/me",
-                        {
-                            method: "GET",
-
-                            credentials:
-                                "same-origin",
-
-                            headers: {
-                                "Accept":
-                                    "application/json"
-                            },
-
-                            cache:
-                                "no-store"
-                        }
-                    );
+            showMessage(
+                "Login was completed, but the administrator token could not be verified."
+            );
 
 
-                const sessionResult =
-                    await sessionResponse
-                        .json()
-                        .catch(
-                            () => null
-                        );
+            setLoading(false);
+
+            return;
+
+        }
 
 
-                console.log(
-                    "Admin session check:",
-                    sessionResult
-                );
+        /*
+        |--------------------------------------------------------------------------
+        | GO TO DASHBOARD
+        |--------------------------------------------------------------------------
+        */
 
+        window.location.replace(
+            "/admin/index.html"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Administrator login request failed:",
+            error
+        );
+
+
+        showMessage(
+            "Unable to connect to the hotel server. Please try again."
+        );
+
+
+        setLoading(false);
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FORM EVENT
+|--------------------------------------------------------------------------
+*/
+
+if (loginForm) {
+
+    loginForm.addEventListener(
+        "submit",
+        handleLogin
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ENTER KEY SUPPORT
+|--------------------------------------------------------------------------
+*/
+
+if (passwordInput) {
+
+    passwordInput.addEventListener(
+        "keydown",
+        (event) => {
+
+            if (
+                event.key === "Enter"
+            ) {
 
                 if (
-                    !sessionResponse.ok ||
-                    !sessionResult ||
-                    !sessionResult.authenticated
+                    loginForm &&
+                    typeof loginForm.requestSubmit ===
+                        "function"
                 ) {
 
-                    throw new Error(
-                        "Login succeeded, but the administrator session was not established."
-                    );
-
-                }
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | REDIRECT TO DASHBOARD
-                |--------------------------------------------------------------------------
-                */
-
-                window.location.replace(
-                    "/admin"
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Administrator login error:",
-                    error
-                );
-
-
-                showMessage(
-                    error.message ||
-                    "Unable to sign in. Please try again.",
-                    "error"
-                );
-
-
-                if (loginButton) {
-
-                    loginButton.disabled =
-                        false;
-
-                    loginButton.textContent =
-                        originalButtonText ||
-                        "Sign In";
+                    loginForm.requestSubmit();
 
                 }
 
@@ -274,4 +565,20 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     );
 
-});
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CHECK EXISTING LOGIN
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        checkExistingLogin();
+
+    }
+);

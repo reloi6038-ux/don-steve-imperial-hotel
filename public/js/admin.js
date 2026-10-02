@@ -1,411 +1,738 @@
-/* =========================================================
-   DON STEVE IMPERIAL HOTEL
-   ADMIN DASHBOARD JAVASCRIPT
-========================================================= */
-
 "use strict";
 
 
-/* =========================================================
-   GLOBAL STATE
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| DON STEVE IMPERIAL HOTEL
+| ADMIN DASHBOARD
+|--------------------------------------------------------------------------
+*/
+
+
+const ADMIN_TOKEN_KEY =
+    "donSteveAdminToken";
+
 
 let allBookings = [];
 
 let filteredBookings = [];
 
+let allContactMessages = [];
 
-/* =========================================================
-   DOM ELEMENTS
-========================================================= */
+let selectedReservation = null;
 
-const totalReservations =
-    document.getElementById("totalReservations");
+let isLoadingBookings = false;
 
-const pendingReservations =
-    document.getElementById("pendingReservations");
-
-const confirmedReservations =
-    document.getElementById("confirmedReservations");
-
-const cancelledReservations =
-    document.getElementById("cancelledReservations");
-
-const reservationsTableBody =
-    document.getElementById("reservationsTableBody");
-
-const bookingSearch =
-    document.getElementById("bookingSearch");
-
-const statusFilter =
-    document.getElementById("statusFilter");
-
-const refreshBookings =
-    document.getElementById("refreshBookings");
-
-const adminSignout =
-    document.getElementById("adminSignout");
+let isLoadingMessages = false;
 
 
-/* =========================================================
-   INITIALIZE DASHBOARD
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| DOM HELPER
+|--------------------------------------------------------------------------
+*/
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+function $(id) {
 
-        console.log(
-            "Don Steve admin dashboard initialized."
+    return document.getElementById(id);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TOKEN
+|--------------------------------------------------------------------------
+*/
+
+function getAdminToken() {
+
+    try {
+
+        return localStorage.getItem(
+            ADMIN_TOKEN_KEY
         );
 
+    } catch (error) {
 
-        /*
-         * Load reservations
-         */
+        console.error(
+            "Unable to read admin token:",
+            error
+        );
 
-        loadBookings();
-
-
-        /*
-         * Load contact messages
-         */
-
-        loadContactMessages();
-
-
-        /*
-         * Setup search
-         */
-
-        if (bookingSearch) {
-
-            bookingSearch.addEventListener(
-                "input",
-                function () {
-
-                    filterBookings();
-
-                }
-            );
-
-        }
-
-
-        /*
-         * Setup status filter
-         */
-
-        if (statusFilter) {
-
-            statusFilter.addEventListener(
-                "change",
-                function () {
-
-                    filterBookings();
-
-                }
-            );
-
-        }
-
-
-        /*
-         * Refresh reservations
-         */
-
-        if (refreshBookings) {
-
-            refreshBookings.addEventListener(
-                "click",
-                function () {
-
-                    loadBookings();
-
-                }
-            );
-
-        }
-
-
-        /*
-         * Refresh contact messages
-         */
-
-        const refreshContactMessages =
-            document.getElementById(
-                "refreshContactMessages"
-            );
-
-
-        if (refreshContactMessages) {
-
-            refreshContactMessages.addEventListener(
-                "click",
-                function () {
-
-                    loadContactMessages();
-
-                }
-            );
-
-        }
-
-
-        /*
-         * Setup administrator logout
-         */
-
-        setupAdminLogout();
+        return null;
 
     }
-);
+
+}
 
 
-/* =========================================================
-   ADMIN LOGOUT
-========================================================= */
+function removeAdminToken() {
 
-function setupAdminLogout() {
+    try {
 
-    const signOutButton =
-        document.getElementById(
-            "adminSignout"
+        localStorage.removeItem(
+            ADMIN_TOKEN_KEY
         );
 
+    } catch (error) {
 
-    if (!signOutButton) {
-
-        console.warn(
-            "Admin sign-out button not found."
+        console.error(
+            "Unable to remove admin token:",
+            error
         );
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REDIRECT TO LOGIN
+|--------------------------------------------------------------------------
+*/
+
+function redirectToLogin() {
+
+    if (
+        window.location.pathname ===
+        "/admin/login.html"
+    ) {
 
         return;
 
     }
 
-
-    signOutButton.addEventListener(
-        "click",
-        async function () {
-
-            if (signOutButton.disabled) {
-
-                return;
-
-            }
-
-
-            const confirmed =
-                window.confirm(
-                    "Are you sure you want to sign out?"
-                );
-
-
-            if (!confirmed) {
-
-                return;
-
-            }
-
-
-            signOutButton.disabled = true;
-
-            signOutButton.textContent =
-                "Signing Out...";
-
-
-            try {
-
-                console.log(
-                    "Sending administrator logout request..."
-                );
-
-
-                const response =
-                    await fetch(
-                        "/api/admin/logout",
-                        {
-                            method: "POST",
-
-                            credentials:
-                                "same-origin",
-
-                            headers: {
-                                "Accept":
-                                    "application/json"
-                            },
-
-                            cache: "no-store"
-                        }
-                    );
-
-
-                let result = null;
-
-
-                try {
-
-                    result =
-                        await response.json();
-
-                } catch (jsonError) {
-
-                    console.warn(
-                        "Logout response was not JSON."
-                    );
-
-                }
-
-
-                console.log(
-                    "Logout response:",
-                    response.status
-                );
-
-
-                if (!response.ok) {
-
-                    throw new Error(
-                        result?.message ||
-                        "Unable to sign out."
-                    );
-
-                }
-
-
-                if (
-                    result &&
-                    result.success === false
-                ) {
-
-                    throw new Error(
-                        result.message ||
-                        "Unable to sign out."
-                    );
-
-                }
-
-
-                console.log(
-                    "Administrator logged out successfully."
-                );
-
-
-                /*
-                 * Redirect to login page.
-                 */
-
-                window.location.href =
-                    "/admin/login.html";
-
-
-            } catch (error) {
-
-                console.error(
-                    "Admin logout error:",
-                    error
-                );
-
-
-                signOutButton.disabled =
-                    false;
-
-
-                signOutButton.textContent =
-                    "Sign Out";
-
-
-                showNotification(
-                    error.message ||
-                    "Unable to sign out. Please try again.",
-                    "error"
-                );
-
-            }
-
-        }
-    );
+    window.location.href =
+        "/admin/login.html";
 
 }
 
 
-/* =========================================================
-   LOAD RESERVATIONS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATED FETCH
+|--------------------------------------------------------------------------
+*/
 
-async function loadBookings() {
+async function authenticatedFetch(
+    url,
+    options = {}
+) {
 
-    showLoading();
+    const token =
+        getAdminToken();
+
+
+    if (!token) {
+
+        redirectToLogin();
+
+        throw new Error(
+            "Admin authentication token is missing."
+        );
+
+    }
+
+
+    const requestOptions = {
+        ...options,
+
+        headers: {
+            ...(options.headers || {}),
+
+            "Authorization":
+                `Bearer ${token}`,
+
+            "Content-Type":
+                "application/json"
+        }
+    };
+
+
+    let response;
 
 
     try {
 
-        console.log(
-            "Requesting: /api/bookings/admin"
+        response =
+            await fetch(
+                url,
+                requestOptions
+            );
+
+    } catch (error) {
+
+        console.error(
+            "Network error:",
+            error
         );
 
+        throw new Error(
+            "Unable to connect to the server."
+        );
+
+    }
+
+
+    if (
+        response.status ===
+        401
+    ) {
+
+        removeAdminToken();
+
+        showToast(
+            "Your login has expired. Please sign in again.",
+            "error"
+        );
+
+        setTimeout(
+            redirectToLogin,
+            700
+        );
+
+        throw new Error(
+            "Admin authentication expired."
+        );
+
+    }
+
+
+    return response;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| AUTHENTICATION CHECK
+|--------------------------------------------------------------------------
+*/
+
+async function checkAdminAuthentication() {
+
+    if (!getAdminToken()) {
+
+        redirectToLogin();
+
+        return false;
+
+    }
+
+
+    try {
 
         const response =
-            await fetch(
-                "/api/bookings/admin",
-                {
-                    method: "GET",
-
-                    credentials:
-                        "same-origin",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    },
-
-                    cache: "no-store"
-                }
+            await authenticatedFetch(
+                "/api/admin/me"
             );
-
-
-        console.log(
-            "Reservation API response:",
-            response.status
-        );
-
-
-        /*
-         * Administrator session expired.
-         */
-
-        if (response.status === 401) {
-
-            showError(
-                "Your administrator session has expired. Please sign in again."
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1500
-            );
-
-
-            return;
-
-        }
 
 
         const data =
             await response.json();
 
 
-        console.log(
-            "Reservation data:",
-            data
+        if (
+            !response.ok ||
+            !data.success
+        ) {
+
+            removeAdminToken();
+
+            redirectToLogin();
+
+            return false;
+
+        }
+
+
+        if (
+            data.admin
+        ) {
+
+            const name =
+                data.admin.name ||
+                data.admin.username ||
+                "Administrator";
+
+
+            const role =
+                data.admin.role ||
+                "Hotel Management";
+
+
+            const nameElement =
+                $("administratorName");
+
+
+            const roleElement =
+                $("administratorRole");
+
+
+            if (nameElement) {
+
+                nameElement.textContent =
+                    name;
+
+            }
+
+
+            if (roleElement) {
+
+                roleElement.textContent =
+                    role;
+
+            }
+
+        }
+
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            "Authentication check failed:",
+            error
         );
+
+        return false;
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| SAFE TEXT
+|--------------------------------------------------------------------------
+*/
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DISPLAY VALUE
+|--------------------------------------------------------------------------
+*/
+
+function displayValue(
+    value,
+    fallback = "—"
+) {
+
+    if (
+        value === null ||
+        value === undefined ||
+        String(value).trim() === ""
+    ) {
+
+        return fallback;
+
+    }
+
+
+    return String(value);
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATE
+|--------------------------------------------------------------------------
+*/
+
+function formatDate(value) {
+
+    if (!value) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleDateString(
+        undefined,
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric"
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| DATE AND TIME
+|--------------------------------------------------------------------------
+*/
+
+function formatDateTime(value) {
+
+    if (!value) {
+
+        return "—";
+
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return String(value);
+
+    }
+
+
+    return date.toLocaleString(
+        undefined,
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| NORMALIZE BOOKING
+|--------------------------------------------------------------------------
+*/
+
+function normalizeBooking(
+    booking
+) {
+
+    return {
+
+        ...booking,
+
+        id:
+            booking._id ||
+            booking.id ||
+            "",
+
+        guestName:
+            booking.guestName ||
+            booking.name ||
+            "",
+
+        email:
+            booking.email ||
+            booking.guestEmail ||
+            "",
+
+        phone:
+            booking.phone ||
+            booking.phoneNumber ||
+            booking.mobile ||
+            "",
+
+        guests:
+            booking.guests ??
+            booking.numberOfGuests ??
+            booking.guestCount ??
+            "",
+
+        room:
+            booking.room ||
+            booking.roomName ||
+            booking.roomType ||
+            "",
+
+        roomType:
+            booking.roomType ||
+            booking.room ||
+            "",
+
+        checkIn:
+            booking.checkIn ||
+            booking.checkin ||
+            booking.arrivalDate ||
+            "",
+
+        checkOut:
+            booking.checkOut ||
+            booking.checkout ||
+            booking.departureDate ||
+            "",
+
+        specialRequests:
+            booking.specialRequests ||
+            booking.requests ||
+            booking.specialRequest ||
+            "",
+
+        status:
+            booking.status ||
+            "pending",
+
+        createdAt:
+            booking.createdAt ||
+            booking.created_at ||
+            booking.date ||
+            ""
+
+    };
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| NORMALIZE CONTACT MESSAGE
+|--------------------------------------------------------------------------
+*/
+
+function normalizeContactMessage(
+    message
+) {
+
+    return {
+
+        ...message,
+
+        id:
+            message._id ||
+            message.id ||
+            "",
+
+        name:
+            message.name ||
+            message.fullName ||
+            "",
+
+        email:
+            message.email ||
+            "",
+
+        phone:
+            message.phone ||
+            message.phoneNumber ||
+            "",
+
+        subject:
+            message.subject ||
+            message.title ||
+            "",
+
+        message:
+            message.message ||
+            message.body ||
+            message.content ||
+            "",
+
+        status:
+            message.status ||
+            "unread",
+
+        createdAt:
+            message.createdAt ||
+            message.created_at ||
+            message.date ||
+            ""
+
+    };
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| TOAST
+|--------------------------------------------------------------------------
+*/
+
+function showToast(
+    message,
+    type = "info"
+) {
+
+    const container =
+        $("toastContainer");
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    const toast =
+        document.createElement(
+            "div"
+        );
+
+
+    toast.className =
+        `toast ${type}`;
+
+
+    toast.textContent =
+        message;
+
+
+    container.appendChild(
+        toast
+    );
+
+
+    setTimeout(
+        function () {
+
+            toast.style.opacity =
+                "0";
+
+            toast.style.transform =
+                "translateX(15px)";
+
+            toast.style.transition =
+                "all 0.2s ease";
+
+
+            setTimeout(
+                function () {
+
+                    toast.remove();
+
+                },
+                250
+            );
+
+        },
+        3500
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOAD BOOKINGS
+|--------------------------------------------------------------------------
+*/
+
+async function loadBookings() {
+
+    if (isLoadingBookings) {
+
+        return;
+
+    }
+
+
+    isLoadingBookings = true;
+
+
+    const tableBody =
+        $("reservationsTableBody");
+
+
+    if (tableBody) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td
+                    colspan="7"
+                    class="loading-cell"
+                >
+                    <div class="loading-state">
+                        <span class="loading-spinner"></span>
+                        <div>
+                            Loading reservations...
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+    }
+
+
+    try {
+
+        const response =
+            await authenticatedFetch(
+                "/api/bookings/admin"
+            );
+
+
+        const data =
+            await response.json();
 
 
         if (!response.ok) {
@@ -418,76 +745,114 @@ async function loadBookings() {
         }
 
 
-        if (!data.success) {
+        let bookings = [];
 
-            throw new Error(
-                data.message ||
-                "Reservation request failed."
-            );
+
+        if (
+            Array.isArray(
+                data.bookings
+            )
+        ) {
+
+            bookings =
+                data.bookings;
+
+        } else if (
+            Array.isArray(data)
+        ) {
+
+            bookings =
+                data;
+
+        } else if (
+            data.data &&
+            Array.isArray(data.data)
+        ) {
+
+            bookings =
+                data.data;
 
         }
 
 
         allBookings =
-            Array.isArray(data.bookings)
-                ? data.bookings
-                : [];
-
-
-        /*
-         * Sort newest reservations first.
-         */
-
-        allBookings.sort(
-            function (a, b) {
-
-                return (
-                    new Date(
-                        b.createdAt ||
-                        b._id
-                    ) -
-                    new Date(
-                        a.createdAt ||
-                        a._id
-                    )
-                );
-
-            }
-        );
-
-
-        console.log(
-            "Reservations received:",
-            allBookings.length
-        );
+            bookings.map(
+                normalizeBooking
+            );
 
 
         updateStatistics();
 
-        filterBookings();
-
+        applyBookingFilters();
 
     } catch (error) {
 
         console.error(
-            "Reservation loading error:",
+            "Load bookings error:",
             error
         );
 
 
-        showError(
-            error.message ||
-            "Unable to load reservations."
-        );
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            if (tableBody) {
+
+                tableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="7"
+                            class="loading-cell"
+                        >
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    ⚠
+                                </div>
+
+                                <h4>
+                                    Unable to load reservations
+                                </h4>
+
+                                <p>
+                                    ${escapeHtml(
+                                        error.message
+                                    )}
+                                </p>
+
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+
+            showToast(
+                error.message ||
+                "Unable to load reservations.",
+                "error"
+            );
+
+        }
+
+    } finally {
+
+        isLoadingBookings =
+            false;
 
     }
 
 }
 
 
-/* =========================================================
-   UPDATE STATISTICS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| STATISTICS
+|--------------------------------------------------------------------------
+*/
 
 function updateStatistics() {
 
@@ -497,100 +862,107 @@ function updateStatistics() {
 
     const pending =
         allBookings.filter(
-            function (booking) {
-
-                return (
-                    normalizeStatus(
-                        booking.status
-                    ) === "pending"
-                );
-
-            }
+            booking =>
+                String(
+                    booking.status
+                ).toLowerCase() ===
+                "pending"
         ).length;
 
 
     const confirmed =
         allBookings.filter(
-            function (booking) {
-
-                return (
-                    normalizeStatus(
-                        booking.status
-                    ) === "confirmed"
-                );
-
-            }
+            booking =>
+                String(
+                    booking.status
+                ).toLowerCase() ===
+                "confirmed"
         ).length;
 
 
     const cancelled =
         allBookings.filter(
-            function (booking) {
-
-                return (
-                    normalizeStatus(
-                        booking.status
-                    ) === "cancelled"
-                );
-
-            }
+            booking =>
+                String(
+                    booking.status
+                ).toLowerCase() ===
+                "cancelled"
         ).length;
 
 
-    if (totalReservations) {
-
-        totalReservations.textContent =
-            total;
-
-    }
+    setText(
+        "totalReservations",
+        total
+    );
 
 
-    if (pendingReservations) {
-
-        pendingReservations.textContent =
-            pending;
-
-    }
+    setText(
+        "pendingReservations",
+        pending
+    );
 
 
-    if (confirmedReservations) {
-
-        confirmedReservations.textContent =
-            confirmed;
-
-    }
+    setText(
+        "confirmedReservations",
+        confirmed
+    );
 
 
-    if (cancelledReservations) {
-
-        cancelledReservations.textContent =
-            cancelled;
-
-    }
-
-
-    console.log(
-        "Dashboard statistics:",
-        {
-            total,
-            pending,
-            confirmed,
-            cancelled
-        }
+    setText(
+        "cancelledReservations",
+        cancelled
     );
 
 }
 
 
-/* =========================================================
-   FILTER RESERVATIONS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| SET TEXT
+|--------------------------------------------------------------------------
+*/
 
-function filterBookings() {
+function setText(
+    id,
+    value
+) {
+
+    const element =
+        $(id);
+
+
+    if (element) {
+
+        element.textContent =
+            displayValue(
+                value,
+                "0"
+            );
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| FILTER BOOKINGS
+|--------------------------------------------------------------------------
+*/
+
+function applyBookingFilters() {
+
+    const searchInput =
+        $("bookingSearch");
+
+
+    const statusFilter =
+        $("statusFilter");
+
 
     const search =
-        bookingSearch
-            ? bookingSearch.value
+        searchInput
+            ? searchInput.value
                 .trim()
                 .toLowerCase()
             : "";
@@ -603,113 +975,112 @@ function filterBookings() {
 
 
     filteredBookings =
-        allBookings.filter(
-            function (booking) {
-
-                const guestName =
-                    String(
-                        booking.guestName ||
-                        booking.name ||
-                        ""
-                    ).toLowerCase();
+        [...allBookings];
 
 
-                const email =
-                    String(
-                        booking.email ||
-                        ""
-                    ).toLowerCase();
+    if (search) {
+
+        filteredBookings =
+            filteredBookings.filter(
+                booking => {
+
+                    const text = [
+
+                        booking.guestName,
+                        booking.email,
+                        booking.phone,
+                        booking.room,
+                        booking.roomType,
+                        booking.status,
+                        booking.checkIn,
+                        booking.checkOut
+
+                    ]
+                        .filter(Boolean)
+                        .join(" ")
+                        .toLowerCase();
 
 
-                const phone =
-                    String(
-                        booking.phone ||
-                        ""
-                    ).toLowerCase();
-
-
-                const room =
-                    String(
-                        booking.room ||
-                        booking.roomType ||
-                        ""
-                    ).toLowerCase();
-
-
-                const matchesSearch =
-                    !search ||
-                    guestName.includes(search) ||
-                    email.includes(search) ||
-                    phone.includes(search) ||
-                    room.includes(search);
-
-
-                const bookingStatus =
-                    normalizeStatus(
-                        booking.status
+                    return text.includes(
+                        search
                     );
 
+                }
+            );
 
-                const matchesStatus =
-                    selectedStatus === "all" ||
-                    bookingStatus ===
-                        selectedStatus;
-
-
-                return (
-                    matchesSearch &&
-                    matchesStatus
-                );
-
-            }
-        );
+    }
 
 
-    renderBookings();
+    if (
+        selectedStatus &&
+        selectedStatus !== "all"
+    ) {
+
+        filteredBookings =
+            filteredBookings.filter(
+                booking =>
+                    String(
+                        booking.status
+                    ).toLowerCase() ===
+                    selectedStatus.toLowerCase()
+            );
+
+    }
+
+
+    renderBookings(
+        filteredBookings
+    );
 
 }
 
 
-/* =========================================================
-   RENDER RESERVATIONS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| RENDER BOOKINGS
+|--------------------------------------------------------------------------
+*/
 
-function renderBookings() {
+function renderBookings(
+    bookings
+) {
 
-    if (!reservationsTableBody) {
+    const tableBody =
+        $("reservationsTableBody");
+
+
+    if (!tableBody) {
 
         return;
 
     }
 
 
-    if (
-        filteredBookings.length === 0
-    ) {
+    if (!bookings.length) {
 
-        reservationsTableBody.innerHTML = `
+        tableBody.innerHTML = `
             <tr>
                 <td
-                    colspan="6"
-                    class="empty-cell"
+                    colspan="7"
+                    class="loading-cell"
                 >
+
                     <div class="empty-state">
 
-                        <div class="empty-icon">
-                            ◆
+                        <div class="empty-state-icon">
+                            📋
                         </div>
 
-                        <h3>
+                        <h4>
                             No reservations found
-                        </h3>
+                        </h4>
 
                         <p>
-                            There are no reservations
-                            matching your current search
-                            or status filter.
+                            No reservations match your search or filter.
                         </p>
 
                     </div>
+
                 </td>
             </tr>
         `;
@@ -719,108 +1090,211 @@ function renderBookings() {
     }
 
 
-    reservationsTableBody.innerHTML =
-        filteredBookings
+    tableBody.innerHTML =
+        bookings
             .map(
-                function (booking) {
-
-                    return createBookingRow(
-                        booking
-                    );
-
-                }
+                createBookingRow
             )
             .join("");
-
-
-    attachBookingActions();
 
 }
 
 
-/* =========================================================
-   CREATE RESERVATION TABLE ROW
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| STATUS CLASS
+|--------------------------------------------------------------------------
+*/
+
+function statusClass(
+    status
+) {
+
+    switch (
+        String(status).toLowerCase()
+    ) {
+
+        case "confirmed":
+            return "status-confirmed";
+
+        case "cancelled":
+            return "status-cancelled";
+
+        default:
+            return "status-pending";
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CREATE BOOKING ROW
+|--------------------------------------------------------------------------
+*/
 
 function createBookingRow(
     booking
 ) {
 
-    const id =
-        String(
-            booking._id ||
-            booking.id ||
-            ""
-        );
-
-
-    const guestName =
-        booking.guestName ||
-        booking.name ||
-        "Guest";
-
-
-    const email =
-        booking.email ||
-        "No email";
-
-
-    const room =
-        booking.room ||
-        booking.roomType ||
-        "Room not specified";
-
-
-    const guests =
-        Number(
-            booking.guests ||
-            1
-        );
-
-
     const status =
-        normalizeStatus(
-            booking.status
-        );
+        String(
+            booking.status ||
+            "pending"
+        ).toLowerCase();
 
 
-    const checkIn =
-        formatDate(
-            booking.checkIn
-        );
+    let actionButtons = "";
 
 
-    const checkOut =
-        formatDate(
-            booking.checkOut
-        );
+    /*
+    |--------------------------------------------------------------------------
+    | PENDING RESERVATION
+    |--------------------------------------------------------------------------
+    |
+    | The administrator can approve it with ONE CLICK.
+    |--------------------------------------------------------------------------
+    */
+
+    if (
+        status === "pending"
+    ) {
+
+        actionButtons = `
+
+            <button
+                type="button"
+                class="action-btn action-view"
+                data-action="view"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                👁 View
+            </button>
 
 
-    const statusClass =
-        getStatusClass(
-            status
-        );
+            <button
+                type="button"
+                class="action-btn approve-button"
+                data-action="approve"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                ✓ Approve
+            </button>
+
+
+            <button
+                type="button"
+                class="action-btn cancel-button"
+                data-action="cancel"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                × Cancel
+            </button>
+
+
+            <button
+                type="button"
+                class="action-btn delete-button"
+                data-action="delete"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                🗑 Delete
+            </button>
+
+        `;
+
+    } else {
+
+        /*
+        |--------------------------------------------------------------------------
+        | ALREADY CONFIRMED OR CANCELLED
+        |--------------------------------------------------------------------------
+        */
+
+        actionButtons = `
+
+            <button
+                type="button"
+                class="action-btn action-view"
+                data-action="view"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                👁 View
+            </button>
+
+
+            <button
+                type="button"
+                class="action-btn pending-button"
+                data-action="pending"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                ↻ Pending
+            </button>
+
+
+            ${
+                status === "confirmed"
+                    ? `
+                        <button
+                            type="button"
+                            class="action-btn cancel-button"
+                            data-action="cancel"
+                            data-id="${escapeHtml(booking.id)}"
+                        >
+                            × Cancel
+                        </button>
+                    `
+                    : `
+                        <button
+                            type="button"
+                            class="action-btn approve-button"
+                            data-action="approve"
+                            data-id="${escapeHtml(booking.id)}"
+                        >
+                            ✓ Approve
+                        </button>
+                    `
+            }
+
+
+            <button
+                type="button"
+                class="action-btn delete-button"
+                data-action="delete"
+                data-id="${escapeHtml(booking.id)}"
+            >
+                🗑 Delete
+            </button>
+
+        `;
+
+    }
 
 
     return `
-        <tr>
+
+        <tr
+            data-booking-id="${escapeHtml(booking.id)}"
+        >
 
             <td>
 
-                <div class="guest-cell">
+                <div class="guest-name">
+                    ${escapeHtml(
+                        displayValue(
+                            booking.guestName
+                        )
+                    )}
+                </div>
 
-                    <strong>
-                        ${escapeHtml(
-                            guestName
-                        )}
-                    </strong>
-
-                    <small>
-                        ${escapeHtml(
-                            email
-                        )}
-                    </small>
-
+                <div class="guest-email">
+                    ${escapeHtml(
+                        displayValue(
+                            booking.email
+                        )
+                    )}
                 </div>
 
             </td>
@@ -830,7 +1304,10 @@ function createBookingRow(
 
                 <div class="room-name">
                     ${escapeHtml(
-                        room
+                        displayValue(
+                            booking.room ||
+                            booking.roomType
+                        )
                     )}
                 </div>
 
@@ -838,43 +1315,32 @@ function createBookingRow(
 
 
             <td>
+                ${escapeHtml(
+                    displayValue(
+                        booking.guests
+                    )
+                )}
+            </td>
 
-                <div class="stay-cell">
 
-                    <strong>
-                        ${escapeHtml(
-                            checkIn
-                        )}
-                    </strong>
+            <td class="date-text">
 
-                    <small>
-                        Check-in
-                    </small>
-
-                    <strong>
-                        ${escapeHtml(
-                            checkOut
-                        )}
-                    </strong>
-
-                    <small>
-                        Check-out
-                    </small>
-
-                </div>
+                ${escapeHtml(
+                    formatDate(
+                        booking.checkIn
+                    )
+                )}
 
             </td>
 
 
-            <td>
+            <td class="date-text">
 
-                <div class="guest-count">
-                    ${guests}
-                    ${guests === 1
-                        ? "guest"
-                        : "guests"
-                    }
-                </div>
+                ${escapeHtml(
+                    formatDate(
+                        booking.checkOut
+                    )
+                )}
 
             </td>
 
@@ -882,14 +1348,9 @@ function createBookingRow(
             <td>
 
                 <span
-                    class="
-                        status-badge
-                        ${statusClass}
-                    "
+                    class="status-badge ${statusClass(status)}"
                 >
-                    ${escapeHtml(
-                        status
-                    )}
+                    ${escapeHtml(status)}
                 </span>
 
             </td>
@@ -897,188 +1358,42 @@ function createBookingRow(
 
             <td>
 
-                <div
-                    class="reservation-actions"
-                >
+                <div class="action-buttons">
 
-                    <button
-                        type="button"
-                        class="
-                            action-button
-                            view-booking
-                        "
-                        data-action="view"
-                        data-id="${escapeHtml(id)}"
-                    >
-                        View
-                    </button>
-
-
-                    ${
-                        status !== "confirmed"
-                            ? `
-                                <button
-                                    type="button"
-                                    class="
-                                        action-button
-                                        confirm-booking
-                                    "
-                                    data-action="confirm"
-                                    data-id="${escapeHtml(id)}"
-                                >
-                                    Confirm
-                                </button>
-                            `
-                            : ""
-                    }
-
-
-                    ${
-                        status !== "cancelled"
-                            ? `
-                                <button
-                                    type="button"
-                                    class="
-                                        action-button
-                                        cancel-booking
-                                    "
-                                    data-action="cancel"
-                                    data-id="${escapeHtml(id)}"
-                                >
-                                    Cancel
-                                </button>
-                            `
-                            : ""
-                    }
-
-
-                    <button
-                        type="button"
-                        class="
-                            action-button
-                            delete-booking
-                        "
-                        data-action="delete"
-                        data-id="${escapeHtml(id)}"
-                    >
-                        Delete
-                    </button>
+                    ${actionButtons}
 
                 </div>
 
             </td>
 
         </tr>
+
     `;
 
 }
 
 
-/* =========================================================
-   ATTACH RESERVATION ACTION EVENTS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| OPEN RESERVATION DETAILS
+|--------------------------------------------------------------------------
+*/
 
-function attachBookingActions() {
-
-    const buttons =
-        document.querySelectorAll(
-            "[data-action]"
-        );
-
-
-    buttons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    const action =
-                        button.dataset.action;
-
-
-                    const id =
-                        button.dataset.id;
-
-
-                    if (!id) {
-
-                        showNotification(
-                            "Reservation ID is missing.",
-                            "error"
-                        );
-
-                        return;
-
-                    }
-
-
-                    if (
-                        action === "view"
-                    ) {
-
-                        viewBooking(id);
-
-                    }
-
-
-                    if (
-                        action === "confirm"
-                    ) {
-
-                        updateBookingStatus(
-                            id,
-                            "confirmed"
-                        );
-
-                    }
-
-
-                    if (
-                        action === "cancel"
-                    ) {
-
-                        updateBookingStatus(
-                            id,
-                            "cancelled"
-                        );
-
-                    }
-
-
-                    if (
-                        action === "delete"
-                    ) {
-
-                        deleteBooking(id);
-
-                    }
-
-                }
-            );
-
-        }
-    );
-
-}
-
-
-/* =========================================================
-   UPDATE RESERVATION STATUS
-========================================================= */
-
-async function updateBookingStatus(
-    id,
-    status
+function openReservationDetails(
+    bookingId
 ) {
 
     const booking =
-        findBookingById(id);
+        allBookings.find(
+            item =>
+                String(item.id) ===
+                String(bookingId)
+        );
 
 
     if (!booking) {
 
-        showNotification(
+        showToast(
             "Reservation could not be found.",
             "error"
         );
@@ -1088,21 +1403,312 @@ async function updateBookingStatus(
     }
 
 
-    const guestName =
-        booking.guestName ||
-        booking.name ||
-        "this guest";
+    selectedReservation =
+        booking;
 
 
-    const actionText =
-        status === "confirmed"
-            ? "confirm"
-            : "cancel";
+    setText(
+        "detailGuestName",
+        displayValue(
+            booking.guestName
+        )
+    );
+
+
+    setText(
+        "detailGuestEmail",
+        displayValue(
+            booking.email
+        )
+    );
+
+
+    setText(
+        "detailGuestPhone",
+        displayValue(
+            booking.phone
+        )
+    );
+
+
+    setText(
+        "detailGuestCount",
+        displayValue(
+            booking.guests
+        )
+    );
+
+
+    setText(
+        "detailRoom",
+        displayValue(
+            booking.room
+        )
+    );
+
+
+    setText(
+        "detailRoomType",
+        displayValue(
+            booking.roomType
+        )
+    );
+
+
+    setText(
+        "detailCheckIn",
+        formatDate(
+            booking.checkIn
+        )
+    );
+
+
+    setText(
+        "detailCheckOut",
+        formatDate(
+            booking.checkOut
+        )
+    );
+
+
+    setText(
+        "detailReservationId",
+        displayValue(
+            booking.id
+        )
+    );
+
+
+    setText(
+        "detailCreatedAt",
+        formatDateTime(
+            booking.createdAt
+        )
+    );
+
+
+    setText(
+        "detailSpecialRequests",
+        displayValue(
+            booking.specialRequests,
+            "No special requests."
+        )
+    );
+
+
+    updateModalStatus();
+
+
+    const modal =
+        $("reservationModal");
+
+
+    if (!modal) {
+
+        showToast(
+            "Reservation details window is not available.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    modal.classList.add(
+        "open"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+
+    document.body.classList.add(
+        "modal-open"
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| UPDATE MODAL STATUS
+|--------------------------------------------------------------------------
+*/
+
+function updateModalStatus() {
+
+    if (!selectedReservation) {
+
+        return;
+
+    }
+
+
+    const statusElement =
+        $("detailStatus");
+
+
+    if (!statusElement) {
+
+        return;
+
+    }
+
+
+    const status =
+        String(
+            selectedReservation.status ||
+            "pending"
+        ).toLowerCase();
+
+
+    statusElement.innerHTML = `
+
+        <span
+            class="status-badge ${statusClass(status)}"
+        >
+            ${escapeHtml(status)}
+        </span>
+
+    `;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CLOSE RESERVATION DETAILS
+|--------------------------------------------------------------------------
+*/
+
+function closeReservationDetails() {
+
+    const modal =
+        $("reservationModal");
+
+
+    if (!modal) {
+
+        return;
+
+    }
+
+
+    modal.classList.remove(
+        "open"
+    );
+
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+
+    document.body.classList.remove(
+        "modal-open"
+    );
+
+
+    selectedReservation =
+        null;
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CHANGE RESERVATION STATUS
+|--------------------------------------------------------------------------
+|
+| IMPORTANT:
+|
+| There is NO typing anymore.
+|
+| The buttons call:
+|
+| approve -> confirmed
+| pending -> pending
+| cancel  -> cancelled
+|
+|--------------------------------------------------------------------------
+*/
+
+async function changeReservationStatus(
+    bookingId,
+    newStatus
+) {
+
+    const booking =
+        allBookings.find(
+            item =>
+                String(item.id) ===
+                String(bookingId)
+        );
+
+
+    if (!booking) {
+
+        showToast(
+            "Reservation could not be found.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const validStatuses = [
+        "pending",
+        "confirmed",
+        "cancelled"
+    ];
+
+
+    if (
+        !validStatuses.includes(
+            newStatus
+        )
+    ) {
+
+        showToast(
+            "Invalid reservation status.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const statusNames = {
+
+        pending:
+            "pending",
+
+        confirmed:
+            "approved",
+
+        cancelled:
+            "cancelled"
+
+    };
+
+
+    const actionName =
+        statusNames[
+            newStatus
+        ];
 
 
     const confirmed =
         window.confirm(
-            `Are you sure you want to ${actionText} the reservation for ${guestName}?`
+            `Are you sure you want to mark this reservation as ${actionName}?`
         );
 
 
@@ -1116,55 +1722,25 @@ async function updateBookingStatus(
     try {
 
         const response =
-            await fetch(
-                `/api/bookings/admin/${encodeURIComponent(id)}`,
+            await authenticatedFetch(
+                `/api/bookings/admin/${encodeURIComponent(bookingId)}`,
                 {
-                    method: "PATCH",
 
-                    credentials:
-                        "same-origin",
+                    method:
+                        "PATCH",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
+                    body:
+                        JSON.stringify({
+                            status:
+                                newStatus
+                        })
 
-                        "Accept":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        status
-                    })
                 }
             );
 
 
         const data =
             await response.json();
-
-
-        if (response.status === 401) {
-
-            showNotification(
-                "Administrator authentication required.",
-                "error"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1200
-            );
-
-
-            return;
-
-        }
 
 
         if (!response.ok) {
@@ -1177,44 +1753,39 @@ async function updateBookingStatus(
         }
 
 
-        if (!data.success) {
+        /*
+        |--------------------------------------------------------------------------
+        | Update local data
+        |--------------------------------------------------------------------------
+        */
 
-            throw new Error(
-                data.message ||
-                "Reservation update failed."
-            );
-
-        }
-
-
-        const index =
-            allBookings.findIndex(
-                function (item) {
-
-                    return (
-                        getBookingId(item) ===
-                        id
-                    );
-
-                }
-            );
+        booking.status =
+            newStatus;
 
 
-        if (index !== -1) {
+        if (
+            selectedReservation &&
+            String(
+                selectedReservation.id
+            ) ===
+            String(bookingId)
+        ) {
 
-            allBookings[index].status =
-                status;
+            selectedReservation.status =
+                newStatus;
 
         }
 
 
         updateStatistics();
 
-        filterBookings();
+        applyBookingFilters();
+
+        updateModalStatus();
 
 
-        showNotification(
-            `Reservation ${status}.`,
+        showToast(
+            `Reservation ${actionName} successfully.`,
             "success"
         );
 
@@ -1222,37 +1793,50 @@ async function updateBookingStatus(
     } catch (error) {
 
         console.error(
-            "Status update error:",
+            "Status update failed:",
             error
         );
 
 
-        showNotification(
-            error.message ||
-            "Unable to update reservation.",
-            "error"
-        );
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            showToast(
+                error.message ||
+                "Unable to update reservation.",
+                "error"
+            );
+
+        }
 
     }
 
 }
 
 
-/* =========================================================
-   DELETE RESERVATION
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| DELETE RESERVATION
+|--------------------------------------------------------------------------
+*/
 
-async function deleteBooking(
-    id
+async function deleteReservation(
+    bookingId
 ) {
 
     const booking =
-        findBookingById(id);
+        allBookings.find(
+            item =>
+                String(item.id) ===
+                String(bookingId)
+        );
 
 
     if (!booking) {
 
-        showNotification(
+        showToast(
             "Reservation could not be found.",
             "error"
         );
@@ -1262,15 +1846,9 @@ async function deleteBooking(
     }
 
 
-    const guestName =
-        booking.guestName ||
-        booking.name ||
-        "this guest";
-
-
     const confirmed =
         window.confirm(
-            `Delete the reservation for ${guestName}?\n\nThis action cannot be undone.`
+            `Delete the reservation for ${booking.guestName || "this guest"}?\n\nThis action cannot be undone.`
         );
 
 
@@ -1284,48 +1862,17 @@ async function deleteBooking(
     try {
 
         const response =
-            await fetch(
-                `/api/bookings/admin/${encodeURIComponent(id)}`,
+            await authenticatedFetch(
+                `/api/bookings/admin/${encodeURIComponent(bookingId)}`,
                 {
-                    method: "DELETE",
-
-                    credentials:
-                        "same-origin",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
+                    method:
+                        "DELETE"
                 }
             );
 
 
         const data =
             await response.json();
-
-
-        if (response.status === 401) {
-
-            showNotification(
-                "Administrator authentication required.",
-                "error"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1200
-            );
-
-
-            return;
-
-        }
 
 
         if (!response.ok) {
@@ -1338,35 +1885,33 @@ async function deleteBooking(
         }
 
 
-        if (!data.success) {
-
-            throw new Error(
-                data.message ||
-                "Reservation deletion failed."
+        allBookings =
+            allBookings.filter(
+                item =>
+                    String(item.id) !==
+                    String(bookingId)
             );
+
+
+        if (
+            selectedReservation &&
+            String(
+                selectedReservation.id
+            ) ===
+            String(bookingId)
+        ) {
+
+            closeReservationDetails();
 
         }
 
 
-        allBookings =
-            allBookings.filter(
-                function (item) {
-
-                    return (
-                        getBookingId(item) !==
-                        id
-                    );
-
-                }
-            );
-
-
         updateStatistics();
 
-        filterBookings();
+        applyBookingFilters();
 
 
-        showNotification(
+        showToast(
             "Reservation deleted successfully.",
             "success"
         );
@@ -1380,961 +1925,106 @@ async function deleteBooking(
         );
 
 
-        showNotification(
-            error.message ||
-            "Unable to delete reservation.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   VIEW RESERVATION
-========================================================= */
-
-function viewBooking(
-    id
-) {
-
-    const booking =
-        findBookingById(id);
-
-
-    if (!booking) {
-
-        showNotification(
-            "Reservation could not be found.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    const guestName =
-        booking.guestName ||
-        booking.name ||
-        "Guest";
-
-
-    const email =
-        booking.email ||
-        "Not provided";
-
-
-    const phone =
-        booking.phone ||
-        "Not provided";
-
-
-    const country =
-        booking.country ||
-        "Not provided";
-
-
-    const room =
-        booking.room ||
-        booking.roomType ||
-        "Not specified";
-
-
-    const checkIn =
-        formatDate(
-            booking.checkIn
-        );
-
-
-    const checkOut =
-        formatDate(
-            booking.checkOut
-        );
-
-
-    const guests =
-        booking.guests ||
-        1;
-
-
-    const status =
-        normalizeStatus(
-            booking.status
-        );
-
-
-    const requests =
-        booking.specialRequests ||
-        booking.requests ||
-        "No special requests were provided.";
-
-
-    const initial =
-        guestName
-            .charAt(0)
-            .toUpperCase();
-
-
-    const modal =
-        document.createElement(
-            "div"
-        );
-
-
-    modal.className =
-        "booking-modal-overlay";
-
-
-    modal.innerHTML = `
-
-        <div class="booking-modal">
-
-            <button
-                type="button"
-                class="booking-modal-close"
-                data-modal-close
-                aria-label="Close"
-            >
-                ×
-            </button>
-
-
-            <div class="booking-modal-heading">
-
-                <span>
-                    RESERVATION DETAILS
-                </span>
-
-                <h2>
-                    Guest reservation
-                </h2>
-
-            </div>
-
-
-            <div
-                class="booking-modal-guest"
-            >
-
-                <div class="guest-initial">
-                    ${escapeHtml(
-                        initial
-                    )}
-                </div>
-
-                <div>
-
-                    <h3>
-                        ${escapeHtml(
-                            guestName
-                        )}
-                    </h3>
-
-                    <p>
-                        ${escapeHtml(
-                            email
-                        )}
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="booking-details-grid"
-            >
-
-                <div>
-
-                    <span>
-                        ROOM
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            room
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        STATUS
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            status
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        CHECK-IN
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            checkIn
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        CHECK-OUT
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            checkOut
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        GUESTS
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            String(guests)
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        PHONE
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            phone
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        COUNTRY
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            country
-                        )}
-                    </strong>
-
-                </div>
-
-
-                <div>
-
-                    <span>
-                        RESERVATION ID
-                    </span>
-
-                    <strong>
-                        ${escapeHtml(
-                            id
-                        )}
-                    </strong>
-
-                </div>
-
-            </div>
-
-
-            <div
-                class="booking-request-box"
-            >
-
-                <span>
-                    SPECIAL REQUESTS
-                </span>
-
-                <p>
-                    ${escapeHtml(
-                        requests
-                    )}
-                </p>
-
-            </div>
-
-
-            <div
-                class="booking-modal-actions"
-            >
-
-                ${
-                    status !== "confirmed"
-                        ? `
-                            <button
-                                type="button"
-                                class="
-                                    modal-confirm-button
-                                "
-                                data-modal-action="confirm"
-                            >
-                                Confirm Reservation
-                            </button>
-                        `
-                        : ""
-                }
-
-
-                ${
-                    status !== "cancelled"
-                        ? `
-                            <button
-                                type="button"
-                                class="
-                                    modal-cancel-button
-                                "
-                                data-modal-action="cancel"
-                            >
-                                Cancel Reservation
-                            </button>
-                        `
-                        : ""
-                }
-
-
-                <button
-                    type="button"
-                    class="
-                        modal-close-button
-                    "
-                    data-modal-close
-                >
-                    Close
-                </button>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    document.body.appendChild(
-        modal
-    );
-
-
-    /*
-     * Close modal buttons.
-     */
-
-    modal
-        .querySelectorAll(
-            "[data-modal-close]"
-        )
-        .forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        modal.remove();
-
-                    }
-                );
-
-            }
-        );
-
-
-    /*
-     * Close when clicking outside modal.
-     */
-
-    modal.addEventListener(
-        "click",
-        function (event) {
-
-            if (
-                event.target ===
-                modal
-            ) {
-
-                modal.remove();
-
-            }
-
-        }
-    );
-
-
-    /*
-     * Confirm from modal.
-     */
-
-    const confirmButton =
-        modal.querySelector(
-            '[data-modal-action="confirm"]'
-        );
-
-
-    if (confirmButton) {
-
-        confirmButton.addEventListener(
-            "click",
-            async function () {
-
-                modal.remove();
-
-                await updateBookingStatus(
-                    id,
-                    "confirmed"
-                );
-
-            }
-        );
-
-    }
-
-
-    /*
-     * Cancel from modal.
-     */
-
-    const cancelButton =
-        modal.querySelector(
-            '[data-modal-action="cancel"]'
-        );
-
-
-    if (cancelButton) {
-
-        cancelButton.addEventListener(
-            "click",
-            async function () {
-
-                modal.remove();
-
-                await updateBookingStatus(
-                    id,
-                    "cancelled"
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   FIND BOOKING
-========================================================= */
-
-function findBookingById(
-    id
-) {
-
-    return allBookings.find(
-        function (booking) {
-
-            return (
-                getBookingId(booking) ===
-                String(id)
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            showToast(
+                error.message ||
+                "Unable to delete reservation.",
+                "error"
             );
 
         }
-    );
+
+    }
 
 }
 
 
-/* =========================================================
-   GET BOOKING ID
-========================================================= */
-
-function getBookingId(
-    booking
-) {
-
-    return String(
-        booking._id ||
-        booking.id ||
-        ""
-    );
-
-}
-
-
-/* =========================================================
-   NORMALIZE RESERVATION STATUS
-========================================================= */
-
-function normalizeStatus(
-    status
-) {
-
-    const value =
-        String(
-            status ||
-            "pending"
-        )
-            .trim()
-            .toLowerCase();
-
-
-    if (
-        value === "confirmed"
-    ) {
-
-        return "confirmed";
-
-    }
-
-
-    if (
-        value === "cancelled" ||
-        value === "canceled"
-    ) {
-
-        return "cancelled";
-
-    }
-
-
-    return "pending";
-
-}
-
-
-/* =========================================================
-   RESERVATION STATUS CLASS
-========================================================= */
-
-function getStatusClass(
-    status
-) {
-
-    if (
-        status === "confirmed"
-    ) {
-
-        return "status-confirmed";
-
-    }
-
-
-    if (
-        status === "cancelled"
-    ) {
-
-        return "status-cancelled";
-
-    }
-
-
-    return "status-pending";
-
-}
-
-
-/* =========================================================
-   FORMAT RESERVATION DATE
-========================================================= */
-
-function formatDate(
-    dateValue
-) {
-
-    if (!dateValue) {
-
-        return "—";
-
-    }
-
-
-    const date =
-        new Date(
-            dateValue
-        );
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "—";
-
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-        }
-    ).format(date);
-
-}
-
-
-/* =========================================================
-   LOADING STATE
-========================================================= */
-
-function showLoading() {
-
-    if (!reservationsTableBody) {
-
-        return;
-
-    }
-
-
-    reservationsTableBody.innerHTML = `
-
-        <tr>
-
-            <td
-                colspan="6"
-                class="loading-cell"
-            >
-
-                <div
-                    class="loading-state"
-                >
-
-                    <span
-                        class="loading-spinner"
-                    ></span>
-
-                    Loading reservations...
-
-                </div>
-
-            </td>
-
-        </tr>
-
-    `;
-
-}
-
-
-/* =========================================================
-   ERROR STATE
-========================================================= */
-
-function showError(
-    message
-) {
-
-    if (!reservationsTableBody) {
-
-        return;
-
-    }
-
-
-    reservationsTableBody.innerHTML = `
-
-        <tr>
-
-            <td
-                colspan="6"
-                class="error-cell"
-            >
-
-                <div
-                    class="error-state"
-                >
-
-                    <strong>
-                        Unable to load reservations
-                    </strong>
-
-                    <p>
-                        ${escapeHtml(
-                            message
-                        )}
-                    </p>
-
-                    <button
-                        type="button"
-                        class="retry-button"
-                        onclick="loadBookings()"
-                    >
-                        Try Again
-                    </button>
-
-                </div>
-
-            </td>
-
-        </tr>
-
-    `;
-
-}
-
-
-/* =========================================================
-   ADMIN NOTIFICATION
-========================================================= */
-
-function showNotification(
-    message,
-    type = "success"
-) {
-
-    const existing =
-        document.querySelector(
-            ".admin-notification"
-        );
-
-
-    if (existing) {
-
-        existing.remove();
-
-    }
-
-
-    const notification =
-        document.createElement(
-            "div"
-        );
-
-
-    notification.className =
-        `admin-notification notification-${type}`;
-
-
-    notification.innerHTML = `
-
-        <div
-            class="notification-icon"
-        >
-            ${type === "success"
-                ? "✓"
-                : "!"
-            }
-        </div>
-
-        <div
-            class="notification-message"
-        >
-            ${escapeHtml(
-                message
-            )}
-        </div>
-
-        <button
-            type="button"
-            class="notification-close"
-            aria-label="Close notification"
-        >
-            ×
-        </button>
-
-    `;
-
-
-    document.body.appendChild(
-        notification
-    );
-
-
-    const closeButton =
-        notification.querySelector(
-            ".notification-close"
-        );
-
-
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            function () {
-
-                notification.remove();
-
-            }
-        );
-
-    }
-
-
-    setTimeout(
-        function () {
-
-            if (
-                notification.isConnected
-            ) {
-
-                notification.remove();
-
-            }
-
-        },
-        4000
-    );
-
-}
-
-
-/* =========================================================
-   CONTACT MESSAGES
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| LOAD CONTACT MESSAGES
+|--------------------------------------------------------------------------
+*/
 
 async function loadContactMessages() {
 
-    const container =
-        document.getElementById(
-            "contactMessagesList"
-        );
-
-
-    if (!container) {
+    if (isLoadingMessages) {
 
         return;
 
     }
 
 
-    container.innerHTML = `
-        <div class="contact-loading">
-            Loading contact messages...
-        </div>
-    `;
+    isLoadingMessages =
+        true;
+
+
+    const container =
+        $("contactMessagesList");
 
 
     try {
 
-        console.log(
-            "Requesting: /api/contact/admin"
-        );
-
-
         const response =
-            await fetch(
-                "/api/contact/admin",
-                {
-                    method: "GET",
-
-                    credentials:
-                        "same-origin",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    },
-
-                    cache: "no-store"
-                }
+            await authenticatedFetch(
+                "/api/contact/admin"
             );
 
 
-        /*
-         * Administrator session expired.
-         */
-
-        if (
-            response.status === 401 ||
-            response.status === 403
-        ) {
-
-            showNotification(
-                "Administrator authentication required.",
-                "error"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1200
-            );
-
-
-            return;
-
-        }
-
-
-        const result =
+        const data =
             await response.json();
 
 
         if (!response.ok) {
 
             throw new Error(
-                result.message ||
+                data.message ||
                 "Unable to load contact messages."
             );
 
         }
 
 
-        if (!result.success) {
+        let messages = [];
 
-            throw new Error(
-                result.message ||
-                "Contact message request failed."
-            );
+
+        if (
+            Array.isArray(
+                data.messages
+            )
+        ) {
+
+            messages =
+                data.messages;
+
+        } else if (
+            Array.isArray(data)
+        ) {
+
+            messages =
+                data;
+
+        } else if (
+            data.data &&
+            Array.isArray(data.data)
+        ) {
+
+            messages =
+                data.data;
 
         }
 
 
-        const messages =
-            Array.isArray(
-                result.messages
-            )
-                ? result.messages
-                : [];
+        allContactMessages =
+            messages.map(
+                normalizeContactMessage
+            );
 
 
-        console.log(
-            "Contact messages received:",
-            messages.length
-        );
-
-
-        renderContactMessages(
-            messages
-        );
+        renderContactMessages();
 
 
     } catch (error) {
@@ -2345,52 +2035,66 @@ async function loadContactMessages() {
         );
 
 
-        container.innerHTML = `
-            <div class="contact-empty">
+        if (container) {
 
-                <div class="contact-empty-icon">
-                    !
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-state-icon">
+                        ⚠
+                    </div>
+
+                    <h4>
+                        Unable to load messages
+                    </h4>
+
+                    <p>
+                        ${escapeHtml(
+                            error.message
+                        )}
+                    </p>
+
                 </div>
 
-                <h3>
-                    Unable to load messages
-                </h3>
+            `;
 
-                <p>
-                    ${escapeHtml(
-                        error.message ||
-                        "Please try again."
-                    )}
-                </p>
+        }
 
-                <button
-                    type="button"
-                    class="contact-retry-button"
-                    onclick="loadContactMessages()"
-                >
-                    Try Again
-                </button>
 
-            </div>
-        `;
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            showToast(
+                error.message ||
+                "Unable to load messages.",
+                "error"
+            );
+
+        }
+
+    } finally {
+
+        isLoadingMessages =
+            false;
 
     }
 
 }
 
 
-/* =========================================================
-   RENDER CONTACT MESSAGES
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| RENDER CONTACT MESSAGES
+|--------------------------------------------------------------------------
+*/
 
-function renderContactMessages(
-    messages
-) {
+function renderContactMessages() {
 
     const container =
-        document.getElementById(
-            "contactMessagesList"
-        );
+        $("contactMessagesList");
 
 
     if (!container) {
@@ -2400,25 +2104,28 @@ function renderContactMessages(
     }
 
 
-    if (!messages.length) {
+    if (
+        !allContactMessages.length
+    ) {
 
         container.innerHTML = `
-            <div class="contact-empty">
 
-                <div class="contact-empty-icon">
+            <div class="empty-state">
+
+                <div class="empty-state-icon">
                     ✉
                 </div>
 
-                <h3>
+                <h4>
                     No contact messages
-                </h3>
+                </h4>
 
                 <p>
-                    Customer enquiries will appear
-                    here when they are submitted.
+                    There are currently no messages from website visitors.
                 </p>
 
             </div>
+
         `;
 
         return;
@@ -2427,574 +2134,283 @@ function renderContactMessages(
 
 
     container.innerHTML =
-        messages
+        allContactMessages
             .map(
-                function (message) {
-
-                    return createContactMessageCard(
-                        message
-                    );
-
-                }
+                createMessageCard
             )
             .join("");
-
-
-    container
-        .querySelectorAll(
-            "[data-contact-action]"
-        )
-        .forEach(
-            function (button) {
-
-                button.addEventListener(
-                    "click",
-                    function () {
-
-                        const action =
-                            button.dataset.contactAction;
-
-
-                        const id =
-                            button.dataset.contactId;
-
-
-                        if (!id) {
-
-                            showNotification(
-                                "Contact message ID is missing.",
-                                "error"
-                            );
-
-                            return;
-
-                        }
-
-
-                        if (
-                            action === "read"
-                        ) {
-
-                            updateContactMessageStatus(
-                                id,
-                                "read"
-                            );
-
-                        }
-
-
-                        if (
-                            action === "replied"
-                        ) {
-
-                            updateContactMessageStatus(
-                                id,
-                                "replied"
-                            );
-
-                        }
-
-
-                        if (
-                            action === "delete"
-                        ) {
-
-                            deleteContactMessage(
-                                id
-                            );
-
-                        }
-
-                    }
-                );
-
-            }
-        );
 
 }
 
 
-/* =========================================================
-   CREATE CONTACT MESSAGE CARD
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| CREATE MESSAGE CARD
+|--------------------------------------------------------------------------
+*/
 
-function createContactMessageCard(
+function createMessageCard(
     message
 ) {
 
     const status =
-        normalizeContactStatus(
-            message.status
-        );
-
-
-    const createdDate =
-        message.createdAt
-            ? formatContactDate(
-                message.createdAt
-            )
-            : "Unknown date";
-
-
-    const statusClass =
-        getContactStatusClass(
-            status
-        );
-
-
-    const displayStatus =
-        status
-            .charAt(0)
-            .toUpperCase() +
-        status.slice(1);
-
-
-    const messageId =
-        message._id ||
-        message.id ||
-        "";
-
-
-    let actions = "";
-
-
-    /*
-     * Mark unread message as read.
-     */
-
-    if (
-        status === "unread"
-    ) {
-
-        actions += `
-            <button
-                type="button"
-                class="
-                    contact-action-button
-                    contact-read-button
-                "
-                data-contact-action="read"
-                data-contact-id="${escapeHtml(
-                    messageId
-                )}"
-            >
-                Mark Read
-            </button>
-        `;
-
-    }
-
-
-    /*
-     * Mark message as replied.
-     */
-
-    if (
-        status !== "replied"
-    ) {
-
-        actions += `
-            <button
-                type="button"
-                class="
-                    contact-action-button
-                    contact-replied-button
-                "
-                data-contact-action="replied"
-                data-contact-id="${escapeHtml(
-                    messageId
-                )}"
-            >
-                Mark Replied
-            </button>
-        `;
-
-    }
-
-
-    /*
-     * Delete message.
-     */
-
-    actions += `
-        <button
-            type="button"
-            class="
-                contact-action-button
-                contact-delete-button
-            "
-            data-contact-action="delete"
-            data-contact-id="${escapeHtml(
-                messageId
-            )}"
-        >
-            Delete
-        </button>
-    `;
-
-
-    return `
-        <article class="contact-message-card">
-
-            <div class="contact-message-top">
-
-                <div class="contact-message-person">
-
-                    <strong>
-                        ${escapeHtml(
-                            message.name ||
-                            "Guest"
-                        )}
-                    </strong>
-
-                    <span>
-                        ${escapeHtml(
-                            message.email ||
-                            "No email"
-                        )}
-                    </span>
-
-                </div>
-
-
-                <span
-                    class="
-                        contact-message-status
-                        ${statusClass}
-                    "
-                >
-                    ${escapeHtml(
-                        displayStatus
-                    )}
-                </span>
-
-            </div>
-
-
-            <div class="contact-message-meta">
-
-                <div class="contact-meta-item">
-
-                    <span
-                        class="contact-meta-label"
-                    >
-                        Phone
-                    </span>
-
-                    <span
-                        class="contact-meta-value"
-                    >
-                        ${escapeHtml(
-                            message.phone ||
-                            "Not provided"
-                        )}
-                    </span>
-
-                </div>
-
-
-                <div class="contact-meta-item">
-
-                    <span
-                        class="contact-meta-label"
-                    >
-                        Date Received
-                    </span>
-
-                    <span
-                        class="contact-meta-value"
-                    >
-                        ${escapeHtml(
-                            createdDate
-                        )}
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            ${
-                message.subject
-                    ? `
-                        <div
-                            class="
-                                contact-message-subject
-                            "
-                        >
-                            Subject:
-                            ${escapeHtml(
-                                message.subject
-                            )}
-                        </div>
-                    `
-                    : ""
-            }
-
-
-            <div
-                class="
-                    contact-message-body
-                "
-            >
-                ${escapeHtml(
-                    message.message ||
-                    "No message content."
-                )}
-            </div>
-
-
-            <div
-                class="
-                    contact-message-actions
-                "
-            >
-                ${actions}
-            </div>
-
-        </article>
-    `;
-
-}
-
-
-/* =========================================================
-   NORMALIZE CONTACT STATUS
-========================================================= */
-
-function normalizeContactStatus(
-    status
-) {
-
-    const value =
         String(
-            status ||
+            message.status ||
             "unread"
-        )
-            .trim()
-            .toLowerCase();
+        ).toLowerCase();
+
+
+    let badgeClass =
+        "status-pending";
 
 
     if (
-        value === "read"
-    ) {
-
-        return "read";
-
-    }
-
-
-    if (
-        value === "replied"
-    ) {
-
-        return "replied";
-
-    }
-
-
-    return "unread";
-
-}
-
-
-/* =========================================================
-   CONTACT STATUS CLASS
-========================================================= */
-
-function getContactStatusClass(
-    status
-) {
-
-    if (
+        status === "read" ||
         status === "replied"
     ) {
 
-        return "contact-status-replied";
+        badgeClass =
+            "status-confirmed";
 
     }
 
 
-    if (
-        status === "read"
-    ) {
+    return `
 
-        return "contact-status-read";
+        <article
+            class="message-card"
+        >
 
-    }
+            <div class="message-header">
+
+                <div>
+
+                    <div class="message-name">
+                        ${escapeHtml(
+                            displayValue(
+                                message.name
+                            )
+                        )}
+                    </div>
+
+                    <div class="message-email">
+                        ${escapeHtml(
+                            displayValue(
+                                message.email
+                            )
+                        )}
+                    </div>
+
+                </div>
 
 
-    return "contact-status-unread";
+                <div class="message-date">
+
+                    ${escapeHtml(
+                        formatDateTime(
+                            message.createdAt
+                        )
+                    )}
+
+                </div>
+
+            </div>
+
+
+            <div class="message-subject">
+
+                ${escapeHtml(
+                    displayValue(
+                        message.subject,
+                        "No subject"
+                    )
+                )}
+
+            </div>
+
+
+            <div class="message-body">
+
+                ${escapeHtml(
+                    displayValue(
+                        message.message,
+                        "No message content."
+                    )
+                )}
+
+            </div>
+
+
+            <div
+                style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:10px;
+                    margin-top:16px;
+                    flex-wrap:wrap;
+                "
+            >
+
+                <span
+                    class="status-badge ${badgeClass}"
+                >
+                    ${escapeHtml(status)}
+                </span>
+
+
+                <div
+                    style="
+                        display:flex;
+                        gap:7px;
+                        flex-wrap:wrap;
+                    "
+                >
+
+                    <button
+                        type="button"
+                        class="action-btn"
+                        data-message-action="read"
+                        data-message-id="${escapeHtml(message.id)}"
+                    >
+                        ✓ Mark Read
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="action-btn"
+                        data-message-action="replied"
+                        data-message-id="${escapeHtml(message.id)}"
+                    >
+                        ↗ Replied
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="action-btn delete-button"
+                        data-message-action="delete"
+                        data-message-id="${escapeHtml(message.id)}"
+                    >
+                        🗑 Delete
+                    </button>
+
+                </div>
+
+            </div>
+
+        </article>
+
+    `;
 
 }
 
 
-/* =========================================================
-   FORMAT CONTACT DATE
-========================================================= */
-
-function formatContactDate(
-    dateValue
-) {
-
-    if (!dateValue) {
-
-        return "—";
-
-    }
-
-
-    const date =
-        new Date(
-            dateValue
-        );
-
-
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-
-        return "—";
-
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "en-GB",
-        {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    ).format(date);
-
-}
-
-
-/* =========================================================
-   UPDATE CONTACT MESSAGE STATUS
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| UPDATE CONTACT STATUS
+|--------------------------------------------------------------------------
+*/
 
 async function updateContactMessageStatus(
-    id,
+    messageId,
     status
 ) {
 
     try {
 
         const response =
-            await fetch(
-                `/api/contact/admin/${encodeURIComponent(id)}`,
+            await authenticatedFetch(
+                `/api/contact/admin/${encodeURIComponent(messageId)}`,
                 {
-                    method: "PATCH",
 
-                    credentials:
-                        "same-origin",
+                    method:
+                        "PATCH",
 
-                    headers: {
-                        "Content-Type":
-                            "application/json",
+                    body:
+                        JSON.stringify({
+                            status:
+                                status
+                        })
 
-                        "Accept":
-                            "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        status
-                    })
                 }
             );
 
 
-        if (
-            response.status === 401 ||
-            response.status === 403
-        ) {
-
-            showNotification(
-                "Administrator authentication required.",
-                "error"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1200
-            );
-
-
-            return;
-
-        }
-
-
-        const result =
+        const data =
             await response.json();
 
 
         if (!response.ok) {
 
             throw new Error(
-                result.message ||
+                data.message ||
                 "Unable to update message."
             );
 
         }
 
 
-        if (!result.success) {
-
-            throw new Error(
-                result.message ||
-                "Contact message update failed."
+        const message =
+            allContactMessages.find(
+                item =>
+                    String(item.id) ===
+                    String(messageId)
             );
+
+
+        if (message) {
+
+            message.status =
+                status;
 
         }
 
 
-        showNotification(
-            `Message marked as ${status}.`,
+        renderContactMessages();
+
+
+        showToast(
+            "Message status updated.",
             "success"
         );
-
-
-        await loadContactMessages();
 
 
     } catch (error) {
 
         console.error(
-            "Update contact message error:",
+            "Message status error:",
             error
         );
 
 
-        showNotification(
-            error.message ||
-            "Unable to update message.",
-            "error"
-        );
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            showToast(
+                error.message ||
+                "Unable to update message.",
+                "error"
+            );
+
+        }
 
     }
 
 }
 
 
-/* =========================================================
-   DELETE CONTACT MESSAGE
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| DELETE CONTACT MESSAGE
+|--------------------------------------------------------------------------
+*/
 
 async function deleteContactMessage(
-    id
+    messageId
 ) {
 
     const confirmed =
@@ -3013,94 +2429,431 @@ async function deleteContactMessage(
     try {
 
         const response =
-            await fetch(
-                `/api/contact/admin/${encodeURIComponent(id)}`,
+            await authenticatedFetch(
+                `/api/contact/admin/${encodeURIComponent(messageId)}`,
                 {
-                    method: "DELETE",
-
-                    credentials:
-                        "same-origin",
-
-                    headers: {
-                        "Accept":
-                            "application/json"
-                    }
+                    method:
+                        "DELETE"
                 }
             );
 
 
-        if (
-            response.status === 401 ||
-            response.status === 403
-        ) {
-
-            showNotification(
-                "Administrator authentication required.",
-                "error"
-            );
-
-
-            setTimeout(
-                function () {
-
-                    window.location.href =
-                        "/admin/login.html";
-
-                },
-                1200
-            );
-
-
-            return;
-
-        }
-
-
-        const result =
+        const data =
             await response.json();
 
 
         if (!response.ok) {
 
             throw new Error(
-                result.message ||
+                data.message ||
                 "Unable to delete message."
             );
 
         }
 
 
-        if (!result.success) {
-
-            throw new Error(
-                result.message ||
-                "Contact message deletion failed."
+        allContactMessages =
+            allContactMessages.filter(
+                message =>
+                    String(message.id) !==
+                    String(messageId)
             );
 
-        }
+
+        renderContactMessages();
 
 
-        showNotification(
-            "Contact message deleted successfully.",
+        showToast(
+            "Contact message deleted.",
             "success"
         );
-
-
-        await loadContactMessages();
 
 
     } catch (error) {
 
         console.error(
-            "Delete contact message error:",
+            "Delete message error:",
             error
         );
 
 
-        showNotification(
-            error.message ||
-            "Unable to delete message.",
-            "error"
+        if (
+            error.message !==
+            "Admin authentication expired."
+        ) {
+
+            showToast(
+                error.message ||
+                "Unable to delete message.",
+                "error"
+            );
+
+        }
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| RESERVATION TABLE EVENTS
+|--------------------------------------------------------------------------
+*/
+
+function setupReservationEvents() {
+
+    const table =
+        $("reservationsTableBody");
+
+
+    if (!table) {
+
+        return;
+
+    }
+
+
+    table.addEventListener(
+        "click",
+        async function (event) {
+
+            const button =
+                event.target.closest(
+                    "button[data-action]"
+                );
+
+
+            if (!button) {
+
+                return;
+
+            }
+
+
+            const action =
+                button.dataset.action;
+
+
+            const id =
+                button.dataset.id;
+
+
+            if (!id) {
+
+                return;
+
+            }
+
+
+            if (
+                action === "view"
+            ) {
+
+                openReservationDetails(
+                    id
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action === "approve"
+            ) {
+
+                await changeReservationStatus(
+                    id,
+                    "confirmed"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action === "cancel"
+            ) {
+
+                await changeReservationStatus(
+                    id,
+                    "cancelled"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action === "pending"
+            ) {
+
+                await changeReservationStatus(
+                    id,
+                    "pending"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                action === "delete"
+            ) {
+
+                await deleteReservation(
+                    id
+                );
+
+                return;
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| CONTACT EVENTS
+|--------------------------------------------------------------------------
+*/
+
+function setupContactEvents() {
+
+    const container =
+        $("contactMessagesList");
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+    container.addEventListener(
+        "click",
+        async function (event) {
+
+            const button =
+                event.target.closest(
+                    "button[data-message-action]"
+                );
+
+
+            if (!button) {
+
+                return;
+
+            }
+
+
+            const action =
+                button.dataset.messageAction;
+
+
+            const id =
+                button.dataset.messageId;
+
+
+            if (
+                action === "read"
+            ) {
+
+                await updateContactMessageStatus(
+                    id,
+                    "read"
+                );
+
+            }
+
+
+            if (
+                action === "replied"
+            ) {
+
+                await updateContactMessageStatus(
+                    id,
+                    "replied"
+                );
+
+            }
+
+
+            if (
+                action === "delete"
+            ) {
+
+                await deleteContactMessage(
+                    id
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| MODAL EVENTS
+|--------------------------------------------------------------------------
+*/
+
+function setupModalEvents() {
+
+    const modal =
+        $("reservationModal");
+
+
+    const backdrop =
+        $("reservationModalBackdrop");
+
+
+    const closeButton =
+        $("closeReservationModal");
+
+
+    const footerButton =
+        $("closeReservationModalFooter");
+
+
+    const approveButton =
+        $("modalApproveReservation");
+
+
+    const pendingButton =
+        $("modalPendingReservation");
+
+
+    const cancelButton =
+        $("modalCancelReservation");
+
+
+    if (backdrop) {
+
+        backdrop.addEventListener(
+            "click",
+            closeReservationDetails
+        );
+
+    }
+
+
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closeReservationDetails
+        );
+
+    }
+
+
+    if (footerButton) {
+
+        footerButton.addEventListener(
+            "click",
+            closeReservationDetails
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ONE CLICK APPROVE
+    |--------------------------------------------------------------------------
+    */
+
+    if (approveButton) {
+
+        approveButton.addEventListener(
+            "click",
+            async function () {
+
+                if (!selectedReservation) {
+
+                    return;
+
+                }
+
+
+                await changeReservationStatus(
+                    selectedReservation.id,
+                    "confirmed"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ONE CLICK PENDING
+    |--------------------------------------------------------------------------
+    */
+
+    if (pendingButton) {
+
+        pendingButton.addEventListener(
+            "click",
+            async function () {
+
+                if (!selectedReservation) {
+
+                    return;
+
+                }
+
+
+                await changeReservationStatus(
+                    selectedReservation.id,
+                    "pending"
+                );
+
+            }
+        );
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | ONE CLICK CANCEL
+    |--------------------------------------------------------------------------
+    */
+
+    if (cancelButton) {
+
+        cancelButton.addEventListener(
+            "click",
+            async function () {
+
+                if (!selectedReservation) {
+
+                    return;
+
+                }
+
+
+                await changeReservationStatus(
+                    selectedReservation.id,
+                    "cancelled"
+                );
+
+            }
         );
 
     }
@@ -3108,52 +2861,293 @@ async function deleteContactMessage(
 }
 
 
-/* =========================================================
-   HTML ESCAPING
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| SEARCH
+|--------------------------------------------------------------------------
+*/
 
-function escapeHtml(
-    value
-) {
+function setupSearch() {
 
-    return String(
-        value ?? ""
-    )
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+    const input =
+        $("bookingSearch");
+
+
+    if (!input) {
+
+        return;
+
+    }
+
+
+    input.addEventListener(
+        "input",
+        applyBookingFilters
+    );
 
 }
 
 
-/* =========================================================
-   EXPOSE FUNCTIONS FOR HTML
-========================================================= */
+/*
+|--------------------------------------------------------------------------
+| FILTER
+|--------------------------------------------------------------------------
+*/
 
-window.loadBookings =
-    loadBookings;
+function setupFilter() {
+
+    const filter =
+        $("statusFilter");
 
 
-window.loadContactMessages =
-    loadContactMessages;
+    if (!filter) {
+
+        return;
+
+    }
 
 
-window.setupAdminLogout =
-    setupAdminLogout;
+    filter.addEventListener(
+        "change",
+        applyBookingFilters
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| REFRESH BUTTONS
+|--------------------------------------------------------------------------
+*/
+
+function setupRefreshButtons() {
+
+    const bookingButton =
+        $("refreshBookings");
+
+
+    const messageButton =
+        $("refreshContactMessages");
+
+
+    if (bookingButton) {
+
+        bookingButton.addEventListener(
+            "click",
+            async function () {
+
+                await loadBookings();
+
+                showToast(
+                    "Reservations refreshed.",
+                    "success"
+                );
+
+            }
+        );
+
+    }
+
+
+    if (messageButton) {
+
+        messageButton.addEventListener(
+            "click",
+            async function () {
+
+                await loadContactMessages();
+
+                showToast(
+                    "Messages refreshed.",
+                    "success"
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
+function setupLogout() {
+
+    const button =
+        $("adminSignout");
+
+
+    if (!button) {
+
+        return;
+
+    }
+
+
+    button.addEventListener(
+        "click",
+        async function () {
+
+            const confirmed =
+                window.confirm(
+                    "Are you sure you want to sign out?"
+                );
+
+
+            if (!confirmed) {
+
+                return;
+
+            }
+
+
+            const token =
+                getAdminToken();
+
+
+            try {
+
+                if (token) {
+
+                    await fetch(
+                        "/api/admin/logout",
+                        {
+
+                            method:
+                                "POST",
+
+                            headers: {
+
+                                "Authorization":
+                                    `Bearer ${token}`,
+
+                                "Content-Type":
+                                    "application/json"
+
+                            }
+
+                        }
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Logout request failed:",
+                    error
+                );
+
+            } finally {
+
+                removeAdminToken();
+
+                window.location.href =
+                    "/admin/login.html";
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| ESCAPE KEY
+|--------------------------------------------------------------------------
+*/
+
+function setupKeyboardEvents() {
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                if (
+                    $("reservationModal") &&
+                    $("reservationModal")
+                        .classList
+                        .contains("open")
+                ) {
+
+                    closeReservationDetails();
+
+                }
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| INITIALIZE
+|--------------------------------------------------------------------------
+*/
+
+async function initializeDashboard() {
+
+    const authenticated =
+        await checkAdminAuthentication();
+
+
+    if (!authenticated) {
+
+        return;
+
+    }
+
+
+    setupReservationEvents();
+
+    setupContactEvents();
+
+    setupModalEvents();
+
+    setupSearch();
+
+    setupFilter();
+
+    setupRefreshButtons();
+
+    setupLogout();
+
+    setupKeyboardEvents();
+
+
+    await Promise.all(
+        [
+            loadBookings(),
+            loadContactMessages()
+        ]
+    );
+
+}
+
+
+/*
+|--------------------------------------------------------------------------
+| START
+|--------------------------------------------------------------------------
+*/
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializeDashboard
+);

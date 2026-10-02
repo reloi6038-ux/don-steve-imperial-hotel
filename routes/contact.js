@@ -1,48 +1,27 @@
-const express = require("express");
+"use strict";
 
-const Contact = require("../models/Contact");
+const express =
+    require("express");
 
-const router = express.Router();
+const mongoose =
+    require("mongoose");
 
+const Contact =
+    require("../models/Contact");
 
-
-/* =====================================================
-   ADMIN AUTHENTICATION
-===================================================== */
-
-function requireAdmin(req, res, next) {
-
-    if (req.session && req.session.admin) {
-        return next();
-    }
-
-    return res.status(401).json({
-        success: false,
-        message: "Administrator authentication required."
-    });
-
-}
+const { requireAdmin } =
+    require("./admin");
 
 
-
-/* =====================================================
-   EMAIL VALIDATION
-===================================================== */
-
-function isValidEmail(email) {
-
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-        email
-    );
-
-}
+const router =
+    express.Router();
 
 
-
-/* =====================================================
-   SUBMIT CONTACT MESSAGE
-   POST /api/contact
-===================================================== */
+/*
+|--------------------------------------------------------------------------
+| PUBLIC - CONTACT FORM
+|--------------------------------------------------------------------------
+*/
 
 router.post(
     "/",
@@ -50,100 +29,82 @@ router.post(
 
         try {
 
-            const {
-                name,
-                email,
-                phone,
-                subject,
-                message
-            } = req.body;
+            const name =
+                String(
+                    req.body.name ||
+                    ""
+                ).trim();
 
 
-            const cleanName =
-                String(name || "").trim();
-
-            const cleanEmail =
-                String(email || "")
-                    .trim()
-                    .toLowerCase();
-
-            const cleanPhone =
-                String(phone || "").trim();
-
-            const cleanSubject =
-                String(subject || "").trim();
-
-            const cleanMessage =
-                String(message || "").trim();
+            const email =
+                String(
+                    req.body.email ||
+                    ""
+                ).trim().toLowerCase();
 
 
+            const message =
+                String(
+                    req.body.message ||
+                    ""
+                ).trim();
 
-            /* -----------------------------------------
-               REQUIRED FIELDS
-            ----------------------------------------- */
 
-            if (!cleanName) {
+            if (!name) {
 
                 return res.status(400).json({
+
                     success: false,
-                    message: "Please enter your full name."
+
+                    message:
+                        "Name is required."
+
                 });
 
             }
 
 
-            if (!cleanEmail) {
+            if (!email) {
 
                 return res.status(400).json({
+
                     success: false,
-                    message: "Please enter your email address."
+
+                    message:
+                        "Email address is required."
+
                 });
 
             }
 
 
-            if (!isValidEmail(cleanEmail)) {
+            if (!message) {
 
                 return res.status(400).json({
+
                     success: false,
-                    message: "Please enter a valid email address."
+
+                    message:
+                        "Message is required."
+
                 });
 
             }
 
-
-            if (!cleanMessage) {
-
-                return res.status(400).json({
-                    success: false,
-                    message: "Please enter your message."
-                });
-
-            }
-
-
-
-            /* -----------------------------------------
-               SAVE MESSAGE
-            ----------------------------------------- */
 
             const contact =
                 await Contact.create({
 
-                    name: cleanName,
+                    name,
 
-                    email: cleanEmail,
+                    email,
 
-                    phone: cleanPhone,
+                    message,
 
-                    subject: cleanSubject,
-
-                    message: cleanMessage,
-
-                    status: "unread"
+                    status:
+                        "unread"
 
                 });
-
 
 
             return res.status(201).json({
@@ -151,17 +112,16 @@ router.post(
                 success: true,
 
                 message:
-                    "Your message has been received.",
+                    "Your message has been sent successfully.",
 
-                contactId: contact._id
+                contact
 
             });
-
 
         } catch (error) {
 
             console.error(
-                "Contact submission error:",
+                "Create contact message error:",
                 error
             );
 
@@ -171,7 +131,7 @@ router.post(
                 success: false,
 
                 message:
-                    "Unable to send your message right now. Please try again."
+                    "Unable to send your message."
 
             });
 
@@ -181,11 +141,11 @@ router.post(
 );
 
 
-
-/* =====================================================
-   GET ALL CONTACT MESSAGES
-   GET /api/contact/admin
-===================================================== */
+/*
+|--------------------------------------------------------------------------
+| ADMIN - ALL CONTACT MESSAGES
+|--------------------------------------------------------------------------
+*/
 
 router.get(
     "/admin",
@@ -195,15 +155,13 @@ router.get(
         try {
 
             const messages =
-                await Contact
-                    .find({})
+                await Contact.find()
                     .sort({
                         createdAt: -1
-                    })
-                    .lean();
+                    });
 
 
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
@@ -211,11 +169,10 @@ router.get(
 
             });
 
-
         } catch (error) {
 
             console.error(
-                "Load contact messages error:",
+                "Get contact messages error:",
                 error
             );
 
@@ -235,11 +192,11 @@ router.get(
 );
 
 
-
-/* =====================================================
-   UPDATE CONTACT MESSAGE STATUS
-   PATCH /api/contact/admin/:id
-===================================================== */
+/*
+|--------------------------------------------------------------------------
+| ADMIN - UPDATE CONTACT MESSAGE
+|--------------------------------------------------------------------------
+*/
 
 router.patch(
     "/admin/:id",
@@ -248,9 +205,22 @@ router.patch(
 
         try {
 
-            const {
-                status
-            } = req.body;
+            if (
+                !mongoose.Types.ObjectId.isValid(
+                    req.params.id
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid message ID."
+
+                });
+
+            }
 
 
             const allowedStatuses = [
@@ -260,8 +230,19 @@ router.patch(
             ];
 
 
+            const status =
+                String(
+                    req.body.status ||
+                    ""
+                )
+                    .trim()
+                    .toLowerCase();
+
+
             if (
-                !allowedStatuses.includes(status)
+                !allowedStatuses.includes(
+                    status
+                )
             ) {
 
                 return res.status(400).json({
@@ -269,12 +250,11 @@ router.patch(
                     success: false,
 
                     message:
-                        "Invalid contact message status."
+                        "Invalid message status."
 
                 });
 
             }
-
 
 
             const contact =
@@ -283,7 +263,7 @@ router.patch(
                     req.params.id,
 
                     {
-                        status: status
+                        status
                     },
 
                     {
@@ -308,18 +288,16 @@ router.patch(
             }
 
 
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
                 message:
-                    "Contact message updated.",
+                    "Contact message updated successfully.",
 
                 contact
 
             });
-
 
         } catch (error) {
 
@@ -344,11 +322,11 @@ router.patch(
 );
 
 
-
-/* =====================================================
-   DELETE CONTACT MESSAGE
-   DELETE /api/contact/admin/:id
-===================================================== */
+/*
+|--------------------------------------------------------------------------
+| ADMIN - DELETE CONTACT MESSAGE
+|--------------------------------------------------------------------------
+*/
 
 router.delete(
     "/admin/:id",
@@ -356,6 +334,24 @@ router.delete(
     async (req, res) => {
 
         try {
+
+            if (
+                !mongoose.Types.ObjectId.isValid(
+                    req.params.id
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid message ID."
+
+                });
+
+            }
+
 
             const contact =
                 await Contact.findByIdAndDelete(
@@ -377,16 +373,14 @@ router.delete(
             }
 
 
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
                 message:
-                    "Contact message deleted."
+                    "Contact message deleted successfully."
 
             });
-
 
         } catch (error) {
 
@@ -411,9 +405,5 @@ router.delete(
 );
 
 
-
-/* =====================================================
-   EXPORT
-===================================================== */
-
-module.exports = router;
+module.exports =
+    router;

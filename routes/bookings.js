@@ -1,457 +1,432 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const Booking = require("../models/Booking");
+"use strict";
 
-const router = express.Router();
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN AUTHENTICATION
-|--------------------------------------------------------------------------
-|
-| Your admin login should create:
-|
-| req.session.admin
-|
-| This can be true or an object such as:
-|
-| req.session.admin = {
-|     username: "admin"
-| };
-|
-|--------------------------------------------------------------------------
-*/
+const express =
+    require("express");
 
-function requireAdmin(req, res, next) {
 
-    if (
-        req.session &&
-        req.session.admin
-    ) {
-        return next();
-    }
+const mongoose =
+    require("mongoose");
 
-    return res.status(401).json({
-        success: false,
-        message: "Administrator authentication required."
-    });
-}
+
+const Booking =
+    require("../models/Booking");
+
+
+const { requireAdmin } =
+    require("./admin");
+
+
+const router =
+    express.Router();
+
 
 
 /*
 |--------------------------------------------------------------------------
-| HELPER: VALIDATE MONGODB ID
+| PUBLIC - CREATE BOOKING
 |--------------------------------------------------------------------------
 */
 
-function validObjectId(id) {
-
-    return mongoose.Types.ObjectId.isValid(id);
-
-}
-
+router.post(
+    "/",
+    async (req, res) => {
 
-/*
-|--------------------------------------------------------------------------
-| PUBLIC - CREATE RESERVATION
-|--------------------------------------------------------------------------
-|
-| POST
-| /api/bookings
-|
-|--------------------------------------------------------------------------
-*/
+        try {
 
-router.post("/", async (req, res) => {
+            /*
+            |--------------------------------------------------------------------------
+            | NORMALIZE INPUT
+            |--------------------------------------------------------------------------
+            */
 
-    try {
+            const guestName =
+                String(
+                    req.body.guestName ||
+                    req.body.name ||
+                    ""
+                ).trim();
 
-        const {
-            guestName,
-            name,
-            email,
-            phone,
-            country,
-            checkIn,
-            checkOut,
-            guests,
-            room,
-            roomType,
-            specialRequests,
-            requests
-        } = req.body;
 
+            const email =
+                String(
+                    req.body.email ||
+                    ""
+                ).trim().toLowerCase();
 
-        /*
-        |--------------------------------------------------------------------------
-        | NORMALIZE GUEST NAME
-        |--------------------------------------------------------------------------
-        */
 
-        const finalGuestName =
-            String(
-                guestName ||
-                name ||
-                ""
-            ).trim();
+            const phone =
+                String(
+                    req.body.phone ||
+                    ""
+                ).trim();
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | NORMALIZE ROOM
-        |--------------------------------------------------------------------------
-        */
+            const country =
+                String(
+                    req.body.country ||
+                    ""
+                ).trim();
 
-        const finalRoom =
-            String(
-                room ||
-                roomType ||
-                ""
-            ).trim();
 
+            const room =
+                String(
+                    req.body.room ||
+                    req.body.roomType ||
+                    ""
+                ).trim();
 
-        /*
-        |--------------------------------------------------------------------------
-        | NORMALIZE SPECIAL REQUESTS
-        |--------------------------------------------------------------------------
-        */
 
-        const finalRequests =
-            String(
-                specialRequests ||
-                requests ||
-                ""
-            ).trim();
+            const roomType =
+                String(
+                    req.body.roomType ||
+                    req.body.room ||
+                    ""
+                ).trim();
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | BASIC VALIDATION
-        |--------------------------------------------------------------------------
-        */
+            const checkIn =
+                req.body.checkIn ||
+                req.body.checkInDate;
 
-        if (!finalGuestName) {
 
-            return res.status(400).json({
-                success: false,
-                message: "Guest name is required."
-            });
+            const checkOut =
+                req.body.checkOut ||
+                req.body.checkOutDate;
 
-        }
 
+            const guests =
+                Number(
+                    req.body.guests ||
+                    req.body.numberOfGuests ||
+                    1
+                );
 
-        if (!email) {
 
-            return res.status(400).json({
-                success: false,
-                message: "Email address is required."
-            });
+            const specialRequests =
+                String(
+                    req.body.specialRequests ||
+                    req.body.requests ||
+                    ""
+                ).trim();
 
-        }
 
+            const requests =
+                String(
+                    req.body.requests ||
+                    req.body.specialRequests ||
+                    ""
+                ).trim();
 
-        if (!phone) {
 
-            return res.status(400).json({
-                success: false,
-                message: "Phone number is required."
-            });
 
-        }
+            /*
+            |--------------------------------------------------------------------------
+            | VALIDATION
+            |--------------------------------------------------------------------------
+            */
 
+            if (!guestName) {
 
-        if (!checkIn) {
+                return res.status(400).json({
 
-            return res.status(400).json({
-                success: false,
-                message: "Check-in date is required."
-            });
+                    success: false,
 
-        }
+                    message:
+                        "Guest name is required."
 
-
-        if (!checkOut) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Check-out date is required."
-            });
-
-        }
-
-
-        if (!finalRoom) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Please select a room or suite."
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | EMAIL
-        |--------------------------------------------------------------------------
-        */
-
-        const finalEmail =
-            String(
-                email
-            )
-                .trim()
-                .toLowerCase();
-
-
-        const emailPattern =
-            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-
-        if (
-            !emailPattern.test(
-                finalEmail
-            )
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Please provide a valid email address."
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DATES
-        |--------------------------------------------------------------------------
-        */
-
-        const arrival =
-            new Date(
-                checkIn
-            );
-
-
-        const departure =
-            new Date(
-                checkOut
-            );
-
-
-        if (
-            Number.isNaN(
-                arrival.getTime()
-            ) ||
-            Number.isNaN(
-                departure.getTime()
-            )
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Invalid reservation dates."
-            });
-
-        }
-
-
-        if (
-            departure <= arrival
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Check-out must be after check-in."
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | GUEST COUNT
-        |--------------------------------------------------------------------------
-        */
-
-        const guestCount =
-            Number(
-                guests || 1
-            );
-
-
-        if (
-            !Number.isInteger(
-                guestCount
-            ) ||
-            guestCount < 1 ||
-            guestCount > 20
-        ) {
-
-            return res.status(400).json({
-                success: false,
-                message: "Guest count must be between 1 and 20."
-            });
-
-        }
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE BOOKING
-        |--------------------------------------------------------------------------
-        |
-        | We store both the newer field names and the older aliases.
-        | This makes the dashboard compatible with your existing project.
-        |
-        |--------------------------------------------------------------------------
-        */
-
-        const booking =
-            new Booking({
-
-                guestName:
-                    finalGuestName,
-
-                name:
-                    finalGuestName,
-
-                email:
-                    finalEmail,
-
-                phone:
-                    String(
-                        phone
-                    ).trim(),
-
-                country:
-                    String(
-                        country ||
-                        ""
-                    ).trim(),
-
-                checkIn:
-                    arrival,
-
-                checkOut:
-                    departure,
-
-                guests:
-                    guestCount,
-
-                room:
-                    finalRoom,
-
-                roomType:
-                    finalRoom,
-
-                specialRequests:
-                    finalRequests,
-
-                requests:
-                    finalRequests,
-
-                status:
-                    "pending"
-
-            });
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SAVE TO MONGODB
-        |--------------------------------------------------------------------------
-        */
-
-        await booking.save();
-
-
-        console.log(
-            "New reservation created:",
-            booking._id
-        );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | RESPONSE
-        |--------------------------------------------------------------------------
-        */
-
-        return res.status(201).json({
-
-            success: true,
-
-            message:
-                "Reservation request received successfully.",
-
-            booking: {
-
-                id:
-                    booking._id,
-
-                guestName:
-                    booking.guestName,
-
-                email:
-                    booking.email,
-
-                room:
-                    booking.room,
-
-                checkIn:
-                    booking.checkIn,
-
-                checkOut:
-                    booking.checkOut,
-
-                guests:
-                    booking.guests,
-
-                status:
-                    booking.status
+                });
 
             }
 
-        });
+
+            if (!email) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Email address is required."
+
+                });
+
+            }
 
 
-    } catch (error) {
+            if (!phone) {
 
-        console.error(
-            "Create booking error:",
-            error
-        );
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Phone number is required."
+
+                });
+
+            }
 
 
-        return res.status(500).json({
+            if (!room) {
 
-            success: false,
+                return res.status(400).json({
 
-            message:
-                "Unable to create reservation.",
+                    success: false,
 
-            error:
-                process.env.NODE_ENV === "development"
-                    ? error.message
-                    : undefined
+                    message:
+                        "Room or suite selection is required."
 
-        });
+                });
+
+            }
+
+
+            if (!checkIn) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Check-in date is required."
+
+                });
+
+            }
+
+
+            if (!checkOut) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Check-out date is required."
+
+                });
+
+            }
+
+
+            if (
+                !Number.isInteger(guests) ||
+                guests < 1 ||
+                guests > 20
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Number of guests must be between 1 and 20."
+
+                });
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | DATE VALIDATION
+            |--------------------------------------------------------------------------
+            */
+
+            const checkInDate =
+                new Date(checkIn);
+
+
+            const checkOutDate =
+                new Date(checkOut);
+
+
+            if (
+                Number.isNaN(
+                    checkInDate.getTime()
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid check-in date."
+
+                });
+
+            }
+
+
+            if (
+                Number.isNaN(
+                    checkOutDate.getTime()
+                )
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Invalid check-out date."
+
+                });
+
+            }
+
+
+            if (
+                checkOutDate <=
+                checkInDate
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        "Check-out date must be after check-in date."
+
+                });
+
+            }
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | CREATE BOOKING
+            |--------------------------------------------------------------------------
+            */
+
+            const booking =
+                await Booking.create({
+
+                    guestName,
+
+                    name:
+                        guestName,
+
+                    email,
+
+                    phone,
+
+                    country,
+
+                    room,
+
+                    roomType,
+
+                    checkIn:
+                        checkInDate,
+
+                    checkOut:
+                        checkOutDate,
+
+                    guests,
+
+                    specialRequests,
+
+                    requests,
+
+                    status:
+                        "pending"
+
+                });
+
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | SUCCESS RESPONSE
+            |--------------------------------------------------------------------------
+            */
+
+            return res.status(201).json({
+
+                success: true,
+
+                message:
+                    "Reservation request submitted successfully.",
+
+                booking,
+
+                reservation:
+                    booking
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Create booking error:",
+                error
+            );
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | MONGOOSE VALIDATION ERROR
+            |--------------------------------------------------------------------------
+            */
+
+            if (
+                error.name ===
+                "ValidationError"
+            ) {
+
+                const validationMessages =
+                    Object.values(
+                        error.errors
+                    )
+                    .map(
+                        item =>
+                            item.message
+                    );
+
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        validationMessages.join(" ")
+
+                });
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | GENERAL SERVER ERROR
+            |--------------------------------------------------------------------------
+            */
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    "Unable to create reservation."
+
+            });
+
+        }
 
     }
+);
 
-});
 
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN - GET ALL RESERVATIONS
-|--------------------------------------------------------------------------
-|
-| GET
-| /api/bookings/admin
-|
+| ADMIN - ALL BOOKINGS
 |--------------------------------------------------------------------------
 */
 
@@ -463,26 +438,28 @@ router.get(
         try {
 
             const bookings =
-                await Booking.find({})
+                await Booking.find()
                     .sort({
                         createdAt: -1
                     })
                     .lean();
 
 
-            console.log(
-                `Admin requested reservations: ${bookings.length}`
-            );
-
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
-                count:
-                    bookings.length,
+                /*
+                | Keep the original API name.
+                */
+                bookings,
 
-                bookings
+                /*
+                | Also provide reservations
+                | for dashboard compatibility.
+                */
+                reservations:
+                    bookings
 
             });
 
@@ -510,16 +487,10 @@ router.get(
 );
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ADMIN - GET RESERVATION STATISTICS
-|--------------------------------------------------------------------------
-|
-| GET
-| /api/bookings/admin/stats
-|
-| This route MUST appear before /admin/:id.
-|
+| ADMIN - STATISTICS
 |--------------------------------------------------------------------------
 */
 
@@ -530,33 +501,36 @@ router.get(
 
         try {
 
-            const total =
-                await Booking.countDocuments();
+            const [
+                total,
+                pending,
+                confirmed,
+                cancelled
+            ] =
+                await Promise.all([
+
+                    Booking.countDocuments(),
+
+                    Booking.countDocuments({
+                        status: "pending"
+                    }),
+
+                    Booking.countDocuments({
+                        status: "confirmed"
+                    }),
+
+                    Booking.countDocuments({
+                        status: "cancelled"
+                    })
+
+                ]);
 
 
-            const pending =
-                await Booking.countDocuments({
-                    status: "pending"
-                });
-
-
-            const confirmed =
-                await Booking.countDocuments({
-                    status: "confirmed"
-                });
-
-
-            const cancelled =
-                await Booking.countDocuments({
-                    status: "cancelled"
-                });
-
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
-                statistics: {
+                stats: {
 
                     total,
 
@@ -574,7 +548,7 @@ router.get(
         } catch (error) {
 
             console.error(
-                "Booking statistics error:",
+                "Booking stats error:",
                 error
             );
 
@@ -594,14 +568,10 @@ router.get(
 );
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ADMIN - GET ONE RESERVATION
-|--------------------------------------------------------------------------
-|
-| GET
-| /api/bookings/admin/:id
-|
+| ADMIN - SINGLE BOOKING
 |--------------------------------------------------------------------------
 */
 
@@ -613,7 +583,7 @@ router.get(
         try {
 
             if (
-                !validObjectId(
+                !mongoose.Types.ObjectId.isValid(
                     req.params.id
                 )
             ) {
@@ -633,7 +603,7 @@ router.get(
             const booking =
                 await Booking.findById(
                     req.params.id
-                ).lean();
+                );
 
 
             if (!booking) {
@@ -650,11 +620,14 @@ router.get(
             }
 
 
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
-                booking
+                booking,
+
+                reservation:
+                    booking
 
             });
 
@@ -662,7 +635,7 @@ router.get(
         } catch (error) {
 
             console.error(
-                "Get single booking error:",
+                "Get booking error:",
                 error
             );
 
@@ -682,14 +655,10 @@ router.get(
 );
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ADMIN - UPDATE RESERVATION STATUS
-|--------------------------------------------------------------------------
-|
-| PATCH
-| /api/bookings/admin/:id
-|
+| ADMIN - UPDATE BOOKING
 |--------------------------------------------------------------------------
 */
 
@@ -701,7 +670,7 @@ router.patch(
         try {
 
             if (
-                !validObjectId(
+                !mongoose.Types.ObjectId.isValid(
                     req.params.id
                 )
             ) {
@@ -718,15 +687,6 @@ router.patch(
             }
 
 
-            const status =
-                String(
-                    req.body.status ||
-                    ""
-                )
-                    .trim()
-                    .toLowerCase();
-
-
             const allowedStatuses = [
 
                 "pending",
@@ -736,6 +696,15 @@ router.patch(
                 "cancelled"
 
             ];
+
+
+            const status =
+                String(
+                    req.body.status ||
+                    ""
+                )
+                    .trim()
+                    .toLowerCase();
 
 
             if (
@@ -789,19 +758,17 @@ router.patch(
             }
 
 
-            console.log(
-                `Reservation ${booking._id} changed to ${status}`
-            );
-
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
                 message:
-                    "Reservation status updated.",
+                    "Reservation updated successfully.",
 
-                booking
+                booking,
+
+                reservation:
+                    booking
 
             });
 
@@ -829,14 +796,10 @@ router.patch(
 );
 
 
+
 /*
 |--------------------------------------------------------------------------
-| ADMIN - DELETE RESERVATION
-|--------------------------------------------------------------------------
-|
-| DELETE
-| /api/bookings/admin/:id
-|
+| ADMIN - DELETE BOOKING
 |--------------------------------------------------------------------------
 */
 
@@ -848,7 +811,7 @@ router.delete(
         try {
 
             if (
-                !validObjectId(
+                !mongoose.Types.ObjectId.isValid(
                     req.params.id
                 )
             ) {
@@ -885,17 +848,17 @@ router.delete(
             }
 
 
-            console.log(
-                `Reservation deleted: ${booking._id}`
-            );
-
-
-            return res.json({
+            return res.status(200).json({
 
                 success: true,
 
                 message:
-                    "Reservation deleted successfully."
+                    "Reservation deleted successfully.",
+
+                booking,
+
+                reservation:
+                    booking
 
             });
 
@@ -923,4 +886,6 @@ router.delete(
 );
 
 
-module.exports = router;
+
+module.exports =
+    router;

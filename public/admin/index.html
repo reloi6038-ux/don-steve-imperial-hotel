@@ -10,26 +10,71 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <meta
-        name="description"
-        content="Don Steve Imperial Hotel administrator dashboard."
+    <title>
+        Don Steve Imperial Hotel | Administration
+    </title>
+
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
     >
 
-    <title>
-        Admin Dashboard | Don Steve Imperial Hotel
-    </title>
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
 
     <style>
 
-        /* =====================================================
-           RESET
-        ===================================================== */
+        :root {
+
+            --navy: #071521;
+            --navy-light: #0d202d;
+
+            --gold: #c7a15a;
+            --gold-dark: #a98442;
+
+            --cream: #f5f2eb;
+            --cream-dark: #ece7dd;
+
+            --white: #ffffff;
+
+            --text: #172938;
+            --muted: #7c8184;
+
+            --border: #e3ded4;
+
+            --green: #287542;
+            --green-light: #edf7ef;
+
+            --red: #a33d3d;
+            --red-light: #faeeee;
+
+            --orange: #9b7025;
+            --orange-light: #fff7e5;
+
+            --shadow:
+                0 15px 45px rgba(
+                    7,
+                    21,
+                    33,
+                    0.08
+                );
+        }
+
 
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
 
@@ -39,23 +84,31 @@
 
 
         body {
-            font-family:
-                "Inter",
-                "Segoe UI",
-                Arial,
-                sans-serif;
-
-            background: #f5f6f8;
-
-            color: #18212f;
 
             min-height: 100vh;
+
+            background:
+                var(--cream);
+
+            color:
+                var(--text);
+
+            font-family:
+                "DM Sans",
+                Arial,
+                sans-serif;
+        }
+
+
+        body.modal-open {
+            overflow: hidden;
         }
 
 
         button,
         input,
-        select {
+        select,
+        textarea {
             font: inherit;
         }
 
@@ -65,2098 +118,2263 @@
         }
 
 
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+
         /* =====================================================
            LAYOUT
-        ===================================================== */
+        ====================================================== */
 
         .admin-layout {
+
             min-height: 100vh;
+
+            display: grid;
+
+            grid-template-columns:
+                230px
+                minmax(0, 1fr);
         }
 
 
         /* =====================================================
            SIDEBAR
-        ===================================================== */
+        ====================================================== */
 
-        .admin-sidebar {
+        .sidebar {
 
             position: fixed;
 
-            top: 0;
             left: 0;
+            top: 0;
             bottom: 0;
 
-            width: 260px;
+            width: 230px;
 
             background:
-                linear-gradient(
-                    180deg,
-                    #07111f 0%,
-                    #0b1829 100%
-                );
+                var(--navy);
 
-            color: #ffffff;
+            color:
+                var(--white);
 
-            display: flex;
+            display:
+                flex;
 
-            flex-direction: column;
+            flex-direction:
+                column;
 
             z-index: 1000;
-
-            border-right:
-                1px solid
-                rgba(255,255,255,0.05);
         }
 
 
-        .admin-brand {
+        .brand {
 
             padding:
-                34px 28px 30px;
+                31px 30px 29px;
 
             border-bottom:
                 1px solid
-                rgba(255,255,255,0.08);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
         }
 
 
-        .admin-brand small {
-
-            display: block;
-
-            font-size: 10px;
-
-            letter-spacing: 3px;
-
-            color: #c8a96b;
-
-            margin-bottom: 10px;
-        }
-
-
-        .admin-brand h1 {
+        .brand-name {
 
             font-family:
-                Georgia,
-                "Times New Roman",
+                "Cormorant Garamond",
                 serif;
 
-            font-size: 22px;
+            font-size:
+                29px;
 
-            line-height: 1.25;
+            font-weight:
+                500;
 
-            font-weight: 500;
-
-            letter-spacing: 0.5px;
+            line-height:
+                1;
         }
 
 
-        .admin-brand p {
+        .brand-subtitle {
 
-            margin-top: 8px;
+            margin-top:
+                7px;
+
+            font-size:
+                8px;
+
+            letter-spacing:
+                3px;
 
             color:
-                rgba(255,255,255,0.55);
+                var(--gold);
 
-            font-size: 11px;
-
-            letter-spacing: 1.5px;
-
-            text-transform: uppercase;
+            font-weight:
+                600;
         }
 
 
-        /* =====================================================
-           NAVIGATION
-        ===================================================== */
-
-        .admin-navigation {
-
-            padding: 25px 16px;
-
-            flex: 1;
-        }
-
-
-        .admin-nav-label {
+        .sidebar-section {
 
             padding:
-                0 14px 12px;
-
-            color:
-                rgba(255,255,255,0.35);
-
-            font-size: 10px;
-
-            letter-spacing: 2px;
-
-            text-transform: uppercase;
+                28px 20px 0;
         }
 
 
-        .admin-nav-item {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 12px;
-
-            width: 100%;
+        .sidebar-label {
 
             padding:
-                13px 14px;
+                0 10px 12px;
 
-            margin-bottom: 5px;
+            font-size:
+                8px;
 
-            border: 0;
-
-            border-radius: 8px;
-
-            background: transparent;
+            letter-spacing:
+                2px;
 
             color:
-                rgba(255,255,255,0.65);
+                #71818d;
 
-            text-align: left;
+            font-weight:
+                700;
+        }
+
+
+        .sidebar-link {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                14px;
+
+            min-height:
+                40px;
+
+            padding:
+                0 15px;
+
+            color:
+                #d5dce0;
+
+            font-size:
+                11px;
 
             transition:
-                background 0.2s ease,
-                color 0.2s ease;
+                0.2s ease;
         }
 
 
-        .admin-nav-item:hover,
-        .admin-nav-item.active {
+        .sidebar-link:hover {
 
             background:
-                rgba(200,169,107,0.12);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.05
+                );
 
-            color: #ffffff;
+            color:
+                #fff;
         }
 
 
-        .admin-nav-icon {
+        .sidebar-link.active {
 
-            width: 22px;
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.07
+                );
 
-            text-align: center;
+            color:
+                #fff;
 
-            font-size: 15px;
-
-            color: #c8a96b;
+            border-left:
+                1px solid
+                var(--gold);
         }
 
 
-        .admin-nav-text {
+        .sidebar-icon {
 
-            font-size: 13px;
+            width:
+                16px;
 
-            letter-spacing: 0.2px;
+            color:
+                var(--gold);
+
+            text-align:
+                center;
         }
 
 
-        /* =====================================================
-           SIDEBAR FOOTER
-        ===================================================== */
+        .sidebar-bottom {
 
-        .admin-sidebar-footer {
+            margin-top:
+                auto;
 
-            padding: 20px;
+            padding:
+                20px;
 
             border-top:
                 1px solid
-                rgba(255,255,255,0.08);
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.08
+                );
         }
 
 
-        .admin-user {
+        .sign-out-button {
 
-            display: flex;
+            width:
+                100%;
 
-            align-items: center;
+            height:
+                38px;
 
-            gap: 11px;
-
-            margin-bottom: 15px;
-        }
-
-
-        .admin-user-avatar {
-
-            width: 38px;
-
-            height: 38px;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #c8a96b,
-                    #8d6d35
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.15
                 );
 
-            color: #ffffff;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-family: Georgia, serif;
-
-            font-size: 15px;
-        }
-
-
-        .admin-user-info strong {
-
-            display: block;
-
-            color: #ffffff;
-
-            font-size: 12px;
-
-            font-weight: 600;
-        }
-
-
-        .admin-user-info span {
-
-            display: block;
-
-            margin-top: 3px;
-
-            color:
-                rgba(255,255,255,0.45);
-
-            font-size: 10px;
-        }
-
-
-        /* =====================================================
-           SIGN OUT
-        ===================================================== */
-
-        .admin-signout {
-
-            width: 100%;
-
-            border:
-                1px solid
-                rgba(255,255,255,0.12);
-
             background:
-                rgba(255,255,255,0.04);
+                transparent;
 
             color:
-                rgba(255,255,255,0.72);
+                #fff;
 
-            padding: 11px 14px;
+            font-size:
+                9px;
 
-            border-radius: 7px;
+            letter-spacing:
+                1px;
 
-            font-size: 12px;
+            text-transform:
+                uppercase;
 
             transition:
-                background 0.2s ease,
-                border-color 0.2s ease,
-                color 0.2s ease;
+                0.2s ease;
         }
 
 
-        .admin-signout:hover {
-
-            background:
-                rgba(255,255,255,0.08);
+        .sign-out-button:hover {
 
             border-color:
-                rgba(200,169,107,0.45);
+                var(--gold);
 
-            color: #ffffff;
-        }
-
-
-        .admin-signout:disabled {
-
-            opacity: 0.6;
-
-            cursor: wait;
+            color:
+                var(--gold);
         }
 
 
         /* =====================================================
-           MAIN CONTENT
-        ===================================================== */
+           MAIN
+        ====================================================== */
 
-        .admin-main {
+        .main-area {
 
-            margin-left: 260px;
+            grid-column:
+                2;
 
-            min-height: 100vh;
-
-            padding: 35px;
+            min-width:
+                0;
         }
 
 
-        /* =====================================================
-           HEADER
-        ===================================================== */
+        .top-header {
 
-        .admin-header {
+            min-height:
+                76px;
 
-            display: flex;
+            background:
+                #fff;
 
-            align-items: flex-end;
+            border-bottom:
+                1px solid
+                var(--border);
 
-            justify-content: space-between;
+            display:
+                flex;
 
-            gap: 25px;
+            align-items:
+                center;
 
-            margin-bottom: 32px;
-        }
-
-
-        .admin-header-eyebrow {
-
-            display: block;
-
-            color: #a07c3e;
-
-            font-size: 10px;
-
-            letter-spacing: 3px;
-
-            text-transform: uppercase;
-
-            margin-bottom: 8px;
-        }
-
-
-        .admin-header h2 {
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-
-            font-size: 32px;
-
-            font-weight: 500;
-
-            color: #101a29;
-        }
-
-
-        .admin-header p {
-
-            margin-top: 8px;
-
-            color: #7c8490;
-
-            font-size: 13px;
-        }
-
-
-        .admin-header-date {
+            justify-content:
+                space-between;
 
             padding:
-                11px 16px;
+                0 34px;
+        }
 
-            background: #ffffff;
 
-            border:
-                1px solid
-                #e6e8ec;
+        .header-label {
 
-            border-radius: 8px;
+            color:
+                #71808c;
 
-            color: #6f7782;
+            font-size:
+                8px;
 
-            font-size: 12px;
+            letter-spacing:
+                2.5px;
+
+            font-weight:
+                700;
+        }
+
+
+        .administrator {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                12px;
+        }
+
+
+        .administrator-avatar {
+
+            width:
+                34px;
+
+            height:
+                34px;
+
+            border-radius:
+                50%;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            background:
+                var(--navy);
+
+            color:
+                var(--gold);
+
+            font-family:
+                "Cormorant Garamond",
+                serif;
+
+            font-size:
+                17px;
+        }
+
+
+        .administrator-info {
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                2px;
+        }
+
+
+        .administrator-name {
+
+            font-size:
+                11px;
+
+            font-weight:
+                700;
+        }
+
+
+        .administrator-role {
+
+            color:
+                #8a949a;
+
+            font-size:
+                8px;
+        }
+
+
+        /* =====================================================
+           CONTENT
+        ====================================================== */
+
+        .content {
+
+            padding:
+                55px 36px 65px;
+
+            max-width:
+                1400px;
+
+            margin:
+                0 auto;
+        }
+
+
+        .page-introduction {
+
+            margin-bottom:
+                31px;
+        }
+
+
+        .eyebrow {
+
+            display:
+                block;
+
+            margin-bottom:
+                9px;
+
+            color:
+                #a38352;
+
+            font-size:
+                8px;
+
+            letter-spacing:
+                2.5px;
+
+            font-weight:
+                700;
+        }
+
+
+        .page-title {
+
+            font-family:
+                "Cormorant Garamond",
+                serif;
+
+            font-size:
+                52px;
+
+            line-height:
+                0.95;
+
+            font-weight:
+                400;
+
+            color:
+                #092032;
+
+            margin-bottom:
+                10px;
+        }
+
+
+        .page-description {
+
+            color:
+                #7e8589;
+
+            font-size:
+                12px;
+
+            line-height:
+                1.6;
         }
 
 
         /* =====================================================
            STATISTICS
-        ===================================================== */
+        ====================================================== */
 
-        .stats-grid {
+        .statistics-grid {
 
-            display: grid;
+            display:
+                grid;
 
             grid-template-columns:
-                repeat(4, minmax(0, 1fr));
+                repeat(
+                    4,
+                    minmax(0, 1fr)
+                );
 
-            gap: 18px;
+            gap:
+                16px;
 
-            margin-bottom: 28px;
+            margin-bottom:
+                28px;
         }
 
 
         .stat-card {
 
-            background: #ffffff;
+            position:
+                relative;
+
+            min-height:
+                130px;
+
+            padding:
+                25px 23px 20px;
+
+            background:
+                #fff;
 
             border:
                 1px solid
-                #e7e9ed;
-
-            border-radius: 10px;
-
-            padding: 23px;
+                var(--border);
 
             box-shadow:
                 0 5px 20px
-                rgba(13,26,43,0.03);
+                rgba(
+                    20,
+                    30,
+                    40,
+                    0.025
+                );
+
+            overflow:
+                hidden;
         }
 
 
-        .stat-card-top {
+        .stat-card::after {
 
-            display: flex;
+            content:
+                "";
 
-            justify-content: space-between;
+            position:
+                absolute;
 
-            align-items: flex-start;
+            left:
+                0;
 
-            gap: 10px;
+            right:
+                0;
+
+            bottom:
+                0;
+
+            height:
+                3px;
+
+            background:
+                var(--gold);
         }
 
 
         .stat-label {
 
-            color: #818995;
+            color:
+                #7b8690;
 
-            font-size: 10px;
+            font-size:
+                8px;
 
-            letter-spacing: 1.5px;
+            letter-spacing:
+                2px;
 
-            text-transform: uppercase;
-        }
+            font-weight:
+                700;
 
-
-        .stat-icon {
-
-            width: 35px;
-
-            height: 35px;
-
-            border-radius: 8px;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            color: #a07c3e;
-
-            background:
-                rgba(200,169,107,0.10);
-
-            font-size: 14px;
+            text-transform:
+                uppercase;
         }
 
 
         .stat-value {
 
-            display: block;
+            margin-top:
+                22px;
 
-            margin-top: 15px;
+            color:
+                #071b2b;
 
             font-family:
-                Georgia,
-                "Times New Roman",
+                "Cormorant Garamond",
                 serif;
 
-            font-size: 31px;
+            font-size:
+                31px;
 
-            font-weight: 500;
+            line-height:
+                1;
 
-            color: #172233;
+            font-weight:
+                500;
+        }
+
+
+        .stat-note {
+
+            margin-top:
+                9px;
+
+            color:
+                #a0a4a5;
+
+            font-size:
+                9px;
         }
 
 
         /* =====================================================
            PANEL
-        ===================================================== */
+        ====================================================== */
 
-        .admin-panel {
+        .panel {
 
-            background: #ffffff;
+            background:
+                #fff;
 
             border:
                 1px solid
-                #e7e9ed;
-
-            border-radius: 10px;
+                var(--border);
 
             box-shadow:
                 0 5px 20px
-                rgba(13,26,43,0.03);
+                rgba(
+                    20,
+                    30,
+                    40,
+                    0.025);
 
-            margin-bottom: 28px;
-
-            overflow: hidden;
+            margin-bottom:
+                28px;
         }
 
 
         .panel-header {
 
+            min-height:
+                74px;
+
             padding:
-                22px 24px;
+                0 25px;
 
             border-bottom:
                 1px solid
-                #edf0f3;
+                var(--border);
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            justify-content: space-between;
+            justify-content:
+                space-between;
 
-            gap: 20px;
+            gap:
+                20px;
         }
 
 
-        .panel-title h3 {
+        .panel-title {
 
             font-family:
-                Georgia,
-                "Times New Roman",
+                "Cormorant Garamond",
                 serif;
 
-            font-size: 21px;
+            font-size:
+                26px;
 
-            font-weight: 500;
+            font-weight:
+                500;
 
-            color: #182333;
+            color:
+                #0a2335;
         }
 
 
-        .panel-title p {
+        .panel-subtitle {
 
-            margin-top: 5px;
+            margin-top:
+                4px;
 
-            color: #89919d;
+            color:
+                #92999d;
 
-            font-size: 11px;
-        }
-
-
-        .panel-tools {
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 9px;
-
-            flex-wrap: wrap;
+            font-size:
+                9px;
         }
 
 
         /* =====================================================
-           SEARCH
-        ===================================================== */
+           CONTROLS
+        ====================================================== */
 
-        .admin-search {
+        .reservation-controls {
 
-            position: relative;
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                9px;
+
+            flex-wrap:
+                wrap;
         }
 
 
-        .admin-search input {
+        .search-input {
 
-            width: 220px;
+            width:
+                210px;
 
-            height: 38px;
+            height:
+                36px;
+
+            padding:
+                0 12px;
 
             border:
                 1px solid
-                #dfe3e8;
+                var(--border);
 
-            border-radius: 6px;
+            background:
+                #fff;
+
+            outline:
+                none;
+
+            font-size:
+                10px;
+        }
+
+
+        .search-input:focus {
+
+            border-color:
+                var(--gold);
+        }
+
+
+        .status-filter {
+
+            height:
+                36px;
+
+            min-width:
+                135px;
 
             padding:
-                0 13px;
-
-            outline: none;
-
-            color: #273242;
-
-            background: #ffffff;
-
-            font-size: 12px;
-
-            transition:
-                border-color 0.2s ease,
-                box-shadow 0.2s ease;
-        }
-
-
-        .admin-search input:focus {
-
-            border-color: #c8a96b;
-
-            box-shadow:
-                0 0 0 3px
-                rgba(200,169,107,0.10);
-        }
-
-
-        .admin-select {
-
-            height: 38px;
+                0 11px;
 
             border:
                 1px solid
-                #dfe3e8;
+                var(--border);
 
-            border-radius: 6px;
+            background:
+                #fff;
 
-            padding:
-                0 30px 0 11px;
+            outline:
+                none;
 
-            background: #ffffff;
-
-            color: #4d5662;
-
-            font-size: 12px;
-
-            outline: none;
+            font-size:
+                10px;
         }
 
 
-        .admin-refresh {
+        .status-filter:focus {
 
-            height: 38px;
+            border-color:
+                var(--gold);
+        }
+
+
+        .refresh-button {
+
+            height:
+                36px;
 
             padding:
-                0 13px;
+                0 14px;
 
             border:
                 1px solid
-                #dfe3e8;
+                var(--border);
 
-            border-radius: 6px;
+            background:
+                #fff;
 
-            background: #ffffff;
+            color:
+                #243746;
 
-            color: #4d5662;
+            font-size:
+                9px;
 
-            font-size: 12px;
+            letter-spacing:
+                1px;
 
-            transition:
-                border-color 0.2s ease,
-                color 0.2s ease;
+            text-transform:
+                uppercase;
         }
 
 
-        .admin-refresh:hover {
+        .refresh-button:hover {
 
-            border-color: #c8a96b;
+            border-color:
+                var(--gold);
 
-            color: #8d6d35;
+            color:
+                var(--gold-dark);
         }
 
 
         /* =====================================================
            TABLE
-        ===================================================== */
+        ====================================================== */
 
         .table-wrapper {
 
-            width: 100%;
+            width:
+                100%;
 
-            overflow-x: auto;
+            overflow-x:
+                auto;
         }
 
 
-        .reservations-table {
+        .reservation-table {
 
-            width: 100%;
+            width:
+                100%;
 
-            border-collapse: collapse;
+            min-width:
+                980px;
 
-            min-width: 850px;
+            border-collapse:
+                collapse;
         }
 
 
-        .reservations-table th {
+        .reservation-table thead {
+
+            background:
+                #fbfaf7;
+        }
+
+
+        .reservation-table th {
+
+            height:
+                48px;
 
             padding:
-                13px 20px;
-
-            background: #fafbfc;
+                0 16px;
 
             border-bottom:
                 1px solid
-                #edf0f3;
+                var(--border);
 
-            color: #858d98;
+            text-align:
+                left;
 
-            text-align: left;
+            color:
+                #879099;
 
-            font-size: 9px;
+            font-size:
+                8px;
 
-            font-weight: 600;
+            letter-spacing:
+                1.7px;
 
-            letter-spacing: 1.4px;
+            font-weight:
+                700;
 
-            text-transform: uppercase;
-
-            white-space: nowrap;
+            text-transform:
+                uppercase;
         }
 
 
-        .reservations-table td {
+        .reservation-table td {
 
             padding:
-                17px 20px;
+                17px 16px;
 
             border-bottom:
                 1px solid
-                #f0f2f5;
+                #eeeae3;
 
-            vertical-align: middle;
+            vertical-align:
+                middle;
 
-            color: #394452;
+            color:
+                #344552;
 
-            font-size: 12px;
+            font-size:
+                11px;
         }
 
 
-        .reservations-table tbody tr:hover {
+        .reservation-table tbody tr:hover {
 
-            background: #fcfcfd;
+            background:
+                #fcfbf8;
         }
 
 
-        .guest-cell strong {
+        .guest-name {
 
-            display: block;
+            color:
+                #162d3e;
 
-            color: #1b2635;
+            font-weight:
+                700;
 
-            font-size: 12px;
-
-            font-weight: 600;
+            margin-bottom:
+                4px;
         }
 
 
-        .guest-cell small {
+        .guest-email {
 
-            display: block;
+            color:
+                #92999d;
 
-            margin-top: 4px;
-
-            color: #9299a3;
-
-            font-size: 10px;
+            font-size:
+                9px;
         }
 
 
         .room-name {
 
-            color: #303b49;
+            color:
+                #344552;
 
-            font-weight: 500;
+            font-weight:
+                600;
         }
 
 
-        .stay-cell strong {
+        .date-text {
 
-            display: block;
-
-            color: #303b49;
-
-            font-size: 11px;
-
-            margin-bottom: 2px;
-        }
-
-
-        .stay-cell small {
-
-            display: block;
-
-            color: #a0a6ae;
-
-            font-size: 9px;
-
-            margin-bottom: 5px;
-        }
-
-
-        .guest-count {
-
-            color: #59636f;
-
-            white-space: nowrap;
+            white-space:
+                nowrap;
         }
 
 
         /* =====================================================
-           STATUS BADGES
-        ===================================================== */
+           STATUS
+        ====================================================== */
 
         .status-badge {
 
-            display: inline-flex;
+            display:
+                inline-flex;
 
-            align-items: center;
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            min-width:
+                82px;
 
             padding:
-                5px 9px;
+                6px 10px;
 
-            border-radius: 20px;
+            border-radius:
+                20px;
 
-            font-size: 9px;
+            font-size:
+                8px;
 
-            font-weight: 600;
+            font-weight:
+                700;
 
-            text-transform: capitalize;
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.7px;
         }
 
 
         .status-pending {
 
-            background:
-                rgba(200,169,107,0.12);
+            color:
+                var(--orange);
 
-            color: #967334;
+            background:
+                var(--orange-light);
         }
 
 
         .status-confirmed {
 
-            background:
-                rgba(46,125,85,0.10);
+            color:
+                var(--green);
 
-            color: #28734e;
+            background:
+                var(--green-light);
         }
 
 
         .status-cancelled {
 
-            background:
-                rgba(180,63,63,0.09);
+            color:
+                var(--red);
 
-            color: #a74343;
+            background:
+                var(--red-light);
         }
 
 
         /* =====================================================
            ACTION BUTTONS
-        ===================================================== */
+        ====================================================== */
 
-        .reservation-actions {
+        .action-buttons {
 
-            display: flex;
+            display:
+                flex;
 
-            align-items: center;
+            align-items:
+                center;
 
-            gap: 6px;
+            gap:
+                6px;
 
-            flex-wrap: wrap;
+            flex-wrap:
+                wrap;
         }
 
 
-        .action-button {
+        .action-btn {
 
-            border: 0;
-
-            border-radius: 5px;
+            min-height:
+                30px;
 
             padding:
-                6px 9px;
+                0 9px;
 
-            font-size: 9px;
+            border:
+                1px solid
+                var(--border);
 
-            font-weight: 600;
+            background:
+                #fff;
+
+            color:
+                #3c4c57;
+
+            font-size:
+                8px;
+
+            font-weight:
+                700;
 
             transition:
-                opacity 0.2s ease,
-                transform 0.2s ease;
+                0.2s ease;
         }
 
 
-        .action-button:hover {
+        .action-btn:hover {
 
-            opacity: 0.8;
+            border-color:
+                var(--gold);
 
-            transform: translateY(-1px);
+            color:
+                var(--gold-dark);
         }
 
 
-        .view-booking {
+        .action-view:hover {
 
             background:
-                #eef1f5;
-
-            color: #586473;
+                #faf7ee;
         }
 
 
-        .confirm-booking {
+        .approve-button {
 
-            background:
-                rgba(46,125,85,0.10);
+            border-color:
+                #bdd8c5;
 
-            color: #28734e;
+            color:
+                var(--green);
         }
 
 
-        .cancel-booking {
+        .approve-button:hover {
 
             background:
-                rgba(180,63,63,0.09);
+                var(--green-light);
 
-            color: #a74343;
+            border-color:
+                var(--green);
         }
 
 
-        .delete-booking {
+        .cancel-button {
+
+            border-color:
+                #e3c2c2;
+
+            color:
+                var(--red);
+        }
+
+
+        .cancel-button:hover {
 
             background:
-                #f1f2f4;
+                var(--red-light);
 
-            color: #777f89;
+            border-color:
+                var(--red);
+        }
+
+
+        .delete-button {
+
+            border-color:
+                #e3c2c2;
+
+            color:
+                var(--red);
+        }
+
+
+        .delete-button:hover {
+
+            background:
+                var(--red-light);
+
+            border-color:
+                var(--red);
         }
 
 
         /* =====================================================
-           LOADING / EMPTY / ERROR
-        ===================================================== */
+           EMPTY / LOADING
+        ====================================================== */
 
-        .loading-cell,
-        .empty-cell,
-        .error-cell {
+        .loading-cell {
 
-            padding: 50px 20px !important;
+            padding:
+                50px !important;
 
-            text-align: center !important;
-        }
-
-
-        .loading-state,
-        .empty-state,
-        .error-state {
-
-            display: flex;
-
-            flex-direction: column;
-
-            align-items: center;
-
-            justify-content: center;
+            text-align:
+                center;
         }
 
 
         .loading-state {
 
-            color: #818995;
+            padding:
+                45px 20px;
 
-            font-size: 12px;
+            text-align:
+                center;
 
-            gap: 12px;
+            color:
+                #92999d;
+
+            font-size:
+                11px;
         }
 
 
         .loading-spinner {
 
-            width: 25px;
+            display:
+                inline-block;
 
-            height: 25px;
+            width:
+                22px;
+
+            height:
+                22px;
 
             border:
                 2px solid
-                #e7e9ed;
+                var(--border);
 
             border-top-color:
-                #c8a96b;
+                var(--gold);
 
-            border-radius: 50%;
+            border-radius:
+                50%;
 
             animation:
-                adminSpin 0.8s linear infinite;
+                spin 0.8s linear infinite;
+
+            margin-bottom:
+                10px;
         }
 
 
-        @keyframes adminSpin {
+        @keyframes spin {
 
             to {
-                transform: rotate(360deg);
+                transform:
+                    rotate(360deg);
             }
-
         }
 
 
-        .empty-icon,
-        .contact-empty-icon {
-
-            width: 45px;
-
-            height: 45px;
-
-            border-radius: 50%;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            background:
-                rgba(200,169,107,0.10);
-
-            color: #a07c3e;
-
-            margin-bottom: 13px;
-
-            font-size: 16px;
-        }
-
-
-        .empty-state h3,
-        .error-state strong {
-
-            color: #313c4a;
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-
-            font-size: 18px;
-
-            font-weight: 500;
-        }
-
-
-        .empty-state p,
-        .error-state p {
-
-            max-width: 430px;
-
-            margin-top: 7px;
-
-            color: #8c949e;
-
-            font-size: 11px;
-
-            line-height: 1.6;
-        }
-
-
-        .error-state strong {
-
-            color: #a74343;
-        }
-
-
-        .retry-button,
-        .contact-retry-button {
-
-            margin-top: 15px;
+        .empty-state {
 
             padding:
-                9px 14px;
+                50px 20px;
 
-            border: 0;
+            text-align:
+                center;
+        }
 
-            border-radius: 5px;
 
-            background: #0b1829;
+        .empty-state-icon {
 
-            color: #ffffff;
+            font-size:
+                30px;
 
-            font-size: 10px;
+            margin-bottom:
+                12px;
+        }
+
+
+        .empty-state h4 {
+
+            color:
+                #263b49;
+
+            font-family:
+                "Cormorant Garamond",
+                serif;
+
+            font-size:
+                22px;
+
+            margin-bottom:
+                6px;
+        }
+
+
+        .empty-state p {
+
+            color:
+                #8c9498;
+
+            font-size:
+                10px;
         }
 
 
         /* =====================================================
            CONTACT MESSAGES
-        ===================================================== */
+        ====================================================== */
 
-        .contact-messages-panel {
+        .messages-list {
 
-            margin-bottom: 40px;
+            padding:
+                20px 25px 25px;
+
+            display:
+                grid;
+
+            gap:
+                12px;
         }
 
 
-        .contact-messages-list {
-
-            padding: 22px;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
-
-            gap: 16px;
-        }
-
-
-        .contact-message-card {
+        .message-card {
 
             border:
                 1px solid
-                #e7e9ed;
-
-            border-radius: 9px;
-
-            padding: 19px;
-
-            background: #ffffff;
-        }
-
-
-        .contact-message-top {
-
-            display: flex;
-
-            align-items: flex-start;
-
-            justify-content: space-between;
-
-            gap: 15px;
-
-            margin-bottom: 15px;
-        }
-
-
-        .contact-message-person strong {
-
-            display: block;
-
-            color: #202b39;
-
-            font-size: 13px;
-        }
-
-
-        .contact-message-person span {
-
-            display: block;
-
-            margin-top: 4px;
-
-            color: #9299a3;
-
-            font-size: 10px;
-        }
-
-
-        .contact-message-status {
-
-            flex-shrink: 0;
+                var(--border);
 
             padding:
-                5px 9px;
-
-            border-radius: 20px;
-
-            font-size: 9px;
-
-            font-weight: 600;
-        }
-
-
-        .contact-status-unread {
+                18px;
 
             background:
-                rgba(200,169,107,0.12);
-
-            color: #967334;
+                #fff;
         }
 
 
-        .contact-status-read {
+        .message-header {
 
-            background:
-                rgba(80,100,125,0.10);
+            display:
+                flex;
 
-            color: #53657b;
+            justify-content:
+                space-between;
+
+            gap:
+                20px;
+
+            margin-bottom:
+                10px;
         }
 
 
-        .contact-status-replied {
+        .message-name {
 
-            background:
-                rgba(46,125,85,0.10);
+            color:
+                #182e3e;
 
-            color: #28734e;
+            font-size:
+                12px;
+
+            font-weight:
+                700;
         }
 
 
-        .contact-message-meta {
+        .message-email {
 
-            display: grid;
+            color:
+                #92999d;
 
-            grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+            font-size:
+                9px;
 
-            gap: 10px;
-
-            padding:
-                12px 0;
-
-            border-top:
-                1px solid
-                #f0f2f5;
-
-            border-bottom:
-                1px solid
-                #f0f2f5;
+            margin-top:
+                3px;
         }
 
 
-        .contact-meta-label {
+        .message-date {
 
-            display: block;
+            color:
+                #9a9fa2;
 
-            color: #9ba1aa;
+            font-size:
+                9px;
 
-            font-size: 8px;
-
-            letter-spacing: 1px;
-
-            text-transform: uppercase;
-
-            margin-bottom: 4px;
+            white-space:
+                nowrap;
         }
 
 
-        .contact-meta-value {
+        .message-subject {
 
-            display: block;
+            color:
+                #263b49;
 
-            color: #4b5664;
+            font-weight:
+                700;
 
-            font-size: 10px;
+            font-size:
+                11px;
+
+            margin-bottom:
+                8px;
         }
 
 
-        .contact-message-subject {
+        .message-body {
 
-            margin-top: 14px;
+            color:
+                #6d777d;
 
-            color: #596472;
+            font-size:
+                10px;
 
-            font-size: 10px;
+            line-height:
+                1.7;
 
-            font-weight: 600;
-        }
-
-
-        .contact-message-body {
-
-            margin-top: 10px;
-
-            color: #5f6975;
-
-            font-size: 11px;
-
-            line-height: 1.7;
-
-            white-space: pre-wrap;
-
-            word-break: break-word;
-        }
-
-
-        .contact-message-actions {
-
-            display: flex;
-
-            flex-wrap: wrap;
-
-            gap: 7px;
-
-            margin-top: 16px;
-
-            padding-top: 14px;
-
-            border-top:
-                1px solid
-                #f0f2f5;
-        }
-
-
-        .contact-action-button {
-
-            border: 0;
-
-            border-radius: 5px;
-
-            padding:
-                7px 10px;
-
-            font-size: 9px;
-
-            font-weight: 600;
-        }
-
-
-        .contact-read-button {
-
-            background:
-                rgba(80,100,125,0.10);
-
-            color: #53657b;
-        }
-
-
-        .contact-replied-button {
-
-            background:
-                rgba(46,125,85,0.10);
-
-            color: #28734e;
-        }
-
-
-        .contact-delete-button {
-
-            background:
-                rgba(180,63,63,0.09);
-
-            color: #a74343;
-        }
-
-
-        .contact-loading {
-
-            grid-column: 1 / -1;
-
-            text-align: center;
-
-            padding: 35px;
-
-            color: #89919d;
-
-            font-size: 11px;
-        }
-
-
-        .contact-empty {
-
-            grid-column: 1 / -1;
-
-            text-align: center;
-
-            padding: 40px 20px;
-        }
-
-
-        .contact-empty-icon {
-
-            margin:
-                0 auto 13px;
-        }
-
-
-        .contact-empty h3 {
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-
-            font-size: 18px;
-
-            font-weight: 500;
-
-            color: #313c4a;
-        }
-
-
-        .contact-empty p {
-
-            margin-top: 7px;
-
-            color: #8c949e;
-
-            font-size: 11px;
+            white-space:
+                pre-wrap;
         }
 
 
         /* =====================================================
-           RESERVATION MODAL
-        ===================================================== */
+           RESERVATION DETAILS MODAL
+        ====================================================== */
 
-        .booking-modal-overlay {
+        .reservation-modal {
 
-            position: fixed;
+            position:
+                fixed;
 
-            inset: 0;
+            inset:
+                0;
 
-            background:
-                rgba(5,12,22,0.72);
+            display:
+                none;
 
-            display: flex;
+            align-items:
+                center;
 
-            align-items: center;
+            justify-content:
+                center;
 
-            justify-content: center;
+            padding:
+                20px;
 
-            padding: 20px;
-
-            z-index: 5000;
+            z-index:
+                5000;
         }
 
 
-        .booking-modal {
+        .reservation-modal.open {
 
-            width: 100%;
+            display:
+                flex;
+        }
 
-            max-width: 650px;
 
-            max-height: 90vh;
+        .reservation-modal-backdrop {
 
-            overflow-y: auto;
+            position:
+                absolute;
 
-            position: relative;
+            inset:
+                0;
 
-            background: #ffffff;
+            background:
+                rgba(
+                    3,
+                    12,
+                    19,
+                    0.72
+                );
 
-            border-radius: 12px;
+            backdrop-filter:
+                blur(4px);
+        }
 
-            padding: 30px;
+
+        .reservation-modal-card {
+
+            position:
+                relative;
+
+            width:
+                min(
+                    780px,
+                    100%
+                );
+
+            max-height:
+                90vh;
+
+            overflow-y:
+                auto;
+
+            background:
+                #fff;
 
             box-shadow:
                 0 30px 80px
-                rgba(0,0,0,0.25);
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.3
+                );
+
+            z-index:
+                2;
         }
 
 
-        .booking-modal-close {
+        .modal-header {
 
-            position: absolute;
+            display:
+                flex;
 
-            top: 15px;
+            align-items:
+                flex-start;
 
-            right: 16px;
+            justify-content:
+                space-between;
 
-            width: 32px;
+            gap:
+                20px;
 
-            height: 32px;
+            padding:
+                25px 28px;
 
-            border: 0;
+            background:
+                var(--navy);
 
-            border-radius: 50%;
-
-            background: #f1f2f4;
-
-            color: #68717d;
-
-            font-size: 20px;
-
-            line-height: 1;
+            color:
+                #fff;
         }
 
 
-        .booking-modal-heading span {
+        .modal-eyebrow {
 
-            color: #a07c3e;
+            color:
+                var(--gold);
 
-            font-size: 9px;
+            font-size:
+                8px;
 
-            letter-spacing: 2px;
+            letter-spacing:
+                2px;
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                6px;
         }
 
 
-        .booking-modal-heading h2 {
-
-            margin-top: 6px;
+        .modal-title {
 
             font-family:
-                Georgia,
-                "Times New Roman",
+                "Cormorant Garamond",
                 serif;
 
-            font-size: 25px;
+            font-size:
+                30px;
 
-            font-weight: 500;
-
-            color: #182333;
+            font-weight:
+                500;
         }
 
 
-        .booking-modal-guest {
+        .modal-close {
 
-            display: flex;
+            width:
+                34px;
 
-            align-items: center;
+            height:
+                34px;
 
-            gap: 13px;
+            border:
+                1px solid
+                rgba(
+                    255,
+                    255,
+                    255,
+                    0.2
+                );
 
-            margin-top: 24px;
+            background:
+                transparent;
 
-            padding-bottom: 20px;
+            color:
+                #fff;
+
+            font-size:
+                20px;
+
+            line-height:
+                1;
+        }
+
+
+        .modal-close:hover {
+
+            border-color:
+                var(--gold);
+
+            color:
+                var(--gold);
+        }
+
+
+        .modal-content {
+
+            padding:
+                28px;
+        }
+
+
+        .details-section {
+
+            margin-bottom:
+                28px;
+        }
+
+
+        .details-section:last-child {
+
+            margin-bottom:
+                0;
+        }
+
+
+        .details-section-title {
+
+            color:
+                #9a7a4c;
+
+            font-size:
+                8px;
+
+            letter-spacing:
+                2px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            margin-bottom:
+                13px;
+
+            padding-bottom:
+                8px;
 
             border-bottom:
                 1px solid
-                #edf0f3;
-        }
-
-
-        .guest-initial {
-
-            width: 48px;
-
-            height: 48px;
-
-            flex-shrink: 0;
-
-            border-radius: 50%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #c8a96b,
-                    #927039
-                );
-
-            color: #ffffff;
-
-            display: flex;
-
-            align-items: center;
-
-            justify-content: center;
-
-            font-family: Georgia, serif;
-
-            font-size: 18px;
-        }
-
-
-        .booking-modal-guest h3 {
-
-            font-family:
-                Georgia,
-                "Times New Roman",
-                serif;
-
-            font-size: 18px;
-
-            font-weight: 500;
-
-            color: #263140;
-        }
-
-
-        .booking-modal-guest p {
-
-            margin-top: 4px;
-
-            color: #89919d;
-
-            font-size: 11px;
+                var(--border);
         }
 
 
         .booking-details-grid {
 
-            display: grid;
+            display:
+                grid;
 
             grid-template-columns:
-                repeat(2, minmax(0, 1fr));
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
 
-            gap: 16px;
-
-            padding: 22px 0;
+            gap:
+                14px;
         }
 
 
-        .booking-details-grid div {
+        .detail-item {
 
             padding:
-                12px;
-
-            background: #fafbfc;
-
-            border-radius: 6px;
-        }
-
-
-        .booking-details-grid span {
-
-            display: block;
-
-            color: #9ba1aa;
-
-            font-size: 8px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 5px;
-        }
-
-
-        .booking-details-grid strong {
-
-            display: block;
-
-            color: #374251;
-
-            font-size: 11px;
-
-            word-break: break-word;
-        }
-
-
-        .booking-request-box {
-
-            padding: 15px;
-
-            border-radius: 7px;
+                13px;
 
             background:
-                #fafbfc;
-        }
-
-
-        .booking-request-box span {
-
-            display: block;
-
-            color: #9ba1aa;
-
-            font-size: 8px;
-
-            letter-spacing: 1px;
-
-            margin-bottom: 7px;
-        }
-
-
-        .booking-request-box p {
-
-            color: #586371;
-
-            font-size: 11px;
-
-            line-height: 1.6;
-
-            white-space: pre-wrap;
-        }
-
-
-        .booking-modal-actions {
-
-            display: flex;
-
-            justify-content: flex-end;
-
-            flex-wrap: wrap;
-
-            gap: 8px;
-
-            margin-top: 22px;
-        }
-
-
-        .booking-modal-actions button {
-
-            border: 0;
-
-            border-radius: 5px;
-
-            padding:
-                10px 14px;
-
-            font-size: 10px;
-
-            font-weight: 600;
-        }
-
-
-        .modal-confirm-button {
-
-            background:
-                rgba(46,125,85,0.10);
-
-            color: #28734e;
-        }
-
-
-        .modal-cancel-button {
-
-            background:
-                rgba(180,63,63,0.09);
-
-            color: #a74343;
-        }
-
-
-        .modal-close-button {
-
-            background: #0b1829;
-
-            color: #ffffff;
-        }
-
-
-        /* =====================================================
-           NOTIFICATIONS
-        ===================================================== */
-
-        .admin-notification {
-
-            position: fixed;
-
-            top: 22px;
-
-            right: 22px;
-
-            width: min(
-                390px,
-                calc(100vw - 44px)
-            );
-
-            z-index: 10000;
-
-            display: flex;
-
-            align-items: center;
-
-            gap: 11px;
-
-            padding:
-                13px 14px;
-
-            border-radius: 8px;
-
-            background: #ffffff;
+                #faf9f6;
 
             border:
                 1px solid
-                #e5e8ec;
-
-            box-shadow:
-                0 15px 45px
-                rgba(0,0,0,0.12);
-
-            animation:
-                notificationIn 0.25s ease;
+                #eeeae3;
         }
 
 
-        @keyframes notificationIn {
+        .detail-label {
 
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+            display:
+                block;
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            color:
+                #91999e;
 
+            font-size:
+                8px;
+
+            letter-spacing:
+                1px;
+
+            text-transform:
+                uppercase;
+
+            font-weight:
+                700;
+
+            margin-bottom:
+                6px;
         }
 
 
-        .notification-icon {
+        .detail-value {
 
-            width: 27px;
+            color:
+                #263b49;
 
-            height: 27px;
+            font-size:
+                11px;
 
-            flex-shrink: 0;
+            line-height:
+                1.5;
 
-            border-radius: 50%;
+            word-break:
+                break-word;
+        }
 
-            display: flex;
 
-            align-items: center;
+        .special-request-box {
 
-            justify-content: center;
+            padding:
+                16px;
+
+            min-height:
+                80px;
 
             background:
-                rgba(46,125,85,0.10);
+                #faf9f6;
 
-            color: #28734e;
+            border:
+                1px solid
+                #eeeae3;
 
-            font-size: 12px;
+            color:
+                #56646d;
 
-            font-weight: 700;
+            font-size:
+                10px;
+
+            line-height:
+                1.7;
+
+            white-space:
+                pre-wrap;
         }
 
 
-        .notification-error .notification-icon {
+        .modal-status-actions {
+
+            display:
+                flex;
+
+            gap:
+                8px;
+
+            flex-wrap:
+                wrap;
+        }
+
+
+        .modal-status-button {
+
+            min-height:
+                36px;
+
+            padding:
+                0 16px;
+
+            border:
+                1px solid
+                var(--border);
 
             background:
-                rgba(180,63,63,0.09);
+                #fff;
 
-            color: #a74343;
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            letter-spacing:
+                0.5px;
+
+            text-transform:
+                uppercase;
         }
 
 
-        .notification-message {
+        .modal-status-button.approve {
 
-            flex: 1;
+            color:
+                var(--green);
 
-            color: #4a5563;
-
-            font-size: 11px;
-
-            line-height: 1.5;
+            border-color:
+                #bdd8c5;
         }
 
 
-        .notification-close {
+        .modal-status-button.approve:hover {
 
-            width: 24px;
+            background:
+                var(--green-light);
 
-            height: 24px;
+            border-color:
+                var(--green);
+        }
 
-            border: 0;
 
-            background: transparent;
+        .modal-status-button.pending {
 
-            color: #9aa1a9;
+            color:
+                var(--orange);
 
-            font-size: 17px;
+            border-color:
+                #e7d5aa;
+        }
+
+
+        .modal-status-button.pending:hover {
+
+            background:
+                var(--orange-light);
+
+            border-color:
+                var(--orange);
+        }
+
+
+        .modal-status-button.cancel {
+
+            color:
+                var(--red);
+
+            border-color:
+                #e3c2c2;
+        }
+
+
+        .modal-status-button.cancel:hover {
+
+            background:
+                var(--red-light);
+
+            border-color:
+                var(--red);
+        }
+
+
+        .modal-footer {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                flex-end;
+
+            gap:
+                8px;
+
+            padding:
+                18px 28px;
+
+            border-top:
+                1px solid
+                var(--border);
+
+            background:
+                #fbfaf7;
+        }
+
+
+        .modal-footer-button {
+
+            min-height:
+                36px;
+
+            padding:
+                0 16px;
+
+            border:
+                1px solid
+                var(--border);
+
+            background:
+                #fff;
+
+            color:
+                #394b57;
+
+            font-size:
+                9px;
+
+            font-weight:
+                700;
+
+            text-transform:
+                uppercase;
+
+            letter-spacing:
+                0.7px;
+        }
+
+
+        .modal-footer-button:hover {
+
+            border-color:
+                var(--gold);
+
+            color:
+                var(--gold-dark);
         }
 
 
         /* =====================================================
-           RESPONSIVE
-        ===================================================== */
+           TOAST
+        ====================================================== */
+
+        #toastContainer {
+
+            position:
+                fixed;
+
+            right:
+                22px;
+
+            bottom:
+                22px;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            gap:
+                8px;
+
+            z-index:
+                9000;
+        }
+
+
+        .toast {
+
+            min-width:
+                270px;
+
+            max-width:
+                380px;
+
+            padding:
+                13px 16px;
+
+            background:
+                var(--navy);
+
+            color:
+                #fff;
+
+            border-left:
+                3px solid
+                var(--gold);
+
+            box-shadow:
+                0 10px 30px
+                rgba(
+                    0,
+                    0,
+                    0,
+                    0.18
+                );
+
+            font-size:
+                10px;
+        }
+
+
+        .toast.success {
+
+            border-left-color:
+                #63a879;
+        }
+
+
+        .toast.error {
+
+            border-left-color:
+                #d66b6b;
+        }
+
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        .dashboard-footer {
+
+            padding:
+                20px 0;
+
+            color:
+                #999f9f;
+
+            font-size:
+                9px;
+
+            text-align:
+                center;
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
+
+        .mobile-sidebar-button {
+
+            display:
+                none;
+        }
+
 
         @media (max-width: 1100px) {
 
-            .stats-grid {
+            .statistics-grid {
 
                 grid-template-columns:
-                    repeat(2, minmax(0, 1fr));
-
+                    repeat(
+                        2,
+                        minmax(0, 1fr)
+                    );
             }
 
+            .reservation-panel-header {
 
-            .contact-messages-list {
+                align-items:
+                    flex-start;
 
-                grid-template-columns:
-                    1fr;
+                flex-direction:
+                    column;
 
+                padding:
+                    20px 25px;
+            }
+
+            .reservation-controls {
+
+                width:
+                    100%;
+            }
+
+            .search-input {
+
+                flex:
+                    1;
             }
 
         }
 
 
-        @media (max-width: 850px) {
-
-            .admin-sidebar {
-
-                width: 215px;
-
-            }
-
-
-            .admin-main {
-
-                margin-left: 215px;
-
-                padding: 25px;
-
-            }
-
-
-            .admin-header {
-
-                align-items: flex-start;
-
-                flex-direction: column;
-
-            }
-
-        }
-
-
-        @media (max-width: 650px) {
-
-            .admin-sidebar {
-
-                position: relative;
-
-                width: 100%;
-
-                height: auto;
-
-                min-height: 0;
-
-            }
-
+        @media (max-width: 800px) {
 
             .admin-layout {
 
-                display: block;
-
+                display:
+                    block;
             }
 
 
-            .admin-navigation {
+            .sidebar {
+
+                transform:
+                    translateX(-100%);
+
+                transition:
+                    transform 0.25s ease;
+
+                width:
+                    250px;
+            }
+
+
+            .sidebar.open {
+
+                transform:
+                    translateX(0);
+            }
+
+
+            .main-area {
+
+                width:
+                    100%;
+            }
+
+
+            .mobile-sidebar-button {
+
+                display:
+                    inline-flex;
+
+                align-items:
+                    center;
+
+                justify-content:
+                    center;
+
+                width:
+                    35px;
+
+                height:
+                    35px;
+
+                border:
+                    1px solid
+                    var(--border);
+
+                background:
+                    #fff;
+
+                margin-right:
+                    10px;
+            }
+
+
+            .top-header {
 
                 padding:
-                    15px;
-
+                    0 18px;
             }
 
 
-            .admin-brand {
+            .header-left {
+
+                display:
+                    flex;
+
+                align-items:
+                    center;
+            }
+
+
+            .administrator-info {
+
+                display:
+                    none;
+            }
+
+
+            .content {
 
                 padding:
-                    22px;
-
+                    35px 18px 50px;
             }
 
 
-            .admin-sidebar-footer {
+            .page-title {
 
-                padding:
-                    15px 20px 20px;
-
+                font-size:
+                    42px;
             }
 
 
-            .admin-main {
-
-                margin-left: 0;
-
-                padding: 20px 15px;
-
-            }
-
-
-            .stats-grid {
+            .statistics-grid {
 
                 grid-template-columns:
                     1fr 1fr;
+            }
 
-                gap: 10px;
+        }
 
+
+        @media (max-width: 560px) {
+
+            .statistics-grid {
+
+                grid-template-columns:
+                    1fr;
             }
 
 
-            .stat-card {
+            .reservation-controls {
 
-                padding: 16px;
+                display:
+                    grid;
 
+                grid-template-columns:
+                    1fr;
             }
 
 
-            .stat-value {
+            .search-input,
+            .status-filter,
+            .refresh-button {
 
-                font-size: 25px;
-
-            }
-
-
-            .panel-header {
-
-                align-items: flex-start;
-
-                flex-direction: column;
-
-                padding: 18px;
-
-            }
-
-
-            .panel-tools {
-
-                width: 100%;
-
-            }
-
-
-            .admin-search {
-
-                width: 100%;
-
-            }
-
-
-            .admin-search input {
-
-                width: 100%;
-
-            }
-
-
-            .admin-select {
-
-                flex: 1;
-
-            }
-
-
-            .admin-refresh {
-
-                flex: 1;
-
-            }
-
-
-            .contact-messages-list {
-
-                padding: 15px;
-
-            }
-
-
-            .booking-modal {
-
-                padding: 22px;
-
+                width:
+                    100%;
             }
 
 
             .booking-details-grid {
 
-                grid-template-columns: 1fr;
-
-            }
-
-        }
-
-
-        @media (max-width: 430px) {
-
-            .stats-grid {
-
-                grid-template-columns: 1fr;
-
+                grid-template-columns:
+                    1fr;
             }
 
 
-            .admin-header h2 {
+            .modal-content {
 
-                font-size: 27px;
-
+                padding:
+                    20px;
             }
 
 
-            .panel-title h3 {
+            .modal-header {
 
-                font-size: 19px;
-
+                padding:
+                    20px;
             }
 
 
-            .contact-message-meta {
+            .modal-footer {
 
-                grid-template-columns: 1fr;
+                padding:
+                    15px 20px;
+            }
 
+
+            .modal-status-actions {
+
+                display:
+                    grid;
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .modal-status-button {
+
+                width:
+                    100%;
+            }
+
+
+            #toastContainer {
+
+                left:
+                    15px;
+
+                right:
+                    15px;
+
+                bottom:
+                    15px;
+            }
+
+
+            .toast {
+
+                min-width:
+                    0;
+
+                max-width:
+                    none;
+
+                width:
+                    100%;
             }
 
         }
@@ -2172,111 +2390,74 @@
     <div class="admin-layout">
 
 
-        <!-- =================================================
+        <!-- =====================================================
              SIDEBAR
-        ================================================== -->
+        ====================================================== -->
 
-        <aside class="admin-sidebar">
+        <aside
+            class="sidebar"
+            id="adminSidebar"
+        >
 
+            <div class="brand">
 
-            <div class="admin-brand">
+                <div class="brand-name">
+                    Don Steve
+                </div>
 
-                <small>
-                    DON STEVE
-                </small>
-
-                <h1>
-                    Imperial Hotel
-                </h1>
-
-                <p>
-                    Administration
-                </p>
+                <div class="brand-subtitle">
+                    IMPERIAL HOTEL
+                </div>
 
             </div>
 
 
-            <nav
-                class="admin-navigation"
-                aria-label="Admin navigation"
-            >
+            <div class="sidebar-section">
 
-                <div class="admin-nav-label">
-                    Dashboard
+                <div class="sidebar-label">
+                    MANAGEMENT
                 </div>
 
 
-                <button
-                    type="button"
-                    class="
-                        admin-nav-item
-                        active
-                    "
-                    onclick="document.getElementById('reservationsPanel').scrollIntoView({behavior:'smooth'})"
+                <a
+                    href="/admin/"
+                    class="sidebar-link active"
                 >
 
-                    <span class="admin-nav-icon">
+                    <span class="sidebar-icon">
                         ◆
                     </span>
 
-                    <span class="admin-nav-text">
+                    <span>
                         Reservations
                     </span>
 
-                </button>
+                </a>
 
 
-                <button
-                    type="button"
-                    class="admin-nav-item"
-                    onclick="document.getElementById('contactMessagesPanel').scrollIntoView({behavior:'smooth'})"
+                <a
+                    href="#contactMessagesPanel"
+                    class="sidebar-link"
                 >
 
-                    <span class="admin-nav-icon">
+                    <span class="sidebar-icon">
                         ✉
                     </span>
 
-                    <span class="admin-nav-text">
+                    <span>
                         Contact Messages
                     </span>
 
-                </button>
+                </a>
 
-            </nav>
-
-
-            <div class="admin-sidebar-footer">
+            </div>
 
 
-                <div class="admin-user">
-
-                    <div class="admin-user-avatar">
-                        A
-                    </div>
-
-                    <div class="admin-user-info">
-
-                        <strong>
-                            Administrator
-                        </strong>
-
-                        <span>
-                            Hotel Management
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =================================================
-                     IMPORTANT:
-                     admin.js looks for #adminSignout
-                ================================================== -->
+            <div class="sidebar-bottom">
 
                 <button
                     type="button"
-                    class="admin-signout"
+                    class="sign-out-button"
                     id="adminSignout"
                 >
                     Sign Out
@@ -2287,393 +2468,847 @@
         </aside>
 
 
+        <!-- =====================================================
+             MAIN AREA
+        ====================================================== -->
 
-        <!-- =================================================
-             MAIN CONTENT
-        ================================================== -->
-
-        <main class="admin-main">
+        <div class="main-area">
 
 
-            <!-- =================================================
-                 HEADER
-            ================================================== -->
+            <header class="top-header">
 
-            <header class="admin-header">
+                <div class="header-left">
 
-                <div>
+                    <button
+                        type="button"
+                        class="mobile-sidebar-button"
+                        id="mobileSidebarButton"
+                        aria-label="Open menu"
+                    >
+                        ☰
+                    </button>
 
-                    <span class="admin-header-eyebrow">
-                        Hotel Management
-                    </span>
-
-                    <h2>
-                        Administrator Dashboard
-                    </h2>
-
-                    <p>
-                        Manage reservations and guest enquiries
-                        from one place.
-                    </p>
+                    <div class="header-label">
+                        HOTEL MANAGEMENT CONSOLE
+                    </div>
 
                 </div>
 
 
-                <div class="admin-header-date">
+                <div class="administrator">
 
-                    Don Steve Imperial Hotel
+                    <div class="administrator-avatar">
+                        DS
+                    </div>
+
+                    <div class="administrator-info">
+
+                        <div
+                            class="administrator-name"
+                            id="administratorName"
+                        >
+                            Administrator
+                        </div>
+
+                        <div
+                            class="administrator-role"
+                            id="administratorRole"
+                        >
+                            Hotel Management
+                        </div>
+
+                    </div>
 
                 </div>
 
             </header>
 
 
-
-            <!-- =================================================
-                 STATISTICS
-            ================================================== -->
-
-            <section
-                class="stats-grid"
-                aria-label="Reservation statistics"
-            >
+            <main class="content">
 
 
-                <article class="stat-card">
+                <!-- =================================================
+                     INTRODUCTION
+                ================================================== -->
 
-                    <div class="stat-card-top">
+                <section class="page-introduction">
 
-                        <span class="stat-label">
+                    <span class="eyebrow">
+                        ADMINISTRATION
+                    </span>
+
+                    <h1 class="page-title">
+                        Reservations
+                    </h1>
+
+                    <p class="page-description">
+                        Monitor reservations and manage
+                        your guests' stay requests.
+                    </p>
+
+                </section>
+
+
+                <!-- =================================================
+                     STATISTICS
+                ================================================== -->
+
+                <section class="statistics-grid">
+
+
+                    <article class="stat-card">
+
+                        <div class="stat-label">
                             Total Reservations
-                        </span>
+                        </div>
 
-                        <span class="stat-icon">
-                            ◆
-                        </span>
+                        <div
+                            class="stat-value"
+                            id="totalReservations"
+                        >
+                            0
+                        </div>
 
-                    </div>
+                        <div class="stat-note">
+                            All guest reservations
+                        </div>
 
-                    <strong
-                        class="stat-value"
-                        id="totalReservations"
-                    >
-                        0
-                    </strong>
-
-                </article>
+                    </article>
 
 
+                    <article class="stat-card">
 
-                <article class="stat-card">
+                        <div class="stat-label">
+                            Pending Requests
+                        </div>
 
-                    <div class="stat-card-top">
+                        <div
+                            class="stat-value"
+                            id="pendingReservations"
+                        >
+                            0
+                        </div>
 
-                        <span class="stat-label">
-                            Pending
-                        </span>
+                        <div class="stat-note">
+                            Awaiting confirmation
+                        </div>
 
-                        <span class="stat-icon">
-                            ◷
-                        </span>
-
-                    </div>
-
-                    <strong
-                        class="stat-value"
-                        id="pendingReservations"
-                    >
-                        0
-                    </strong>
-
-                </article>
+                    </article>
 
 
+                    <article class="stat-card">
 
-                <article class="stat-card">
-
-                    <div class="stat-card-top">
-
-                        <span class="stat-label">
+                        <div class="stat-label">
                             Confirmed
-                        </span>
+                        </div>
 
-                        <span class="stat-icon">
-                            ✓
-                        </span>
+                        <div
+                            class="stat-value"
+                            id="confirmedReservations"
+                        >
+                            0
+                        </div>
 
-                    </div>
+                        <div class="stat-note">
+                            Confirmed guest stays
+                        </div>
 
-                    <strong
-                        class="stat-value"
-                        id="confirmedReservations"
-                    >
-                        0
-                    </strong>
-
-                </article>
+                    </article>
 
 
+                    <article class="stat-card">
 
-                <article class="stat-card">
-
-                    <div class="stat-card-top">
-
-                        <span class="stat-label">
+                        <div class="stat-label">
                             Cancelled
-                        </span>
+                        </div>
 
-                        <span class="stat-icon">
-                            ×
-                        </span>
+                        <div
+                            class="stat-value"
+                            id="cancelledReservations"
+                        >
+                            0
+                        </div>
 
-                    </div>
+                        <div class="stat-note">
+                            Cancelled reservations
+                        </div>
 
-                    <strong
-                        class="stat-value"
-                        id="cancelledReservations"
-                    >
-                        0
-                    </strong>
+                    </article>
 
-                </article>
-
-            </section>
+                </section>
 
 
+                <!-- =================================================
+                     RESERVATIONS
+                ================================================== -->
 
-            <!-- =================================================
-                 RESERVATIONS
-            ================================================== -->
+                <section
+                    class="panel"
+                    id="reservationsPanel"
+                >
 
-            <section
-                class="admin-panel"
-                id="reservationsPanel"
-            >
+                    <div class="panel-header">
 
+                        <div>
 
-                <div class="panel-header">
+                            <div class="panel-title">
+                                Guest Reservations
+                            </div>
 
-
-                    <div class="panel-title">
-
-                        <h3>
-                            Reservations
-                        </h3>
-
-                        <p>
-                            Review and manage hotel reservations.
-                        </p>
-
-                    </div>
-
-
-                    <div class="panel-tools">
-
-
-                        <div class="admin-search">
-
-                            <input
-                                type="search"
-                                id="bookingSearch"
-                                placeholder="Search guest, email or room..."
-                                autocomplete="off"
-                                aria-label="Search reservations"
-                            >
+                            <div class="panel-subtitle">
+                                Review and manage guest bookings
+                            </div>
 
                         </div>
 
 
-                        <select
-                            class="admin-select"
-                            id="statusFilter"
-                            aria-label="Filter reservations by status"
-                        >
+                        <div class="reservation-controls">
 
-                            <option value="all">
-                                All Statuses
-                            </option>
+                            <input
+                                type="search"
+                                id="bookingSearch"
+                                class="search-input"
+                                placeholder="Search reservations..."
+                                autocomplete="off"
+                            >
 
-                            <option value="pending">
-                                Pending
-                            </option>
 
-                            <option value="confirmed">
-                                Confirmed
-                            </option>
+                            <select
+                                id="statusFilter"
+                                class="status-filter"
+                            >
 
-                            <option value="cancelled">
-                                Cancelled
-                            </option>
+                                <option value="all">
+                                    All Statuses
+                                </option>
 
-                        </select>
+                                <option value="pending">
+                                    Pending
+                                </option>
+
+                                <option value="confirmed">
+                                    Confirmed
+                                </option>
+
+                                <option value="cancelled">
+                                    Cancelled
+                                </option>
+
+                            </select>
+
+
+                            <button
+                                type="button"
+                                id="refreshBookings"
+                                class="refresh-button"
+                            >
+                                Refresh
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrapper">
+
+                        <table class="reservation-table">
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>
+                                        Guest
+                                    </th>
+
+                                    <th>
+                                        Room
+                                    </th>
+
+                                    <th>
+                                        Guests
+                                    </th>
+
+                                    <th>
+                                        Check In
+                                    </th>
+
+                                    <th>
+                                        Check Out
+                                    </th>
+
+                                    <th>
+                                        Status
+                                    </th>
+
+                                    <th>
+                                        Actions
+                                    </th>
+
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody
+                                id="reservationsTableBody"
+                            >
+
+                                <tr>
+
+                                    <td
+                                        colspan="7"
+                                        class="loading-cell"
+                                    >
+
+                                        <div class="loading-state">
+
+                                            <span class="loading-spinner"></span>
+
+                                            <div>
+                                                Loading reservations...
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     CONTACT MESSAGES
+                ================================================== -->
+
+                <section
+                    class="panel"
+                    id="contactMessagesPanel"
+                >
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <div class="panel-title">
+                                Contact Messages
+                            </div>
+
+                            <div class="panel-subtitle">
+                                Messages submitted through the hotel website
+                            </div>
+
+                        </div>
 
 
                         <button
                             type="button"
-                            class="admin-refresh"
-                            id="refreshBookings"
+                            id="refreshContactMessages"
+                            class="refresh-button"
                         >
                             Refresh
                         </button>
 
                     </div>
 
-                </div>
 
-
-
-                <div class="table-wrapper">
-
-
-                    <table
-                        class="reservations-table"
+                    <div
+                        class="messages-list"
+                        id="contactMessagesList"
                     >
 
-                        <thead>
+                        <div class="loading-state">
 
-                            <tr>
+                            <span class="loading-spinner"></span>
 
-                                <th>
-                                    Guest
-                                </th>
+                            <div>
+                                Loading messages...
+                            </div>
 
-                                <th>
-                                    Room
-                                </th>
-
-                                <th>
-                                    Stay
-                                </th>
-
-                                <th>
-                                    Guests
-                                </th>
-
-                                <th>
-                                    Status
-                                </th>
-
-                                <th>
-                                    Actions
-                                </th>
-
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody
-                            id="reservationsTableBody"
-                        >
-
-                            <tr>
-
-                                <td
-                                    colspan="6"
-                                    class="loading-cell"
-                                >
-
-                                    <div
-                                        class="loading-state"
-                                    >
-
-                                        <span
-                                            class="loading-spinner"
-                                        ></span>
-
-                                        Loading reservations...
-
-                                    </div>
-
-                                </td>
-
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
-
-
-            <!-- =================================================
-                 CONTACT MESSAGES
-            ================================================== -->
-
-            <section
-                class="
-                    admin-panel
-                    contact-messages-panel
-                "
-                id="contactMessagesPanel"
-            >
-
-
-                <div class="panel-header">
-
-
-                    <div class="panel-title">
-
-                        <h3>
-                            Contact Messages
-                        </h3>
-
-                        <p>
-                            Guest enquiries submitted through
-                            the hotel contact form.
-                        </p>
+                        </div>
 
                     </div>
 
+                </section>
 
-                    <div class="panel-tools">
 
-                        <button
-                            type="button"
-                            class="admin-refresh"
-                            id="refreshContactMessages"
-                        >
-                            Refresh Messages
-                        </button>
+                <div class="dashboard-footer">
 
-                    </div>
+                    Don Steve Imperial Hotel
+                    &nbsp;•&nbsp;
+                    Hotel Management Console
 
                 </div>
 
+            </main>
 
-                <div
-                    class="contact-messages-list"
-                    id="contactMessagesList"
-                >
-
-                    <div class="contact-loading">
-
-                        Loading contact messages...
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-        </main>
+        </div>
 
     </div>
 
 
+    <!-- =========================================================
+         RESERVATION DETAILS MODAL
+    ========================================================== -->
 
-    <!-- =====================================================
-         ADMIN DASHBOARD JAVASCRIPT
-    ====================================================== -->
+    <div
+        class="reservation-modal"
+        id="reservationModal"
+        aria-hidden="true"
+    >
 
-    <script
-        src="/js/admin.js"
-    ></script>
+        <div
+            class="reservation-modal-backdrop"
+            id="reservationModalBackdrop"
+        ></div>
 
+
+        <div
+            class="reservation-modal-card"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reservationModalTitle"
+        >
+
+
+            <div class="modal-header">
+
+                <div>
+
+                    <div class="modal-eyebrow">
+                        RESERVATION DETAILS
+                    </div>
+
+                    <h2
+                        class="modal-title"
+                        id="reservationModalTitle"
+                    >
+                        Guest Reservation
+                    </h2>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    id="closeReservationModal"
+                    aria-label="Close reservation details"
+                >
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-content">
+
+
+                <!-- =============================================
+                     GUEST INFORMATION
+                ============================================== -->
+
+                <section class="details-section">
+
+                    <div class="details-section-title">
+                        Guest Information
+                    </div>
+
+
+                    <div class="booking-details-grid">
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Guest Name
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailGuestName"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Email
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailGuestEmail"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Phone
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailGuestPhone"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Number of Guests
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailGuestCount"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     ACCOMMODATION
+                ============================================== -->
+
+                <section class="details-section">
+
+                    <div class="details-section-title">
+                        Accommodation
+                    </div>
+
+
+                    <div class="booking-details-grid">
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Room
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailRoom"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Room Type
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailRoomType"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Check In
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailCheckIn"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Check Out
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailCheckOut"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     STATUS
+                ============================================== -->
+
+                <section class="details-section">
+
+                    <div class="details-section-title">
+                        Reservation Status
+                    </div>
+
+
+                    <div class="booking-details-grid">
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Current Status
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailStatus"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Reservation ID
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailReservationId"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+
+                        <div class="detail-item">
+
+                            <span class="detail-label">
+                                Created
+                            </span>
+
+                            <div
+                                class="detail-value"
+                                id="detailCreatedAt"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     QUICK STATUS ACTIONS
+                ============================================== -->
+
+                <section class="details-section">
+
+                    <div class="details-section-title">
+                        Quick Status Actions
+                    </div>
+
+
+                    <div class="modal-status-actions">
+
+
+                        <button
+                            type="button"
+                            class="modal-status-button approve"
+                            id="modalApproveReservation"
+                        >
+                            ✓ Approve Reservation
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="modal-status-button pending"
+                            id="modalPendingReservation"
+                        >
+                            ↻ Set Pending
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="modal-status-button cancel"
+                            id="modalCancelReservation"
+                        >
+                            × Cancel Reservation
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =============================================
+                     SPECIAL REQUESTS
+                ============================================== -->
+
+                <section class="details-section">
+
+                    <div class="details-section-title">
+                        Special Requests
+                    </div>
+
+
+                    <div
+                        class="special-request-box"
+                        id="detailSpecialRequests"
+                    >
+                        No special requests.
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    type="button"
+                    class="modal-footer-button"
+                    id="closeReservationModalFooter"
+                >
+                    Close
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         TOAST CONTAINER
+    ========================================================== -->
+
+    <div id="toastContainer"></div>
+
+
+    <!-- =========================================================
+         ADMIN JAVASCRIPT
+    ========================================================== -->
+
+    <script src="/js/admin.js"></script>
+
+
+    <!-- =========================================================
+         MOBILE SIDEBAR
+    ========================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const sidebar =
+                    document.getElementById(
+                        "adminSidebar"
+                    );
+
+                const mobileButton =
+                    document.getElementById(
+                        "mobileSidebarButton"
+                    );
+
+
+                if (
+                    mobileButton &&
+                    sidebar
+                ) {
+
+                    mobileButton.addEventListener(
+                        "click",
+                        function () {
+
+                            sidebar.classList.toggle(
+                                "open"
+                            );
+
+                        }
+                    );
+
+                }
+
+
+                document
+                    .querySelectorAll(
+                        ".sidebar-link"
+                    )
+                    .forEach(
+                        function (link) {
+
+                            link.addEventListener(
+                                "click",
+                                function () {
+
+                                    if (sidebar) {
+
+                                        sidebar.classList.remove(
+                                            "open"
+                                        );
+
+                                    }
+
+                                }
+                            );
+
+                        }
+                    );
+
+            }
+        );
+
+    </script>
 
 </body>
 
